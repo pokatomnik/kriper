@@ -1,13 +1,14 @@
 import type { IParser } from "../lib/IParser.ts";
+import type { IFetchPageParams } from "../lib/IFetchPageParams.ts";
 import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 
-export class OnPageParser implements IParser<Array<string>> {
+export class OnPageParser implements IParser<Array<IFetchPageParams>> {
   private static readonly PAGE_TITLE_ANCHORS_SELECTOR = "div.short-title > a";
 
   public constructor(private readonly domParser: DOMParser) {}
 
-  public parse(source: string): Promise<Array<string>> {
+  public parse(source: string): Promise<Array<IFetchPageParams>> {
     const document = this.domParser.parseFromString(source, "text/html");
     if (!document) {
       throw new Error(
@@ -22,11 +23,15 @@ export class OnPageParser implements IParser<Array<string>> {
 
     const pageLinks = anchors.reduce((acc, anchor) => {
       const href = anchor.getAttribute("href");
-      if (href) return acc.add(href);
-      return acc;
-    }, new Set<string>());
+      const title = anchor.innerText.trim();
+      if (!title || !href) return acc;
+      return acc.set(href, {
+        title,
+        url: href,
+      });
+    }, new Map<string, IFetchPageParams>());
 
-    return Promise.resolve(Array.from(pageLinks));
+    return Promise.resolve(Array.from(pageLinks.values()));
   }
 }
 

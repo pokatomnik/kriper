@@ -1,12 +1,42 @@
 [
-  "https://kriper.net/creepystory/12028-altajskie-kanikuly.html",
-  "https://kriper.net/creepystory/12024-vaska.html",
-  "https://kriper.net/creepystory/12023-baba-jaga.html",
-  "https://kriper.net/creepystory/12026-zagadka-serdca-chelovecheskogo.html",
-  "https://kriper.net/creepystory/12018-nikto-ne-veril-dzhonu-a-ono-nachalos.html",
-  "https://kriper.net/creepystory/12017-otvet-na-post-ih-ne-trogaj.html",
-  "https://kriper.net/creepystory/12015-ih-ne-trogaj.html",
-  "https://kriper.net/creepystory/12016-v-palate.html",
-  "https://kriper.net/creepystory/12011-nagrada-vedmy-vybor.html",
-  "https://kriper.net/creepystory/11934-poslednee-chto-on-uvidel.html"
+  {
+    "title": "Алтайские каникулы",
+    "url": "https://kriper.net/creepystory/12028-altajskie-kanikuly.html"
+  },
+  {
+    "title": "Васька",
+    "url": "https://kriper.net/creepystory/12024-vaska.html"
+  },
+  {
+    "title": "Баба Яга",
+    "url": "https://kriper.net/creepystory/12023-baba-jaga.html"
+  },
+  {
+    "title": "Загадка сердца человеческого",
+    "url": "https://kriper.net/creepystory/12026-zagadka-serdca-chelovecheskogo.html"
+  },
+  {
+    "title": "Никто не верил Джону, а оно началось⁠⁠",
+    "url": "https://kriper.net/creepystory/12018-nikto-ne-veril-dzhonu-a-ono-nachalos.html"
+  },
+  {
+    "title": "Ответ на пост «Их не трогай»",
+    "url": "https://kriper.net/creepystory/12017-otvet-na-post-ih-ne-trogaj.html"
+  },
+  {
+    "title": "Их не трогай",
+    "url": "https://kriper.net/creepystory/12015-ih-ne-trogaj.html"
+  },
+  {
+    "title": "В палате",
+    "url": "https://kriper.net/creepystory/12016-v-palate.html"
+  },
+  {
+    "title": "Награда ведьмы (Выбор).",
+    "url": "https://kriper.net/creepystory/12011-nagrada-vedmy-vybor.html"
+  },
+  {
+    "title": "Последнее, что он увидел...",
+    "url": "https://kriper.net/creepystory/11934-poslednee-chto-on-uvidel.html"
+  }
 ]
