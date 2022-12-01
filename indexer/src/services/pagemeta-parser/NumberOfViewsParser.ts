@@ -4,7 +4,7 @@ import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class NumberOfViewsParser implements IParser<number> {
   private static readonly NUMBER_OF_VIEWS_ELEMENT_SELECTOR =
-    "ul.list-inline li:nth-child(6)";
+    "div.img-fix + div";
 
   public constructor(private readonly domParser: DOMParser) {}
 

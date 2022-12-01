@@ -1,4 +1,3 @@
-import type { IRating } from "./IRating.ts";
 import type { IUncheckedDate } from "./IUncheckedDate.ts";
 
 export interface IPageMeta {
@@ -41,7 +40,7 @@ export interface IPageMeta {
   /**
    * Rating is optional because some pages does not have It.
    */
-  readonly rating?: IRating;
+  readonly rating: number;
 
   /**
    * Tags of story

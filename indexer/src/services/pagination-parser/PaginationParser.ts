@@ -4,9 +4,7 @@ import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class PaginationParser implements IParser<IPagination> {
-  private static readonly PAGNINATION_WRAPPER_SELECTOR = "ul.pagination";
-
-  private static readonly PAGINATION_PARTS_SELECTOR = "li";
+  private static readonly PAGNINATION_WRAPPER_SELECTOR = "div.pages";
 
   private static readonly PAGE_ANCHORS_SELECTOR = "span, a";
 
@@ -25,16 +23,8 @@ export class PaginationParser implements IParser<IPagination> {
       throw new Error("Failed to find pagination wrapper");
     }
 
-    const [, pagesContainer] = this.domParser.querySelectAllElements(
-      paginationWrapper,
-      PaginationParser.PAGINATION_PARTS_SELECTOR
-    );
-    if (!pagesContainer) {
-      throw new Error("Failed to find pages container");
-    }
-
     const pageAnchors = this.domParser.querySelectAllElements(
-      pagesContainer,
+      paginationWrapper,
       PaginationParser.PAGE_ANCHORS_SELECTOR
     );
     if (pageAnchors.length === 0) {

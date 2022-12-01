@@ -4,7 +4,7 @@ import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class OnPageParser implements IParser<Array<IFetchPageParams>> {
-  private static readonly PAGE_TITLE_ANCHORS_SELECTOR = "div.short-title > a";
+  private static readonly PAGE_TITLE_ANCHORS_SELECTOR = "h2.card-title";
 
   public constructor(private readonly domParser: DOMParser) {}
 
@@ -16,14 +16,14 @@ export class OnPageParser implements IParser<Array<IFetchPageParams>> {
       );
     }
 
-    const anchors = this.domParser.querySelectAllElements(
+    const headers = this.domParser.querySelectAllElements(
       document,
       OnPageParser.PAGE_TITLE_ANCHORS_SELECTOR
     );
 
-    const pageLinks = anchors.reduce((acc, anchor) => {
-      const href = anchor.getAttribute("href");
-      const title = anchor.innerText.trim();
+    const pageLinks = headers.reduce((acc, header) => {
+      const href = header.parentElement?.getAttribute("href");
+      const title = header.innerText.trim();
       if (!title || !href) return acc;
       return acc.set(href, {
         title,

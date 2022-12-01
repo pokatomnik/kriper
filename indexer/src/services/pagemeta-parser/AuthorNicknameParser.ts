@@ -3,8 +3,7 @@ import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class AuthorNicknameParser implements IParser<string> {
-  private static readonly AUTHOR_NICKNAME_WRAPPER_SELECTOR =
-    "ul.list-inline li.udt a";
+  private static readonly AUTHOR_NICKNAME_WRAPPER_SELECTOR = "i.fa-user ~ a";
 
   public constructor(private readonly domParser: DOMParser) {}
 

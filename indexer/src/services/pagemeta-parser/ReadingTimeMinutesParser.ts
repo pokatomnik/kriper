@@ -4,7 +4,7 @@ import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class ReadingTimeMinutesParser implements IParser<number> {
   private static readonly READING_TIME_ELEMENT_SELECTOR =
-    "ul.list-inline li:nth-child(7)";
+    "span.text-muted span i.fa-clock";
 
   public constructor(private readonly domParser: DOMParser) {}
 
@@ -16,7 +16,7 @@ export class ReadingTimeMinutesParser implements IParser<number> {
 
     const readingTimeWrapper = document.querySelector(
       ReadingTimeMinutesParser.READING_TIME_ELEMENT_SELECTOR
-    );
+    )?.parentElement;
     if (!readingTimeWrapper) {
       throw new Error("Failed to find number of views element");
     }

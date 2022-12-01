@@ -4,9 +4,17 @@ import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class SourceParser implements IParser<string | null> {
   private static readonly SOURCE_ELEMENT_SELECTOR =
-    "div.card-footer span.linka > a";
+    "span.text-muted span i.fa-quote-right + a";
 
   public constructor(private readonly domParser: DOMParser) {}
+
+  private getURL(href: string): string | null {
+    const url = new URL(href);
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      return href;
+    }
+    return null;
+  }
 
   public parse(source: string): Promise<string | null> {
     const document = this.domParser.parseFromString(source, "text/html");
@@ -26,7 +34,9 @@ export class SourceParser implements IParser<string | null> {
       return Promise.resolve(null);
     }
 
-    return Promise.resolve(href);
+    const url = this.getURL(href);
+
+    return Promise.resolve(url);
   }
 }
 

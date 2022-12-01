@@ -3,7 +3,7 @@ import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 
 export class TitleParser implements IParser<string> {
-  private static readonly TITLE_ELEMENT_SELECTOR = "div.header-block h1";
+  private static readonly TITLE_ELEMENT_SELECTOR = "h2.card-title";
 
   public constructor(private readonly domParser: DOMParser) {}
 

@@ -1,7 +1,6 @@
 import type { IPageMeta } from "../../domain/IPageMeta.ts";
 import type { IParser } from "../lib/IParser.ts";
 import type { IHasher } from "../lib/IHasher.ts";
-import type { IRating } from "../../domain/IRating.ts";
 import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
 import type { IUncheckedDate } from "../../domain/IUncheckedDate.ts";
 
@@ -15,7 +14,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly numberOfViewsParser: IParser<number>,
     private readonly readingTimeMinutesParser: IParser<number>,
     private readonly sourceParser: IParser<string | null>,
-    private readonly ratingParser: IParser<IRating | null>,
+    private readonly ratingParser: IParser<number>,
     private readonly tagsParser: IParser<ReadonlyArray<string>>,
     private readonly seeAlsoParser: IParser<ReadonlyArray<string>>,
     private readonly asyncStorage: IAsyncStorage<string, string>

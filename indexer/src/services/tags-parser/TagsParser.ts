@@ -6,7 +6,7 @@ import { provide } from "provide";
 import { Element } from "denodom";
 
 export class TagsParser implements IParser<ITagsGroupMap> {
-  private static readonly CONTENT_SELECTOR = "div.full-content";
+  private static readonly CONTENT_SELECTOR = "div.fullstory-width";
 
   private static readonly HEADERS_SELECTOR = "h2";
 
