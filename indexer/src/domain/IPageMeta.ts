@@ -38,7 +38,7 @@ export interface IPageMeta {
   readonly source?: string;
 
   /**
-   * Rating is optional because some pages does not have It.
+   * Rating of the page. Zero if no rating provided.
    */
   readonly rating: number;
 
