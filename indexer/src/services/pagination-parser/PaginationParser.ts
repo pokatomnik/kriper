@@ -51,8 +51,8 @@ export class PaginationParser implements IParser<IPagination> {
       throw new Error("Missing pages behind pages indexes");
     }
 
-    const firstPage = Number.parseInt(firstPageElement.innerText);
-    const lastPage = Number.parseInt(lastPageElement.innerText);
+    const firstPage = Number.parseInt(firstPageElement.innerText, 10);
+    const lastPage = Number.parseInt(lastPageElement.innerText, 10);
 
     if (
       Number.isNaN(firstPage) ||

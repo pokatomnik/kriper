@@ -1,4 +1,5 @@
 import type { IRating } from "./IRating.ts";
+import type { IUncheckedDate } from "./IUncheckedDate.ts";
 
 export interface IPageMeta {
   /**
@@ -18,9 +19,9 @@ export interface IPageMeta {
   readonly authorNickname: string;
 
   /**
-   * Creation date, ISO format
+   * Creation date, just date with year, month and day
    */
-  readonly dateCreated: string;
+  readonly dateCreated: IUncheckedDate;
 
   /**
    * How many times has the page beed viewed
@@ -35,7 +36,7 @@ export interface IPageMeta {
   /**
    * Optional source of the page. Can be omitted.
    */
-  readonly source: string;
+  readonly source?: string;
 
   /**
    * Rating is optional because some pages does not have It.
@@ -45,10 +46,10 @@ export interface IPageMeta {
   /**
    * Tags of story
    */
-  readonly tags?: ReadonlyArray<string>;
+  readonly tags: ReadonlyArray<string>;
 
   /**
    * List of stories similar to this. Contains names.
    */
-  readonly seeAlso?: ReadonlyArray<string>;
+  readonly seeAlso: ReadonlyArray<string>;
 }
