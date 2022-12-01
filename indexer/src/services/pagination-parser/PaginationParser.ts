@@ -1,5 +1,5 @@
 import type { IParser } from "../lib/IParser.ts";
-import type { IPagination } from "./IPagination.ts";
+import type { IPagination } from "../lib/IPagination.ts";
 import { provide } from "provide";
 import { DOMParser } from "../dom-parser/DOMParser.ts";
 

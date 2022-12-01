@@ -3,7 +3,7 @@ import type { IURLResolver } from "../lib/IURLResolver.ts";
 import { URLConfiguration } from "../configuration/URLConfiguration.ts";
 import { provide } from "provide";
 
-export class StoriesPaginationResolver implements IURLResolver<[number]> {
+export class PaginationResolver implements IURLResolver<[number]> {
   public constructor(private readonly urlConfiguration: IURLConfiguration) {}
 
   public resolve(pageNumber: number): string {
@@ -21,4 +21,4 @@ export class StoriesPaginationResolver implements IURLResolver<[number]> {
   }
 }
 
-provide(StoriesPaginationResolver, [URLConfiguration]);
+provide(PaginationResolver, [URLConfiguration]);

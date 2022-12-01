@@ -1,8 +1,8 @@
-import { StoriesPaginationResolver } from "./StoriesPaginationResolver.ts";
+import { PaginationResolver } from "./PaginationResolver.ts";
 import { assertEquals, assertThrows } from "testing";
 
-Deno.test("Test StoriesPaginationResolver - first page", () => {
-  const storiesPaginationResolver = new StoriesPaginationResolver({
+Deno.test("Test PaginationResolver - first page", () => {
+  const storiesPaginationResolver = new PaginationResolver({
     originURL: "https://kriper.net",
   });
 
@@ -11,8 +11,8 @@ Deno.test("Test StoriesPaginationResolver - first page", () => {
   assertEquals(firstPageUrl, "https://kriper.net/creepystory/");
 });
 
-Deno.test("Test StoriesPaginationResolver - second page", () => {
-  const storiesPaginationResolver = new StoriesPaginationResolver({
+Deno.test("Test PaginationResolver - second page", () => {
+  const storiesPaginationResolver = new PaginationResolver({
     originURL: "https://kriper.net",
   });
 
@@ -22,9 +22,9 @@ Deno.test("Test StoriesPaginationResolver - second page", () => {
 });
 
 Deno.test(
-  "Test StoriesPaginationResolver - throw if provided page less than 1",
+  "Test PaginationResolver - throw if provided page less than 1",
   () => {
-    const storiesPaginationResolver = new StoriesPaginationResolver({
+    const storiesPaginationResolver = new PaginationResolver({
       originURL: "https://kriper.net",
     });
 
