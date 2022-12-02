@@ -51,4 +51,14 @@ export interface IPageMeta {
    * List of stories similar to this. Contains names.
    */
   readonly seeAlso: ReadonlyArray<string>;
+
+  /**
+   * Images on the page, urls
+   */
+  readonly images: ReadonlyArray<string>;
+
+  /**
+   * Videos on the page, yourube urls
+   */
+  readonly videos: ReadonlyArray<string>;
 }
