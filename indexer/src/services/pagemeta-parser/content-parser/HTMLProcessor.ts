@@ -40,12 +40,12 @@ export class HTMLProcessor {
       }
     },
     // Add line endings to paragraphs
-    (element) => {
+    (element, _, document) => {
       if (
         (element.tagName === "P" || element.tagName === "DIV") &&
         element.classList.length === 0
       ) {
-        element.innerText = `${element.innerText.trim()}${HTMLProcessor.EOL}`;
+        element.appendChild(document.createElement("br"));
       }
     },
     // Improve headers h1
@@ -98,13 +98,16 @@ export class HTMLProcessor {
     // Add Images
     (element, _, document) => {
       if (element.tagName === "IMG") {
-        const src = element.getAttribute("src");
-        const dataSrc = element.getAttribute("data-src");
-        const srcToUse = src || dataSrc;
-        if (!srcToUse) return;
-        const actualSource = srcToUse.startsWith("http")
-          ? srcToUse
-          : this.urlConfiguration.originURL.concat(srcToUse);
+        const biggestImageSource =
+          element.parentElement?.getAttribute("href") ||
+          element.getAttribute("src") ||
+          element.getAttribute("data-src");
+
+        if (!biggestImageSource) return;
+
+        const actualSource = biggestImageSource.startsWith("http")
+          ? biggestImageSource
+          : this.urlConfiguration.originURL.concat(biggestImageSource);
         const spanWithMarkdown = document.createElement("span");
         spanWithMarkdown.innerText = `\n![Изображение загружается...](${actualSource})\n`;
         element.replaceWith(spanWithMarkdown);
