@@ -90,3 +90,25 @@ Deno.test(
     );
   }
 );
+
+Deno.test(
+  {
+    name: "Test ContentParser - Мы уже мертвы",
+    permissions: { read: true, write: true },
+  },
+  async () => {
+    const rawHTML = await new FileReader(import.meta).getFileContents(
+      "./Мы_уже_мертвы.source.html"
+    );
+    const parsedContent = await new ContentParser(
+      new DOMParser(),
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
+    ).parse(rawHTML);
+    await new Snapshot(import.meta).snapshotCheck(
+      parsedContent,
+      "./Мы_уже_мертвы.snapshot.md"
+    );
+  }
+);
