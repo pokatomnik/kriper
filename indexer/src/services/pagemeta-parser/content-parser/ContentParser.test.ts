@@ -112,3 +112,25 @@ Deno.test(
     );
   }
 );
+
+Deno.test(
+  {
+    name: "Test ContentParser - Проклятие поющей девочки",
+    permissions: { read: true, write: true },
+  },
+  async () => {
+    const rawHTML = await new FileReader(import.meta).getFileContents(
+      "./Проклятие_поющей_девочки.source.html"
+    );
+    const parsedContent = await new ContentParser(
+      new DOMParser(),
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
+    ).parse(rawHTML);
+    await new Snapshot(import.meta).snapshotCheck(
+      parsedContent,
+      "./Проклятие_поющей_девочки.snapshot.md"
+    );
+  }
+);
