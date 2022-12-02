@@ -13,6 +13,12 @@ export class HTMLProcessor {
         element.remove();
       }
     },
+    // Remove all SVGs
+    (element) => {
+      if (element.tagName === "SVG") {
+        element.remove();
+      }
+    },
     // Remove tags
     (element) => {
       if (
