@@ -1,4 +1,9 @@
-import { DOMParser as DenoDOMParser, Element, HTMLDocument } from "denodom";
+import {
+  DOMParser as DenoDOMParser,
+  Element,
+  HTMLDocument,
+  Node,
+} from "denodom";
 import { provide } from "provide";
 
 export class DOMParser extends DenoDOMParser {
@@ -15,6 +20,12 @@ export class DOMParser extends DenoDOMParser {
       },
       new Array<Element>()
     );
+  }
+
+  public ifNodeIsElement(node: Node, callback: (element: Element) => void) {
+    const isElement = node instanceof Element;
+    if (!isElement) return;
+    callback(node as Element);
   }
 }
 
