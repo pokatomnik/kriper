@@ -31,7 +31,9 @@ export class ContentParser implements IParser<string> {
       // Remove spaces at the start of line
       .replace(/\n(\s)+/gi, "\n")
       // Duplicate eols for markdown
-      .replaceAll("\n", "\n\n");
+      .replaceAll("\n", "\n\n")
+      // Replace short dashes with long dashes for direct speech
+      .replaceAll("\n-", "\n—");
 
     return Promise.resolve(content);
   }
