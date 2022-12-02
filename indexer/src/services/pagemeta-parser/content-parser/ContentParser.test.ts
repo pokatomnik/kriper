@@ -14,7 +14,9 @@ Deno.test(
     );
     const parsedContent = await new ContentParser(
       new DOMParser(),
-      new HTMLProcessor(new DOMParser())
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
       parsedContent,
@@ -34,7 +36,9 @@ Deno.test(
     );
     const parsedContent = await new ContentParser(
       new DOMParser(),
-      new HTMLProcessor(new DOMParser())
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
       parsedContent,
@@ -54,7 +58,9 @@ Deno.test(
     );
     const parsedContent = await new ContentParser(
       new DOMParser(),
-      new HTMLProcessor(new DOMParser())
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
       parsedContent,
@@ -74,7 +80,9 @@ Deno.test(
     );
     const parsedContent = await new ContentParser(
       new DOMParser(),
-      new HTMLProcessor(new DOMParser())
+      new HTMLProcessor(new DOMParser(), {
+        originURL: "http://kriper.net",
+      })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
       parsedContent,

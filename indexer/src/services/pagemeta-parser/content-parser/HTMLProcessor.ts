@@ -1,7 +1,9 @@
 import type { ElementHander } from "./ElementHandler.ts";
-import { Element, Document } from "denodom";
+import type { IURLConfiguration } from "../../configuration/IURLConfiguration.ts";
+import type { Element, Document } from "denodom";
 import { provide } from "provide";
 import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import { URLConfiguration } from "../../configuration/URLConfiguration.ts";
 
 export class HTMLProcessor {
   private static readonly EOL = "\n";
@@ -93,6 +95,21 @@ export class HTMLProcessor {
         }
       }
     },
+    // Add Images
+    (element, _, document) => {
+      if (element.tagName === "IMG") {
+        const src = element.getAttribute("src");
+        const dataSrc = element.getAttribute("data-src");
+        const srcToUse = src || dataSrc;
+        if (!srcToUse) return;
+        const actualSource = srcToUse.startsWith("http")
+          ? srcToUse
+          : this.urlConfiguration.originURL.concat(srcToUse);
+        const spanWithMarkdown = document.createElement("span");
+        spanWithMarkdown.innerText = `\n![Изображение загружается...](${actualSource})\n`;
+        element.replaceWith(spanWithMarkdown);
+      }
+    },
     // Replace raw line endings
     (_, container) => {
       container.innerHTML = container.innerHTML
@@ -102,7 +119,10 @@ export class HTMLProcessor {
     },
   ];
 
-  public constructor(private readonly domParser: DOMParser) {}
+  public constructor(
+    private readonly domParser: DOMParser,
+    private readonly urlConfiguration: IURLConfiguration
+  ) {}
 
   /**
    * Prepare HTML to extract markdown from It.
@@ -122,4 +142,4 @@ export class HTMLProcessor {
   }
 }
 
-provide(HTMLProcessor, [DOMParser]);
+provide(HTMLProcessor, [DOMParser, URLConfiguration]);
