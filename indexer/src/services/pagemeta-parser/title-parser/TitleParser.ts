@@ -1,6 +1,6 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class TitleParser implements IParser<string> {
   private static readonly TITLE_ELEMENT_SELECTOR = "h2.card-title";

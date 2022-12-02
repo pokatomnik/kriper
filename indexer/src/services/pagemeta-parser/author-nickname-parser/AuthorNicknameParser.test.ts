@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../lib/TestTools.ts";
+import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
 import { AuthorNicknameParser } from "./AuthorNicknameParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 Deno.test(
   {

@@ -1,6 +1,6 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class AuthorNicknameParser implements IParser<string> {
   private static readonly AUTHOR_NICKNAME_WRAPPER_SELECTOR = "i.fa-user ~ a";

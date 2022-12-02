@@ -1,6 +1,6 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class SourceParser implements IParser<string | null> {
   private static readonly SOURCE_ELEMENT_SELECTOR =

@@ -1,6 +1,6 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class ReadingTimeMinutesParser implements IParser<number> {
   private static readonly READING_TIME_ELEMENT_SELECTOR =

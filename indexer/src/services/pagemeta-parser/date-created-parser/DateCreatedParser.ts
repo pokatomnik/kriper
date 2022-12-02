@@ -1,7 +1,7 @@
-import type { IParser } from "../lib/IParser.ts";
-import type { IUncheckedDate } from "../../domain/IUncheckedDate.ts";
+import type { IParser } from "../../lib/IParser.ts";
+import type { IUncheckedDate } from "../../../domain/IUncheckedDate.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class DateCreatedParser implements IParser<IUncheckedDate> {
   private static readonly DATE_CREATED_WRAPPER_SELECTOR = "i.fa-calendar-days";

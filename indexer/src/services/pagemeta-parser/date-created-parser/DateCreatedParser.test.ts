@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../lib/TestTools.ts";
+import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
 import { DateCreatedParser } from "./DateCreatedParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 Deno.test(
   {

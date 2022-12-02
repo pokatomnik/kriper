@@ -1,4 +1,4 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
 
 /**

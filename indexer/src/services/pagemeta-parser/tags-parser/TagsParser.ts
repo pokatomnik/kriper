@@ -1,6 +1,6 @@
-import type { IParser } from "../lib/IParser.ts";
+import type { IParser } from "../../lib/IParser.ts";
 import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class TagsParser implements IParser<ReadonlyArray<string>> {
   private static readonly TAGS_WRAPPER_SELECTOR = "span.fullstorytags";
