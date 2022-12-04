@@ -17,6 +17,8 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly ratingParser: IParser<number>,
     private readonly tagsParser: IParser<ReadonlyArray<string>>,
     private readonly seeAlsoParser: IParser<ReadonlyArray<string>>,
+    private readonly imagesParser: IParser<ReadonlyArray<string>>,
+    private readonly videoParser: IParser<ReadonlyArray<string>>,
     private readonly asyncStorage: IAsyncStorage<string, string>
   ) {}
 
@@ -32,6 +34,8 @@ export class PageMetaParser implements IParser<IPageMeta> {
       rating,
       tags,
       seeAlso,
+      images,
+      videos,
     ] = await Promise.all([
       this.titleParser.parse(rawHTML),
       this.contentParser.parse(rawHTML),
@@ -43,6 +47,8 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.ratingParser.parse(rawHTML),
       this.tagsParser.parse(rawHTML),
       this.seeAlsoParser.parse(rawHTML),
+      this.imagesParser.parse(rawHTML),
+      this.videoParser.parse(rawHTML),
     ]);
 
     const contentId = this.namer.compute(title);
@@ -60,6 +66,8 @@ export class PageMetaParser implements IParser<IPageMeta> {
       rating: rating ?? undefined,
       tags: tags,
       seeAlso: seeAlso,
+      images,
+      videos,
     });
   }
 }
