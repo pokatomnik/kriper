@@ -29,4 +29,4 @@ export class SeeAlsoParser implements IParser<ReadonlyArray<string>> {
   }
 }
 
-provide(SeeAlsoParser, []);
+provide(SeeAlsoParser, [DOMParser]);

@@ -1,6 +1,8 @@
 import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
 import type { IPathConfiguration } from "../configuration/IPathConfiguration.ts";
 import type { IIndex } from "../../domain/IIndex.ts";
+import { provide } from "provide";
+import { PathConfiguration } from "../configuration/PathConfiguration.ts";
 
 export class IndexSaver implements IAsyncStorage<string, IIndex> {
   public constructor(private readonly pathConfiguration: IPathConfiguration) {}
@@ -24,3 +26,5 @@ export class IndexSaver implements IAsyncStorage<string, IIndex> {
     return JSON.parse(jsonAsText);
   }
 }
+
+provide(IndexSaver, [PathConfiguration]);

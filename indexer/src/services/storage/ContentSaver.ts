@@ -1,5 +1,7 @@
 import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
 import type { IPathConfiguration } from "../configuration/IPathConfiguration.ts";
+import { provide } from "provide";
+import { PathConfiguration } from "../configuration/PathConfiguration.ts";
 
 export class ContentSaver implements IAsyncStorage<string, string> {
   public constructor(private readonly pathConfiguration: IPathConfiguration) {}
@@ -26,3 +28,5 @@ export class ContentSaver implements IAsyncStorage<string, string> {
     }
   }
 }
+
+provide(ContentSaver, [PathConfiguration]);
