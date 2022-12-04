@@ -28,12 +28,12 @@ export class ImagesParser implements IParser<ReadonlyArray<string>> {
       throw new Error("Failed to find content container");
     }
 
-    const images = this.domParser.querySelectAllElements(
+    const imageElements = this.domParser.querySelectAllElements(
       contentContainer,
       ImagesParser.IMAGE_SELECTOR
     );
 
-    const imagesSource = images.reduce((acc, image) => {
+    const imagesSource = imageElements.reduce((acc, image) => {
       const biggestImageSource =
         image.parentElement?.getAttribute("href") ||
         image.getAttribute("src") ||
