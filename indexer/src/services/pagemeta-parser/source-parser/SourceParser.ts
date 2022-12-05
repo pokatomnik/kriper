@@ -9,11 +9,10 @@ export class SourceParser implements IParser<string | null> {
   public constructor(private readonly domParser: DOMParser) {}
 
   private getURL(href: string): string | null {
-    const url = new URL(href);
-    if (url.protocol === "http:" || url.protocol === "https:") {
-      return href;
+    if (href.startsWith("javascript:")) {
+      return null;
     }
-    return null;
+    return href.startsWith("http") ? href : `http://${href}`;
   }
 
   public parse(source: string): Promise<string | null> {
