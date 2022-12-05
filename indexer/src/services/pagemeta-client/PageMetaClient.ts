@@ -21,9 +21,19 @@ export class PageMetaClient
   ): Promise<ReadonlyArray<IPageMeta>> {
     const pageMetaList: Array<IPageMeta> = [];
     for (const fetchParams of fetchParamsList) {
-      const rawHTML = await this.httpClient.get(fetchParams.url);
-      const pageMeta = await this.pageMetaParser.parse(rawHTML);
-      pageMetaList.push(pageMeta);
+      // TODO use logger
+      try {
+        console.log(`Fetching "${fetchParams.title}": ${fetchParams.url}`);
+        const rawHTML = await this.httpClient.get(fetchParams.url);
+        const pageMeta = await this.pageMetaParser.parse(rawHTML);
+        pageMetaList.push(pageMeta);
+      } catch (e) {
+        const error =
+          e instanceof Error ? e : new Error("Unknown PageMeta parser error");
+        console.error(
+          `Failed to parse PageMeta. Original error message: ${error.message}. Page caused error: ${fetchParams.title}. URL invoked: ${fetchParams.url}`
+        );
+      }
     }
 
     return pageMetaList;
