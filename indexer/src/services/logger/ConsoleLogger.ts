@@ -9,7 +9,7 @@ enum LogType {
 
 export class ConsoleLogger implements ILogger {
   private formatMessage(message: string, logType: LogType): string {
-    return `[${new Date().toISOString()}][${logType}]${message}`;
+    return `[${new Date().toISOString()}] [${logType}] ${message}`;
   }
 
   public info(message: string): void {
