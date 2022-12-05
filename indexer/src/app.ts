@@ -33,7 +33,11 @@ export class App {
     const pagesToFetch = await this.pageListClient.get(pagination);
     const pageMeta = await this.pageMetaClient.get(pagesToFetch);
 
-    const index: IIndex = { pageMeta, tagsMap: tagsMap };
+    const index: IIndex = {
+      pageMeta,
+      tagsMap: tagsMap,
+      dateCreatedISO: new Date().toISOString(),
+    };
 
     await this.indexSaver.set("index", index);
   }
