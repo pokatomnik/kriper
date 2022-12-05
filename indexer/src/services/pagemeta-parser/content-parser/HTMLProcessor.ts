@@ -39,15 +39,6 @@ export class HTMLProcessor {
         element.remove();
       }
     },
-    // Add line endings to paragraphs
-    (element, _, document) => {
-      if (
-        (element.tagName === "P" || element.tagName === "DIV") &&
-        element.classList.length === 0
-      ) {
-        element.appendChild(document.createElement("br"));
-      }
-    },
     // Improve headers h1
     (element) => {
       if (element.tagName === "H1") {
@@ -70,6 +61,12 @@ export class HTMLProcessor {
         element.innerText = `\n### ${element.innerText.trim()}${
           HTMLProcessor.EOL
         }`;
+      }
+    },
+    // Improve bold text
+    (element) => {
+      if (element.tagName === "B" || element.tagName === "STRONG") {
+        element.innerText = `**${element.innerText}**`;
       }
     },
     // Improve lists UL
@@ -111,6 +108,15 @@ export class HTMLProcessor {
         const spanWithMarkdown = document.createElement("span");
         spanWithMarkdown.innerText = `\n![Изображение загружается...](${actualSource})\n`;
         element.replaceWith(spanWithMarkdown);
+      }
+    },
+    // Add line endings to paragraphs
+    (element, _, document) => {
+      if (
+        (element.tagName === "P" || element.tagName === "DIV") &&
+        element.classList.length === 0
+      ) {
+        element.appendChild(document.createElement("br"));
       }
     },
     // Replace raw line endings

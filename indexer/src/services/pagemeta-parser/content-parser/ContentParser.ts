@@ -33,7 +33,9 @@ export class ContentParser implements IParser<string> {
       // Duplicate eols for markdown
       .replaceAll("\n", "\n\n")
       // Replace short dashes with long dashes for direct speech
-      .replaceAll("\n-", "\n—");
+      .replaceAll("\n-", "\n—")
+      // Replace duplicated bold text parts (see bold text improvements in the HTMLProcessor)
+      .replaceAll("****", "**  **");
 
     return Promise.resolve(content);
   }
