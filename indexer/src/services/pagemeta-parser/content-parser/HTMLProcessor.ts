@@ -85,7 +85,7 @@ export class HTMLProcessor {
     (element) => {
       if (element.tagName === "OL") {
         const listItems = this.domParser.querySelectAllElements(element, "li");
-        for (let i = 0; listItems.length; ++i) {
+        for (let i = 0; i < listItems.length; ++i) {
           const li = listItems[i];
           if (li) {
             li.innerText = `${i + 1}. ${li.innerText.trim()}${
