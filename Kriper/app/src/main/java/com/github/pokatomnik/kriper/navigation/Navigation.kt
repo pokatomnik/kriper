@@ -60,6 +60,9 @@ data class Navigation(
             get() = routePath
     }
 
+    val defaultRoute: Route
+        get() = tagGroupsRoute
+
     val tagsOfGroupRoute = object : RouteSingleParameter {
         private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
 

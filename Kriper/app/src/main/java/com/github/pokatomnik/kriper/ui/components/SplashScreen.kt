@@ -1,8 +1,8 @@
-package com.github.pokatomnik.kriper.ui.theme
+package com.github.pokatomnik.kriper.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 fun SplashScreen() {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colors.background
     ) {
 
     }
