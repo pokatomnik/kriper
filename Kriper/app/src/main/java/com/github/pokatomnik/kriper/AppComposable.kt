@@ -1,8 +1,14 @@
 package com.github.pokatomnik.kriper
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.GroupWork
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import com.github.pokatomnik.kriper.navigation.NavigationProvider
+import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.tag.Tag
 import com.github.pokatomnik.kriper.screens.taggroups.TagGroups
@@ -10,42 +16,75 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.screen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AppComposable() {
     IndexServiceReadiness {
-        NavigationProvider {
-            val navigation = rememberNavigation()
-            AnimatedNavHost(
-                navController = navigation.navController,
-                startDestination = navigation.tagGroupsRoute.route
-            ) {
-                screen(
-                    route = navigation.tagGroupsRoute.route,
-                    main = true,
+        val navigation = rememberNavigation()
+        Scaffold(
+            topBar = {},
+            content = { scaffoldPaddingValues ->
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    navigation.tagGroupsRoute.Params {
-                        TagGroups(
-                            onNavigateToGroup = {
-                                navigation.tagsOfGroupRoute.navigate(it)
+                    AnimatedNavHost(
+                        navController = navigation.navController,
+                        startDestination = navigation.tagGroupsRoute.route,
+                        modifier = Modifier.padding(scaffoldPaddingValues)
+                    ) {
+                        screen(
+                            route = navigation.tagGroupsRoute.route,
+                            main = true,
+                        ) {
+                            navigation.tagGroupsRoute.Params {
+                                TagGroups(
+                                    onNavigateToGroup = {
+                                        navigation.tagsOfGroupRoute.navigate(it)
+                                    }
+                                )
                             }
-                        )
+                        }
+                        screen(
+                            route = navigation.tagsOfGroupRoute.route,
+                            main = false,
+                        ) {
+                            navigation.tagsOfGroupRoute.Params { groupName ->
+                                Tag(
+                                    tagTitle = groupName,
+                                    onNavigateToTagGroups = {
+                                        navigation.tagGroupsRoute.navigate()
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
-                screen(
-                    route = navigation.tagsOfGroupRoute.route,
-                    main = false,
-                ) {
-                    navigation.tagsOfGroupRoute.Params { groupName ->
-                        Tag(
-                            tagTitle = groupName,
-                            onNavigateToTagGroups = {
-                                navigation.tagGroupsRoute.navigate()
-                            }
-                        )
-                    }
+            },
+            bottomBar = {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = navigation.tagGroupsRoute.on(),
+                        onClick = { navigation.tagGroupsRoute.navigate() },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.GroupWork,
+                                contentDescription = "Группы тегов"
+                            )
+                        }
+                    )
+                    NavigationBarItem(
+                        selected = navigation.settingsRoute.on(),
+                        onClick = { navigation.settingsRoute.navigate() },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Настройки"
+                            )
+                        }
+                    )
                 }
             }
-        }
+        )
     }
 }

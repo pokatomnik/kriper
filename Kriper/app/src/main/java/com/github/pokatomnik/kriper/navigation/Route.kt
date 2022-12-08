@@ -61,7 +61,7 @@ interface RouteTwoParameters : Route {
     fun Params(
         content: @Composable (
             parameter0: String,
-            parameter1: String
+            parameter1: String,
         ) -> Unit
     )
 }

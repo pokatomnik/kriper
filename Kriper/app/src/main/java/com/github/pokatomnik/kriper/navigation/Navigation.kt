@@ -17,7 +17,7 @@ data class Navigation(
     private val serializer: Serializer
 ) {
     private fun NavHostController.navigateDistinct(route: String) {
-        navigate(route) { launchSingleTop = true }
+        navigate(route) { launchSingleTop = true;  }
     }
 
     private fun NavHostController.navigateAllowSame(route: String) {
@@ -76,7 +76,9 @@ data class Navigation(
                 ?.arguments
                 ?.getString(TAG_GROUP_NAME_KEY)
                 ?.let(serializer::parse)
-            if (tagGroupName != null) content(tagGroupName)
+            RequireNonNull(tagGroupName) {
+                content(it)
+            }
         }
 
         override val route: String
@@ -102,7 +104,11 @@ data class Navigation(
                 ?.arguments
             val tagGroupName = arguments?.getString(TAG_GROUP_NAME_KEY)?.let(serializer::parse)
             val tagName = arguments?.getString(TAG_NAME_KEY)?.let(serializer::parse)
-            if(tagGroupName != null && tagName != null) content(tagGroupName, tagName)
+            RequireNonNull(tagGroupName) { tagGroupNameNonNull ->
+                RequireNonNull(tagName) { tagNameNonNull ->
+                    content(tagGroupNameNonNull, tagNameNonNull)
+                }
+            }
         }
 
         override val route: String
@@ -132,8 +138,12 @@ data class Navigation(
             val tagGroupName = arguments?.getString(TAG_GROUP_NAME_KEY)?.let(serializer::parse)
             val tagName = arguments?.getString(TAG_NAME_KEY)?.let(serializer::parse)
             val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
-            if (tagGroupName != null && tagName != null && storyName != null) {
-                content(tagGroupName, tagName, storyName)
+            RequireNonNull(tagGroupName) { tagGroupNameNonNull ->
+                RequireNonNull(tagName) { tagNameNonNull ->
+                    RequireNonNull(storyName) { storyNameNonNull ->
+                        content(tagGroupNameNonNull, tagNameNonNull, storyNameNonNull)
+                    }
+                }
             }
         }
 
@@ -166,7 +176,7 @@ data class Navigation(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun rememberNavigationInit(): Navigation {
+fun rememberNavigation(): Navigation {
     val navHostController = rememberAnimatedNavController()
     val serializer = rememberSerializer()
 
