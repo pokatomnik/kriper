@@ -53,6 +53,8 @@
     "test:lint": "deno lint",
     "test": "deno task test:unit && deno task test:check && deno task test:lint",
 
-    "start": "deno run --allow-read --allow-write --allow-net ./bootstrap.ts"
+    "start": "deno task clean && deno run --allow-read --allow-write --allow-net ./bootstrap.ts | tee ./last-run.log",
+
+    "clean": "sh ./clean-out.sh"
   }
 }

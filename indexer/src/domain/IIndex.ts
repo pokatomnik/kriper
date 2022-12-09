@@ -1,4 +1,4 @@
-import type { IPageMeta } from "./IPageMeta.ts";
+import { IPageMeta } from "./IPageMeta.ts";
 import type { ITagsGroupMap } from "./ITagGroupsMap.ts";
 
 export interface IIndex {

@@ -21,25 +21,15 @@ export class PageListClient
     private readonly logger: ILogger
   ) {}
 
-  private formatMessage(
-    min: number,
-    current: number,
-    max: number,
-    message: string
-  ): string {
-    return `[${min} <= ${current} <= ${max}] ${message}`;
+  private formatMessage(current: number, max: number, message: string): string {
+    return `[${current}/${max}] ${message}`;
   }
 
   public async get(pagination: IPagination): Promise<Array<IFetchPageParams>> {
     const linksMap = new Map<string, IFetchPageParams>();
     for (let i = pagination.minPage; i <= pagination.maxPage; ++i) {
       this.logger.info(
-        this.formatMessage(
-          pagination.minPage,
-          i,
-          pagination.maxPage,
-          `Start fetching...`
-        )
+        this.formatMessage(i, pagination.maxPage, `Start fetching...`)
       );
       const pageUrl = this.pageResolver.resolve(i);
       const content = await this.httpClient.get(pageUrl);
@@ -49,7 +39,6 @@ export class PageListClient
       }
       this.logger.info(
         this.formatMessage(
-          pagination.minPage,
           i,
           pagination.maxPage,
           `Finished fetching. Stories found: ${fetchPageParamsList.length}`
