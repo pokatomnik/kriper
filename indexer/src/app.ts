@@ -30,7 +30,7 @@ export class App {
     private readonly logger: ILogger
   ) {}
 
-  public async start() {
+  private async getTagsGroupMap(): Promise<ITagsGroupMap> {
     let tagsMap: ITagsGroupMap;
     this.logger.info("Started fetching tags...");
     try {
@@ -42,7 +42,10 @@ export class App {
       this.logger.error(error.message);
       Deno.exit(1);
     }
+    return tagsMap;
+  }
 
+  private async getPagination(): Promise<IPagination> {
     let pagination: IPagination;
     this.logger.info("Started fetching pagination...");
     try {
@@ -54,7 +57,12 @@ export class App {
       this.logger.error(error.message);
       Deno.exit(1);
     }
+    return pagination;
+  }
 
+  private async getPagesToFetch(
+    pagination: IPagination
+  ): Promise<Array<IFetchPageParams>> {
     let pagesToFetch: Array<IFetchPageParams>;
     this.logger.info("Started fetching pages list...");
     try {
@@ -66,7 +74,12 @@ export class App {
       this.logger.error(error.message);
       Deno.exit(1);
     }
+    return pagesToFetch;
+  }
 
+  private async getPageMeta(
+    pagesToFetch: Array<IFetchPageParams>
+  ): Promise<ReadonlyArray<IPageMeta>> {
     let pageMeta: ReadonlyArray<IPageMeta>;
     this.logger.info("Started fetching content and page metadata...");
     try {
@@ -78,13 +91,10 @@ export class App {
       this.logger.error(error.message);
       Deno.exit(1);
     }
+    return pageMeta;
+  }
 
-    const index: IIndex = {
-      pageMeta,
-      tagsMap: tagsMap,
-      dateCreatedISO: new Date().toISOString(),
-    };
-
+  private async saveIndex(index: IIndex) {
     this.logger.info("Started dumping index file...");
     try {
       await this.indexSaver.set("index", index);
@@ -95,6 +105,36 @@ export class App {
       this.logger.error(error.message);
       Deno.exit(1);
     }
+  }
+
+  public async start() {
+    const tagsGroupMap = await this.getTagsGroupMap();
+    const pagination = await this.getPagination();
+    const pagesToFetch = await this.getPagesToFetch(pagination);
+    const pageMeta = await this.getPageMeta(pagesToFetch);
+
+    const pageMetaIndex: { [pageTitle: string]: IPageMeta } = {};
+    for (const pageMetaItem of pageMeta) {
+      pageMetaIndex[pageMetaItem.title] = pageMetaItem;
+
+      for (const currentTagTitle of pageMetaItem.tags) {
+        for (const [_, tagGroup] of Object.entries(tagsGroupMap)) {
+          for (const [tagTitle, tag] of Object.entries(tagGroup)) {
+            if (currentTagTitle === tagTitle) {
+              tag.pages.push(pageMetaItem.title);
+            }
+          }
+        }
+      }
+    }
+
+    const index: IIndex = {
+      tagsMap: tagsGroupMap,
+      pageMeta: pageMetaIndex,
+      dateCreatedISO: new Date().toISOString(),
+    };
+
+    await this.saveIndex(index);
 
     this.logger.info("Process completed successfully");
   }

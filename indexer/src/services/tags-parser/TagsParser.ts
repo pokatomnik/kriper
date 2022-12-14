@@ -57,22 +57,22 @@ export class TagsParser implements IParser<ITagsGroupMap> {
 
     const tagsGroupMap: ITagsGroupMap = {};
     for (let i = 0; i < tagGroupNames.length; ++i) {
-      const currenGroupName = tagGroupNames[i];
+      const currentGroupName = tagGroupNames[i];
       const currentTagsWrapper = tagsGroupWrappers[i];
 
-      if (currenGroupName === undefined || currentTagsWrapper === undefined) {
+      if (currentGroupName === undefined || currentTagsWrapper === undefined) {
         throw new Error("Index out of bounds error");
       }
 
       const tagNames = this.getTagNamesFromWrapper(currentTagsWrapper);
 
-      const tagGroup: Array<ITag> = [];
+      const tagGroup: { [tagTitle: string]: ITag } = {};
       for (const tagName of tagNames) {
-        const tag: ITag = { tagName: tagName };
-        tagGroup.push(tag);
+        const tag: ITag = { tagName: tagName, pages: [] };
+        tagGroup[tagName] = tag;
       }
 
-      tagsGroupMap[currenGroupName] = tagGroup;
+      tagsGroupMap[currentGroupName] = tagGroup;
     }
 
     return Promise.resolve(tagsGroupMap);
