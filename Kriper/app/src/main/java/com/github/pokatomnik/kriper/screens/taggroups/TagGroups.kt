@@ -9,7 +9,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
-import com.github.pokatomnik.kriper.ui.components.PageTitle
 
 @Composable
 fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
@@ -27,8 +26,7 @@ fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
                 LazyList(list = groupNames) { index, groupTitle ->
                     val tagsString = indexService.content
                         .getTagGroupByName(groupTitle)
-                        .tagNames
-                        .joinToString(" ") { "#$it" }
+                        .shortIntro
 
                     val isFirst = 0 == index
 
@@ -46,7 +44,7 @@ fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
                                 text = tagsString,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.alpha(0.7f)
+                                modifier = Modifier.alpha(ALPHA_GHOST)
                             )
                         },
                         onClick = { onNavigateToGroup(groupTitle) }

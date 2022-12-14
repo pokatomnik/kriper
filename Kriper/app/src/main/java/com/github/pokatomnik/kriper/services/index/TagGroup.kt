@@ -2,8 +2,9 @@ package com.github.pokatomnik.kriper.services.index
 
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
+import com.github.pokatomnik.kriper.ext.uppercaseFirst
 
-class TagGroup(
+data class TagGroup(
     private val pageMetaMap: Map<String, PageMeta>,
     val tagGroupName: String,
     private val tagGroupSource: Map<String, Tag>
@@ -12,6 +13,10 @@ class TagGroup(
 
     val tagNames: Collection<String>
         get() = tagGroupSource.keys
+
+    val shortIntro by lazy {
+        tagNames.joinToString(" ") { "#${it.uppercaseFirst()}" }
+    }
 
     fun getTagContentsByName(tagName: String): TagContents =
         tagsByName[tagName] ?: tagGroupSource[tagName]?.let { tag ->

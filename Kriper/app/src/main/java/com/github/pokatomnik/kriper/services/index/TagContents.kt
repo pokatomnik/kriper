@@ -8,6 +8,10 @@ class TagContents(
     private val pageMetaMap: Map<String, PageMeta>,
     private val tag: Tag
 ) {
+    val shortIntro by lazy {
+        pageNames.joinToString(", ")
+    }
+
     val pageNames: Collection<String>
         get() = tag.pages
 
