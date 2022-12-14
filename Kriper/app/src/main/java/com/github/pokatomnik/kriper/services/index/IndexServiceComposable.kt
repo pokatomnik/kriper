@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun IndexServiceReadiness(
     wip: @Composable () -> Unit = {},
-    done: @Composable () -> Unit = {},
+    done: @Composable (indexService: IndexService) -> Unit = {},
 ) {
     val indexService = hiltViewModel<IndexServiceViewModel>().indexService
     val (prepared, setPrepared) = remember { mutableStateOf(indexService.prepared) }
@@ -26,5 +26,5 @@ fun IndexServiceReadiness(
         }
     }
 
-    if (prepared) done() else wip()
+    if (prepared) done(indexService) else wip()
 }

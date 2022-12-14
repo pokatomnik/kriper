@@ -1,10 +1,10 @@
 package com.github.pokatomnik.kriper.services.index
 
-import com.github.pokatomnik.kriper.contentreader.ContentReaderService
+import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
 
 class TagGroup(
-    private val contentReaderService: ContentReaderService,
+    private val pageMetaMap: Map<String, PageMeta>,
     val tagGroupName: String,
     private val tagGroupSource: Map<String, Tag>
 ) {
@@ -16,18 +16,18 @@ class TagGroup(
     fun getTagContentsByName(tagName: String): TagContents =
         tagsByName[tagName] ?: tagGroupSource[tagName]?.let { tag ->
             TagContents(
-                contentReaderService = contentReaderService,
                 tagName = tagName,
+                pageMetaMap = pageMetaMap,
                 tag = tag
             ).apply {
                 tagsByName[tagName] = this
             }
         } ?: TagContents(
-            contentReaderService = contentReaderService,
             tagName = "",
+            pageMetaMap = pageMetaMap,
             tag = Tag(
                 tagName = "",
-                pages = mutableMapOf()
+                pages = mutableSetOf()
             )
         )
 }

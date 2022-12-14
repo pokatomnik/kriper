@@ -5,14 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.GroupWork
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
+import com.github.pokatomnik.kriper.screens.settings.Settings
+import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
+import com.github.pokatomnik.kriper.screens.story.Story
 import com.github.pokatomnik.kriper.screens.tag.Tag
 import com.github.pokatomnik.kriper.screens.taggroups.TagGroups
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
@@ -36,8 +37,7 @@ fun AppComposable() {
                         modifier = Modifier.padding(scaffoldPaddingValues)
                     ) {
                         screen(
-                            route = navigation.tagGroupsRoute.route,
-                            main = true,
+                            route = navigation.tagGroupsRoute.route
                         ) {
                             navigation.tagGroupsRoute.Params {
                                 TagGroups(
@@ -49,15 +49,45 @@ fun AppComposable() {
                         }
                         screen(
                             route = navigation.tagsOfGroupRoute.route,
-                            main = false,
                         ) {
                             navigation.tagsOfGroupRoute.Params { groupName ->
                                 Tag(
-                                    tagTitle = groupName,
-                                    onNavigateToTagGroups = {
-                                        navigation.tagGroupsRoute.navigate()
+                                    tagGroupTitle = groupName,
+                                    navigateBack = { navigation.tagGroupsRoute.navigate() },
+                                    navigateToStories = { tagName ->
+                                        navigation.storiesOfTagRoute.navigate(groupName, tagName)
                                     }
                                 )
+                            }
+                        }
+                        screen(
+                            route = navigation.storiesOfTagRoute.route
+                        ) {
+                            navigation.storiesOfTagRoute.Params { groupName, tagName ->
+                                StoriesOfTag(
+                                    tagGroupName = groupName,
+                                    tagName = tagName,
+                                    onNavigateBack = {
+                                        navigation.tagsOfGroupRoute.navigate(groupName)
+                                    },
+                                    onNavigateToStory = { storyTitle ->
+                                        navigation.storyRoute.navigate(storyTitle)
+                                    }
+                                )
+                            }
+                        }
+                        screen(
+                            route = navigation.storyRoute.route
+                        ) {
+                            navigation.storyRoute.Params { storyTitle ->
+                                Story(storyTitle = storyTitle)
+                            }
+                        }
+                        screen(
+                            route = navigation.settingsRoute.route,
+                        ) {
+                            navigation.settingsRoute.Params {
+                                Settings()
                             }
                         }
                     }

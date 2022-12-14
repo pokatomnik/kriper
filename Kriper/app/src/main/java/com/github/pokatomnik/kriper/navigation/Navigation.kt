@@ -73,22 +73,21 @@ data class Navigation(
 
         @Composable
         override fun Params(content: @Composable (tagGroupName: String) -> Unit) {
-            val tagGroupName = navController
+            navController
                 .currentBackStackEntryAsState()
                 .value
                 ?.arguments
                 ?.getString(TAG_GROUP_NAME_KEY)
                 ?.let(serializer::parse)
-            RequireNonNull(tagGroupName) {
-                content(it)
-            }
+                .let { rememberLastNonNull(it) }
+                ?.let { content(it) }
         }
 
         override val route: String
             get() = "/tag-groups/{$TAG_GROUP_NAME_KEY}"
     }
 
-    val tagRoute = object : RouteTwoParameters {
+    val storiesOfTagRoute = object : RouteTwoParameters {
         private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
 
         private val TAG_NAME_KEY = "TAG_NAME_KEY"
@@ -106,52 +105,38 @@ data class Navigation(
                 .value
                 ?.arguments
             val tagGroupName = arguments?.getString(TAG_GROUP_NAME_KEY)?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
             val tagName = arguments?.getString(TAG_NAME_KEY)?.let(serializer::parse)
-            RequireNonNull(tagGroupName) { tagGroupNameNonNull ->
-                RequireNonNull(tagName) { tagNameNonNull ->
-                    content(tagGroupNameNonNull, tagNameNonNull)
-                }
-            }
+                .let { rememberLastNonNull(it) }
+            if (tagGroupName != null && tagName != null) content(tagGroupName, tagName)
         }
 
         override val route: String
             get() = "/tag-groups/{$TAG_GROUP_NAME_KEY}/{$TAG_NAME_KEY}"
-
     }
 
-    val storyRoute = object : RouteThreeParameters {
-        private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
-
-        private val TAG_NAME_KEY = "TAG_NAME_KEY"
-
+    val storyRoute = object : RouteSingleParameter {
         private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
 
-        override fun navigate(tagGroupName: String, tagName: String, storyTitle: String) {
-            val serializedTagGroupTitle = serializer.serialize(tagGroupName)
-            val serializedTagName = serializer.serialize(tagName)
+        override fun navigate(storyTitle: String) {
             val serializedStoryTitle = serializer.serialize(storyTitle)
-            navController.navigate("/tag-groups/${serializedTagGroupTitle}/${serializedTagName}/${serializedStoryTitle}")
+            navController.navigate("/story/${serializedStoryTitle}")
         }
 
         @Composable
         override fun Params(
-            content: @Composable (tagGroupName: String, tagName: String, storyName: String) -> Unit
+            content: @Composable (storyName: String) -> Unit
         ) {
             val arguments = navController.currentBackStackEntry?.arguments
-            val tagGroupName = arguments?.getString(TAG_GROUP_NAME_KEY)?.let(serializer::parse)
-            val tagName = arguments?.getString(TAG_NAME_KEY)?.let(serializer::parse)
             val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
-            RequireNonNull(tagGroupName) { tagGroupNameNonNull ->
-                RequireNonNull(tagName) { tagNameNonNull ->
-                    RequireNonNull(storyName) { storyNameNonNull ->
-                        content(tagGroupNameNonNull, tagNameNonNull, storyNameNonNull)
-                    }
-                }
-            }
+                .let { rememberLastNonNull(it) }
+            if (storyName != null) content(
+                storyName
+            )
         }
 
         override val route: String
-            get() = "/tag-groups/{$TAG_GROUP_NAME_KEY}/{$TAG_NAME_KEY}/{$STORY_TITLE_KEY"
+            get() = "/story/{$STORY_TITLE_KEY}"
     }
 
     val settingsRoute = object : RouteNoParameters {

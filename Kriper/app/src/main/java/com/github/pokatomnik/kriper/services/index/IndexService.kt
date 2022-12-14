@@ -25,5 +25,11 @@ class IndexService(private val contentReaderService: ContentReaderService) {
     val dateCreatedISO: Instant
         get() = index.dateCreatedISO
 
-    val content by lazy { Content(contentReaderService, index.tagsMap) }
+    val content by lazy {
+        Content(
+            pageMetaMap = index.pageMeta,
+            contentReaderService = contentReaderService,
+            contentSource = index.tagsMap
+        )
+    }
 }

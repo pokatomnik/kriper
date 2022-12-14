@@ -113,20 +113,24 @@ export class App {
     const pagesToFetch = await this.getPagesToFetch(pagination);
     const pageMeta = await this.getPageMeta(pagesToFetch);
 
+    const pageMetaIndex: { [pageTitle: string]: IPageMeta } = {};
     for (const pageMetaItem of pageMeta) {
+      pageMetaIndex[pageMetaItem.title] = pageMetaItem;
+
       for (const currentTagTitle of pageMetaItem.tags) {
         for (const [_, tagGroup] of Object.entries(tagsGroupMap)) {
           for (const [tagTitle, tag] of Object.entries(tagGroup)) {
             if (currentTagTitle === tagTitle) {
-              tag.pages[pageMetaItem.title] = pageMetaItem;
+              tag.pages.push(pageMetaItem.title);
             }
           }
         }
       }
     }
+
     const index: IIndex = {
       tagsMap: tagsGroupMap,
-      pageMeta: pageMeta,
+      pageMeta: pageMetaIndex,
       dateCreatedISO: new Date().toISOString(),
     };
 

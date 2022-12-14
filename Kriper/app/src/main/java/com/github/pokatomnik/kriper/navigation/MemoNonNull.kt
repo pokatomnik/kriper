@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 @Composable
-fun <T : Any> RequireNonNull(nullableValue: T?, content: @Composable (T) -> Unit) {
+fun <T : Any> rememberLastNonNull(nullableValue: T?): T? {
     val (value, setValue) = remember {
         mutableStateOf(nullableValue)
     }
@@ -15,5 +15,5 @@ fun <T : Any> RequireNonNull(nullableValue: T?, content: @Composable (T) -> Unit
         if (nullableValue != null) setValue(nullableValue)
     }
 
-    if (value != null) content(value)
+    return value
 }

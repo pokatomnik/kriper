@@ -1,33 +1,26 @@
 package com.github.pokatomnik.kriper.screens.taggroups
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.ui.components.LazyList
+import com.github.pokatomnik.kriper.ui.components.OneRowNavigationListItem
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 
 @Composable
 fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
-    PageContainer(
-        priorButton = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = ""
+    IndexServiceReadiness { indexService ->
+        PageContainer(
+            header = {
+                PageTitle(title = "Группы тегов")
+            }
+        ) {
+            LazyList(list = indexService.content.groupNames.toList()) { title ->
+                OneRowNavigationListItem(
+                    title = title,
+                    onClick = { onNavigateToGroup(title) }
                 )
             }
-        },
-        header = {
-            PageTitle(title = "Группы тегов")
-        }
-    ) {
-        Button(onClick = { onNavigateToGroup((0..10000).random().toString()) }) {
-            Text("This is tag groups screen")
         }
     }
 }

@@ -68,7 +68,7 @@ export class TagsParser implements IParser<ITagsGroupMap> {
 
       const tagGroup: { [tagTitle: string]: ITag } = {};
       for (const tagName of tagNames) {
-        const tag: ITag = { tagName: tagName, pages: {} };
+        const tag: ITag = { tagName: tagName, pages: [] };
         tagGroup[tagName] = tag;
       }
 

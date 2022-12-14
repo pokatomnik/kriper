@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.screens.tag
+package com.github.pokatomnik.kriper.screens.storiesoftag
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -12,34 +12,36 @@ import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 
 @Composable
-fun Tag(
-    tagGroupTitle: String,
-    navigateBack: () -> Unit,
-    navigateToStories: (tagName: String) -> Unit
+fun StoriesOfTag(
+    tagGroupName: String,
+    tagName: String,
+    onNavigateBack: () -> Unit,
+    onNavigateToStory: (storyTitle: String) -> Unit
 ) {
     IndexServiceReadiness { indexService ->
         PageContainer(
             priorButton = {
-                IconButton(onClick = navigateBack) {
+                IconButton(onClick = onNavigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Назад к группам тегов"
+                        contentDescription = "Назад к тегу $tagName"
                     )
                 }
             },
             header = {
-                PageTitle(title = tagGroupTitle)
+                PageTitle(title = tagName)
             }
         ) {
             LazyList(
                 list = indexService.content
-                    .getTagGroupByName(tagGroupTitle)
-                    .tagNames
+                    .getTagGroupByName(tagGroupName)
+                    .getTagContentsByName(tagName)
+                    .pageNames
                     .toList()
-            ) { tagTitle ->
+            ) { pageTitle ->
                 OneRowNavigationListItem(
-                    title = tagTitle,
-                    onClick = { navigateToStories(tagTitle) }
+                    title = pageTitle,
+                    onClick = { onNavigateToStory(pageTitle) }
                 )
             }
         }
