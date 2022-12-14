@@ -1,7 +1,7 @@
 package com.github.pokatomnik.kriper.services.index
 
 import com.github.pokatomnik.kriper.contentreader.ContentReaderService
-import com.github.pokatomnik.kriper.domain.PageMeta
+import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -9,26 +9,41 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class Content(
-    private val pageMetaMap: Map<String, PageMeta>,
     private val contentReaderService: ContentReaderService,
-    private val contentSource: Map<String, Map<String, Tag>>
+    private val index: Index,
 ) {
     val groupNames: Collection<String>
-        get() = contentSource.keys
+        get() = index.tagsMap.keys
 
     private val tagContentsMap = mutableMapOf<String, TagGroup>()
 
+    val allTagsGroup: TagGroup by lazy {
+        val tagGroupSource = index.tagsMap.entries
+            .fold(mutableMapOf<String, Tag>()) { allTagsGroup, (_, currentTagGroup) ->
+                allTagsGroup.apply {
+                    currentTagGroup.forEach { (currentKey, currentTag) ->
+                        allTagsGroup[currentKey] = currentTag
+                    }
+                }
+            }
+        TagGroup(
+            pageMetaMap = index.pageMeta,
+            tagGroupName = "ВСЕ",
+            tagGroupSource = tagGroupSource
+        )
+    }
+
     fun getTagGroupByName(tagGroupName: String): TagGroup =
-        tagContentsMap[tagGroupName] ?: contentSource[tagGroupName]?.let { tagGroupSource ->
+        tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->
             TagGroup(
-                pageMetaMap = pageMetaMap,
+                pageMetaMap = index.pageMeta,
                 tagGroupName = tagGroupName,
                 tagGroupSource = tagGroupSource
             ).apply {
                 tagContentsMap[tagGroupName] = this
             }
         } ?: TagGroup(
-            pageMetaMap = pageMetaMap,
+            pageMetaMap = index.pageMeta,
             tagGroupName = "",
             tagGroupSource = mapOf()
         )
@@ -36,7 +51,7 @@ class Content(
     suspend fun getStoryMarkdown(storyTitle: String) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             try {
-                val pageMeta = pageMetaMap[storyTitle] ?: throw IOException("No content for page meta with title $storyTitle")
+                val pageMeta = index.pageMeta[storyTitle] ?: throw IOException("No content for page meta with title $storyTitle")
                 contentReaderService.readContents("content/${pageMeta.contentId}.md")
             } catch (e: IOException) {
                 ""

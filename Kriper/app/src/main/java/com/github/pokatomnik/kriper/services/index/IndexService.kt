@@ -17,9 +17,7 @@ class IndexService(private val contentReaderService: ContentReaderService) {
     fun prepareIndex(): Index {
         val indexJSONContent = contentReaderService
             .readContents("content/index.json")
-        val index = parseFromString(indexJSONContent)
-        _index = index
-        return index
+        return parseFromString(indexJSONContent).apply { _index = this }
     }
 
     val dateCreatedISO: Instant
@@ -27,9 +25,8 @@ class IndexService(private val contentReaderService: ContentReaderService) {
 
     val content by lazy {
         Content(
-            pageMetaMap = index.pageMeta,
             contentReaderService = contentReaderService,
-            contentSource = index.tagsMap
+            index = index,
         )
     }
 }

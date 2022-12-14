@@ -36,7 +36,7 @@ fun Tag(
                     .getTagGroupByName(tagGroupTitle)
                     .tagNames
                     .toList()
-            ) { tagTitle ->
+            ) { _, tagTitle ->
                 OneRowNavigationListItem(
                     title = tagTitle,
                     onClick = { navigateToStories(tagTitle) }

@@ -38,7 +38,7 @@ fun StoriesOfTag(
                     .getTagContentsByName(tagName)
                     .pageNames
                     .toList()
-            ) { pageTitle ->
+            ) { _, pageTitle ->
                 OneRowNavigationListItem(
                     title = pageTitle,
                     onClick = { onNavigateToStory(pageTitle) }
