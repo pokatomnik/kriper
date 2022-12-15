@@ -38,6 +38,18 @@ data class Navigation(
         return navBackStackEntry?.destination
     }
 
+    /**
+     * This must point to a home route. Must return any route listed below.
+     */
+    val defaultRoute: Route
+        get() = tagGroupsRoute
+
+    /**
+     * This is the top level of tags hierarchy.
+     * All tags presented are grouped by tag groups.
+     * This route must display all tag groups.
+     * This is unparametrized route
+     */
     val tagGroupsRoute = object : RouteNoParameters {
         private val routePath = "/tag-groups"
 
@@ -60,9 +72,9 @@ data class Navigation(
             get() = routePath
     }
 
-    val defaultRoute: Route
-        get() = tagGroupsRoute
-
+    /**
+     * This route must list all tags in the selected tags group.
+     */
     val tagsOfGroupRoute = object : RouteSingleParameter {
         private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
 
@@ -87,6 +99,9 @@ data class Navigation(
             get() = "/tag-groups/{$TAG_GROUP_NAME_KEY}"
     }
 
+    /**
+     * This route must display all stories of selected tag of selected tag group.
+     */
     val storiesOfTagRoute = object : RouteTwoParameters {
         private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
 
@@ -115,6 +130,10 @@ data class Navigation(
             get() = "/tag-groups/{$TAG_GROUP_NAME_KEY}/{$TAG_NAME_KEY}"
     }
 
+    /**
+     * Story route.
+     * Must display selected story
+     */
     val storyRoute = object : RouteSingleParameter {
         private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
 
@@ -139,6 +158,9 @@ data class Navigation(
             get() = "/story/{$STORY_TITLE_KEY}"
     }
 
+    /**
+     * Route for displaying application settings
+     */
     val settingsRoute = object : RouteNoParameters {
         private val routePath = "/settings"
 
