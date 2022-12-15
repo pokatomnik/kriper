@@ -1,5 +1,7 @@
 package com.github.pokatomnik.kriper.screens.home
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,11 +12,15 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.HistoryEdu
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import kotlinx.coroutines.launch
 
 @Composable
 private fun HomeHorizontalSpacer() {
@@ -31,6 +37,24 @@ fun Home(
     onNavigateToAllTags: () -> Unit,
     onNavigateToAllStories: () -> Unit,
 ) {
+    val animatedTitleTranslateX = remember { Animatable(-100f) }
+    val animatedTitleAlpha = remember { Animatable(0.3f) }
+
+    LaunchedEffect(Unit) {
+        launch {
+            animatedTitleTranslateX.animateTo(
+                targetValue = 0f,
+                animationSpec = tween(2000)
+            )
+        }
+        launch {
+            animatedTitleAlpha.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(2000)
+            )
+        }
+    }
+
     IndexServiceReadiness { indexService ->
         PageContainer {
             Column(
@@ -46,7 +70,11 @@ fun Home(
                 ) {
                     Text(
                         text = "...Kriper",
-                        style = MaterialTheme.typography.h1
+                        style = MaterialTheme.typography.h1,
+                        modifier = Modifier.graphicsLayer {
+                            translationX = animatedTitleTranslateX.value
+                            alpha = animatedTitleAlpha.value
+                        }
                     )
                 }
                 HomeHorizontalSpacer()
@@ -58,7 +86,9 @@ fun Home(
                 )
                 HomeHorizontalSpacer()
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
                         IconicCardSmall(
                             title = "Все метки",
                             icon = Icons.Filled.Tag,
@@ -66,7 +96,9 @@ fun Home(
                         )
                     }
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
-                    Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
                         IconicCardSmall(
                             title = "Все истории",
                             icon = Icons.Filled.HistoryEdu,
