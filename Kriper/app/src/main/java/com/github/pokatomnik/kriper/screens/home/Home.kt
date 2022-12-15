@@ -96,9 +96,11 @@ fun Home(
                         )
                     }
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
                         IconicCardSmall(
                             title = "Все истории",
                             icon = Icons.Filled.HistoryEdu,
