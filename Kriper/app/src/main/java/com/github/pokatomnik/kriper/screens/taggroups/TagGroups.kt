@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.ext.getPluralNoun
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 
@@ -21,9 +22,16 @@ fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
                 modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp)
             ) {
                 LazyList(list = groupNames) { index, groupTitle ->
-                    val tagsString = indexService.content
+                    val tagGroup = indexService.content
                         .getTagGroupByName(groupTitle)
-                        .shortIntro
+
+                    val tagsString = tagGroup.shortIntro
+                    val tagsInGroup = tagGroup.tagNames.size
+                    val tagsInGroupPlural = tagsInGroup.getPluralNoun(
+                        "метка",
+                        "метки",
+                        "меток"
+                    )
 
                     val isFirst = 0 == index
 
@@ -35,7 +43,7 @@ fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
                         )
                     }
                     CardNavigationListItem(
-                        title = groupTitle,
+                        title = "$groupTitle, $tagsInGroup $tagsInGroupPlural",
                         description = tagsString,
                         onClick = { onNavigateToGroup(groupTitle) }
                     )

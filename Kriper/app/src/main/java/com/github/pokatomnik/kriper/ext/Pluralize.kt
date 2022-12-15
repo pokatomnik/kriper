@@ -2,10 +2,6 @@ package com.github.pokatomnik.kriper.ext
 
 // Dirty port of https://github.com/megatolya/plural-ru
 
-fun Int.getPluralNoun(form1: String, form2: String): String {
-    return if (this > 1) form2 else form1
-}
-
 fun Int.getPluralNoun(form1: String, form2: String, form3: String): String {
     return if (this % 10 == 1 && this % 100 != 11) {
         form1
