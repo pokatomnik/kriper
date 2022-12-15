@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.screens.storiesoftag
+package com.github.pokatomnik.kriper.screens.alltags
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -8,40 +8,32 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.ext.getPluralNoun
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 
 @Composable
-fun StoriesOfTag(
-    tagGroupName: String? = null,
-    tagName: String,
+fun AllTags(
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit
+    navigateToStories: (tagName: String) -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        val tagContents = if (tagGroupName == null) {
-                indexService.content
-                    .allTagsGroup
-                    .getTagContentsByName(tagName)
-            } else {
-                indexService.content
-                    .getTagGroupByName(tagGroupName)
-                    .getTagContentsByName(tagName)
-            }
+        val allTagsGroup = indexService.content.allTagsGroup
+        val allTags = allTagsGroup.tagNames
 
         PageContainer(
             priorButton = {
                 IconButton(onClick = onNavigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Назад к тегу $tagName"
+                        contentDescription = "Назад"
                     )
                 }
             },
             header = {
-                PageTitle(title = "#${tagName.uppercaseFirst()}")
+                PageTitle(title = "Все метки")
             }
         ) {
             Column(
@@ -49,9 +41,18 @@ fun StoriesOfTag(
                     .fillMaxSize()
                     .padding(horizontal = SMALL_PADDING.dp)
             ) {
-                LazyList(list = tagContents.pageNames.toList()) { index, pageTitle ->
+                LazyList(list = allTags.toList()) { index, tagTitle ->
+                    val tagContents = allTagsGroup.getTagContentsByName(tagTitle)
                     val isFirst = 0 == index
-                    val pageMeta = indexService.content.getPageMetaByName(pageTitle)
+
+                    val storiesInTag = tagContents.pageNames.size
+                    val shortIntro = tagContents.shortIntro
+
+                    val storiesPlural = storiesInTag.getPluralNoun(
+                        form1 = "история",
+                        form2 = "истории",
+                        form3 = "историй"
+                    )
 
                     if (isFirst) {
                         Spacer(
@@ -60,13 +61,10 @@ fun StoriesOfTag(
                                 .height(SMALL_PADDING.dp)
                         )
                     }
-                    StoryCardNavigationListItem(
-                        title = pageTitle,
-                        tags = pageMeta?.tags ?: listOf(),
-                        rating = pageMeta?.rating ?: 0,
-                        author = pageMeta?.authorNickname ?: "Автор не указан",
-                        readingTimeMinutes = pageMeta?.readingTimeMinutes ?: 0f,
-                        onClick = { onNavigateToStory(pageTitle) }
+                    CardNavigationListItem(
+                        title = "#${tagTitle.uppercaseFirst()}, $storiesInTag $storiesPlural",
+                        description = shortIntro,
+                        onClick = { navigateToStories(tagTitle) }
                     )
                     Spacer(
                         modifier = Modifier

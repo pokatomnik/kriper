@@ -34,6 +34,10 @@ class Content(
         )
     }
 
+    val allStoryTitles: Collection<String> by lazy {
+        index.pageMeta.keys.sortedWith { a, b -> a.compareTo(b) }
+    }
+
     fun getPageMetaByName(storyTitle: String): PageMeta? = index.pageMeta[storyTitle]
 
     fun getTagGroupByName(tagGroupName: String): TagGroup =

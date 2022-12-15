@@ -1,6 +1,10 @@
 package com.github.pokatomnik.kriper.screens.taggroups
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -9,11 +13,22 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 
 @Composable
-fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
+fun TagGroups(
+    onNavigateToGroup: (tagName: String) -> Unit,
+    onNavigateBack: () -> Unit,
+) {
     IndexServiceReadiness { indexService ->
         val groupNames = indexService.content.groupNames.toList()
 
         PageContainer(
+            priorButton = {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Назад"
+                    )
+                }
+            },
             header = {
                 PageTitle(title = "Группы тегов")
             }

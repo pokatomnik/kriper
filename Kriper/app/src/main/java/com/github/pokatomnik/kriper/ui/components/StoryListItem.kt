@@ -1,6 +1,5 @@
 package com.github.pokatomnik.kriper.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -17,9 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
 
@@ -28,21 +25,6 @@ private fun Float.format(digits: Int) = if (this - this.toInt() > 0) {
 } else {
     this.toInt().toString()
 }
-
-@Composable
-private fun VerticalDivider(
-    modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.onSurface.copy(alpha = DividerAlpha),
-    thickness: Dp = 1.dp
-) {
-    Box(
-        modifier
-            .fillMaxHeight()
-            .width(thickness)
-            .background(color = color)
-    )
-}
-private const val DividerAlpha = 0.12f
 
 @Composable
 fun StoryCardNavigationListItem(

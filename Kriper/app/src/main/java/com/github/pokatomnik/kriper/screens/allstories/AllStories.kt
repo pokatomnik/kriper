@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.screens.storiesoftag
+package com.github.pokatomnik.kriper.screens.allstories
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -8,48 +8,35 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 
 @Composable
-fun StoriesOfTag(
-    tagGroupName: String? = null,
-    tagName: String,
+fun AllStories(
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit
+    onNavigateToStory: (storyTitle: String) -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        val tagContents = if (tagGroupName == null) {
-                indexService.content
-                    .allTagsGroup
-                    .getTagContentsByName(tagName)
-            } else {
-                indexService.content
-                    .getTagGroupByName(tagGroupName)
-                    .getTagContentsByName(tagName)
-            }
+        val allStoryTitles = indexService.content.allStoryTitles.toList()
 
         PageContainer(
             priorButton = {
                 IconButton(onClick = onNavigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Назад к тегу $tagName"
+                        contentDescription = "Назад на главную"
                     )
                 }
             },
             header = {
-                PageTitle(title = "#${tagName.uppercaseFirst()}")
+                PageTitle(title = "Все истории")
             }
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = SMALL_PADDING.dp)
-            ) {
-                LazyList(list = tagContents.pageNames.toList()) { index, pageTitle ->
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(SMALL_PADDING.dp)) {
+                LazyList(list = allStoryTitles) { index, pageTitle ->
                     val isFirst = 0 == index
                     val pageMeta = indexService.content.getPageMetaByName(pageTitle)
 

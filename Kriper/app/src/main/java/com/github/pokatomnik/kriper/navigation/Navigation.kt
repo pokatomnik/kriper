@@ -39,7 +39,7 @@ data class Navigation(
      * This must point to a home route. Must return any route listed below.
      */
     val defaultRoute: Route
-        get() = tagGroupsRoute
+        get() = homeRoute
 
     val homeRoute = object : RouteNoParameters {
         private val routePath = "/home"
@@ -119,7 +119,7 @@ data class Navigation(
     /**
      * This route must display all stories of selected tag of selected tag group.
      */
-    val storiesOfTagRoute = object : RouteTwoParameters {
+    val storiesOfTagOfGroupRoute = object : RouteTwoParameters {
         private val TAG_GROUP_NAME_KEY = "TAG_GROUP_NAME_KEY"
 
         private val TAG_NAME_KEY = "TAG_NAME_KEY"
@@ -173,6 +173,81 @@ data class Navigation(
 
         override val route: String
             get() = "/story/{$STORY_TITLE_KEY}"
+    }
+
+    /**
+     * This route must display all tags presented in the content.
+     */
+    val allTagsRoute = object : RouteNoParameters {
+        private val routePath = "/all-tags"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val storiesOfTagRoute = object : RouteSingleParameter {
+        private val TAG_NAME_KEY = "TAG_NAME_KEY"
+
+        override fun navigate(tagName: String) {
+            val serializedTagName = serializer.serialize(tagName)
+            navController.navigateDistinct("/tag/${serializedTagName}")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (tagName: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val tagName = arguments
+                ?.getString(TAG_NAME_KEY)
+                ?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
+            tagName?.let { content(it) }
+        }
+
+        override val route: String
+            get() = "/tag/{${TAG_NAME_KEY}}"
+    }
+
+    /**
+     * This route must display all stories presented in the content
+     */
+    val allStoriesRoute = object : RouteNoParameters {
+        private val routePath = "/all-stories"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
     }
 
     /**

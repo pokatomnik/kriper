@@ -45,6 +45,12 @@ fun Tag(
                     val storiesInTag = tagContents.pageNames.size
                     val shortIntro = tagContents.shortIntro
 
+                    val storiesPlural = storiesInTag.getPluralNoun(
+                        form1 = "история",
+                        form2 = "истории",
+                        form3 = "историй"
+                    )
+
                     if (isFirst) {
                         Spacer(
                             modifier = Modifier
@@ -52,11 +58,6 @@ fun Tag(
                                 .height(SMALL_PADDING.dp)
                         )
                     }
-                    val storiesPlural = storiesInTag.getPluralNoun(
-                        form1 = "история",
-                        form2 = "истории",
-                        form3 = "историй"
-                    )
                     CardNavigationListItem(
                         title = "#${tagTitle.uppercaseFirst()}, $storiesInTag $storiesPlural",
                         description = shortIntro,

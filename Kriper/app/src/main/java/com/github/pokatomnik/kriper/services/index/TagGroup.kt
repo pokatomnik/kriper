@@ -11,8 +11,9 @@ data class TagGroup(
 ) {
     private val tagsByName = mutableMapOf<String, TagContents>()
 
-    val tagNames: Collection<String>
-        get() = tagGroupSource.keys
+    val tagNames: Collection<String> by lazy {
+        tagGroupSource.keys.sortedWith { a, b -> a.compareTo(b) }
+    }
 
     val shortIntro by lazy {
         tagNames.joinToString(" ") { "#${it.uppercaseFirst()}" }
