@@ -1,7 +1,6 @@
 @file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 package com.github.pokatomnik.kriper.navigation
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination
@@ -9,15 +8,13 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.github.pokatomnik.kriper.services.serializer.Serializer
-import com.github.pokatomnik.kriper.services.serializer.rememberSerializer
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 data class Navigation(
     val navController: NavHostController,
     private val serializer: Serializer
 ) {
     private fun NavHostController.navigateDistinct(route: String) {
-        navigate(route) { launchSingleTop = true;  }
+        navigate(route) { launchSingleTop = true; }
     }
 
     private fun NavHostController.navigateAllowSame(route: String) {
@@ -44,6 +41,26 @@ data class Navigation(
     val defaultRoute: Route
         get() = tagGroupsRoute
 
+    val homeRoute = object : RouteNoParameters {
+        private val routePath = "/home"
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
     /**
      * This is the top level of tags hierarchy.
      * All tags presented are grouped by tag groups.
@@ -184,14 +201,3 @@ data class Navigation(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun rememberNavigation(): Navigation {
-    val navHostController = rememberAnimatedNavController()
-    val serializer = rememberSerializer()
-
-    return Navigation(
-        navController = navHostController,
-        serializer = serializer
-    )
-}
