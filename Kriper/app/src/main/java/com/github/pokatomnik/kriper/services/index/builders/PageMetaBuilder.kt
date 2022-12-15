@@ -38,7 +38,7 @@ fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
         authorNickname = pageMetaElement.asJsonObject["authorNickname"].asString,
         dateCreated = dateCreated,
         numberOfViews = pageMetaElement.asJsonObject["numberOfViews"].asInt,
-        readingTimeMinutes = pageMetaElement.asJsonObject["readingTimeMinutes"].asInt,
+        readingTimeMinutes = pageMetaElement.asJsonObject["readingTimeMinutes"].asFloat,
         source = try {
             pageMetaElement.asJsonObject["source"].asString
         } catch (e: Exception) {

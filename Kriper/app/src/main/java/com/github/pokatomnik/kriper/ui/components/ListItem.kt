@@ -11,24 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
-const val SMALL_ITEM_HEIGHT = 64
-const val MIDDLE_ITEM_HEIGHT = 96
-const val LARGE_ITEM_HEIGHT = 128
-
 @Composable
-fun LargeCardNavigationListItem(
+fun CardNavigationListItem(
     title: String,
-    description: @Composable () -> Unit,
+    description: String,
     onClick: () -> Unit
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
         elevation = 3.dp,
-        modifier = Modifier.fillMaxWidth().height(LARGE_ITEM_HEIGHT.dp)
+        modifier = Modifier.fillMaxWidth().height(96.dp)
     ) {
         Row(
             modifier = Modifier
@@ -50,7 +47,7 @@ fun LargeCardNavigationListItem(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f),
+                        .height(32.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
@@ -60,14 +57,19 @@ fun LargeCardNavigationListItem(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Divider(modifier = Modifier.fillMaxWidth().padding(vertical = SMALL_PADDING.dp))
+                Spacer(modifier = Modifier.fillMaxWidth().height(SMALL_PADDING.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    description()
+                    Text(
+                        text = description,
+                        modifier = Modifier.alpha(ALPHA_GHOST),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
             Column(
@@ -92,7 +94,7 @@ fun OneRowNavigationListItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(SMALL_ITEM_HEIGHT.dp)
+            .height(64.dp)
             .clickable(
                 indication = rememberRipple(bounded = true),
                 onClick = onClick,
@@ -113,7 +115,7 @@ fun OneRowNavigationListItem(
             )
         }
         Column(
-            modifier = Modifier.height(SMALL_ITEM_HEIGHT.dp),
+            modifier = Modifier.height(64.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

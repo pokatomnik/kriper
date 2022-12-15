@@ -6,7 +6,7 @@ data class PageMeta(
     val authorNickname: String,
     val dateCreated: UncheckedDate,
     val numberOfViews: Int,
-    val readingTimeMinutes: Int,
+    val readingTimeMinutes: Float,
     val source: String?,
     val rating: Int,
     val tags: Set<String>,

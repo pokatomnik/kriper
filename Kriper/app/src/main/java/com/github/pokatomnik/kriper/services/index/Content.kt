@@ -2,6 +2,7 @@ package com.github.pokatomnik.kriper.services.index
 
 import com.github.pokatomnik.kriper.contentreader.ContentReaderService
 import com.github.pokatomnik.kriper.domain.Index
+import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,6 +33,8 @@ class Content(
             tagGroupSource = tagGroupSource
         )
     }
+
+    fun getPageMetaByName(storyTitle: String): PageMeta? = index.pageMeta[storyTitle]
 
     fun getTagGroupByName(tagGroupName: String): TagGroup =
         tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->

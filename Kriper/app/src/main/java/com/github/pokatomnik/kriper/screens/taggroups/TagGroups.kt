@@ -1,11 +1,8 @@
 package com.github.pokatomnik.kriper.screens.taggroups
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
@@ -37,16 +34,9 @@ fun TagGroups(onNavigateToGroup: (tagName: String) -> Unit) {
                                 .height(SMALL_PADDING.dp)
                         )
                     }
-                    LargeCardNavigationListItem(
+                    CardNavigationListItem(
                         title = groupTitle,
-                        description = {
-                            Text(
-                                text = tagsString,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.alpha(ALPHA_GHOST)
-                            )
-                        },
+                        description = tagsString,
                         onClick = { onNavigateToGroup(groupTitle) }
                     )
                     Spacer(
