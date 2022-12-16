@@ -15,12 +15,14 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.services.preferences.page.FontSize
+import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
+import com.github.pokatomnik.kriper.ui.components.MarkdownText
 import com.github.pokatomnik.kriper.ui.components.PageContainer
-import com.github.pokatomnik.kriper.ui.components.PageTitle
-import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -33,8 +35,10 @@ fun Story(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
+
     val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
     val (storyMarkdown, setStoryMarkdown) = remember { mutableStateOf("") }
+    val (fontSize, setFontSize) = rememberPreferences().pagePreferences.fontSize.collectAsState()
 
     IndexServiceReadiness { indexService ->
         LaunchedEffect(storyTitle) {
@@ -62,7 +66,7 @@ fun Story(
                             )
                     ) {
                         Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
-                            PageTitle(title = storyTitle)
+                            StoryTitle(title = storyTitle)
                             Spacer(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -73,6 +77,7 @@ fun Story(
                                     markdown = storyMarkdown,
                                     textAlign = TextAlign.Justify,
                                     disableLinkMovementMethod = true,
+                                    fontSize = fontSize.sp,
                                 )
                             }
                         }
@@ -81,9 +86,9 @@ fun Story(
             },
             drawerContent = {
                 BottomDrawerContent(
-                    onResetFontSizePress = {},
-                    onDecreaseFontSizePress = {},
-                    onIncreaseFontSizePress = {}
+                    onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
+                    onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
+                    onIncreaseFontSizePress = { setFontSize(fontSize + 1) }
                 )
             }
         )
