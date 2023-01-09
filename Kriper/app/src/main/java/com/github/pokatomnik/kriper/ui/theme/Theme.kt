@@ -5,6 +5,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.github.pokatomnik.kriper.services.preferences.global.ThemeIdentifier
+import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -28,14 +30,18 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun KriperTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+private fun KriperThemeInternal(
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
+    val themeState = rememberPreferences()
+        .globalPreferences
+        .themeSelection
+        .collectAsState()
+
+    val colors = when (themeState.value) {
+        ThemeIdentifier.LIGHT -> LightColorPalette
+        ThemeIdentifier.DARK -> DarkColorPalette
+        else -> if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette
     }
 
     MaterialTheme(
@@ -44,4 +50,16 @@ fun KriperTheme(
         shapes = Shapes,
         content = content
     )
+}
+
+@Composable
+fun KriperTheme(
+    content: @Composable () -> Unit
+) {
+    val preferences = rememberPreferences().globalPreferences.themeSelection
+    preferences.Provider {
+        KriperThemeInternal {
+            content()
+        }
+    }
 }
