@@ -33,9 +33,11 @@ fun AllStories(
                 PageTitle(title = "Все истории")
             }
         ) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(SMALL_PADDING.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(SMALL_PADDING.dp)
+            ) {
                 LazyList(list = allStoryTitles) { index, pageTitle ->
                     val isFirst = 0 == index
                     val pageMeta = indexService.content.getPageMetaByName(pageTitle)

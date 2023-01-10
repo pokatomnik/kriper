@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.HistoryEdu
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ fun Home(
     onNavigateToTagGroups: () -> Unit,
     onNavigateToAllTags: () -> Unit,
     onNavigateToAllStories: () -> Unit,
+    onNavigateToHistory: () -> Unit,
 ) {
     val animatedTitleTranslateX = remember { Animatable(-100f) }
     val animatedTitleAlpha = remember { Animatable(0.3f) }
@@ -108,6 +110,13 @@ fun Home(
                         )
                     }
                 }
+                HomeHorizontalSpacer()
+                IconicCardFull(
+                    title = "Хронология",
+                    icon = Icons.Filled.History,
+                    description = "Прочитано ранее",
+                    onClick = onNavigateToHistory
+                )
                 HomeHorizontalSpacer()
             }
         }
