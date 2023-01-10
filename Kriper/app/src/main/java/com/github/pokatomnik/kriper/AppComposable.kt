@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.allstories.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
+import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.settings.Settings
 import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
@@ -52,6 +54,9 @@ fun AppComposable() {
                                     },
                                     onNavigateToAllStories = {
                                         navigation.allStoriesRoute.navigate()
+                                    },
+                                    onNavigateToHistory = {
+                                        navigation.historyRoute.navigate()
                                     }
                                 )
                             }
@@ -156,6 +161,20 @@ fun AppComposable() {
                                 )
                             }
                         }
+                        screen(
+                            route = navigation.historyRoute.route
+                        ) {
+                            navigation.historyRoute.Params {
+                                History(
+                                    onNavigateBack = {
+                                        navigation.homeRoute.navigate()
+                                    },
+                                    onNavigateToStory = { storyTitle ->
+                                        navigation.storyRoute.navigate(storyTitle)
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             },
@@ -170,6 +189,16 @@ fun AppComposable() {
                             Icon(
                                 imageVector = Icons.Filled.Home,
                                 contentDescription = "Главная"
+                            )
+                        }
+                    )
+                    BottomNavigationItem(
+                        selected = navigation.historyRoute.on(),
+                        onClick = { navigation.historyRoute.navigate() },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Filled.History,
+                                contentDescription = "Хронология"
                             )
                         }
                     )
