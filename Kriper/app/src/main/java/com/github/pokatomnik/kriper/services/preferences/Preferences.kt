@@ -2,6 +2,7 @@ package com.github.pokatomnik.kriper.services.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.github.pokatomnik.kriper.services.preferences.global.GlobalPreferences
 import com.github.pokatomnik.kriper.services.preferences.page.PagePreferences
 
 class Preferences(private val context: Context) {
@@ -11,5 +12,9 @@ class Preferences(private val context: Context) {
 
     val pagePreferences = PagePreferences(
         getPreferencesByName("PAGE_PREFERENCES")
+    )
+
+    val globalPreferences = GlobalPreferences(
+        getPreferencesByName("GLOBAL_PREFERENCES")
     )
 }

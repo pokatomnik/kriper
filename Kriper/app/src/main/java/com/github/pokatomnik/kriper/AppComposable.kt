@@ -115,7 +115,11 @@ fun AppComposable() {
                             route = navigation.settingsRoute.route,
                         ) {
                             navigation.settingsRoute.Params {
-                                Settings()
+                                Settings(
+                                    onNavigateBack = {
+                                        navigation.homeRoute.navigate()
+                                    }
+                                )
                             }
                         }
                         screen(

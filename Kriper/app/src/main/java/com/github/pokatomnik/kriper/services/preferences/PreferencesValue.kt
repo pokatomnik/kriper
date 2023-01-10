@@ -7,5 +7,5 @@ interface PreferencesIntValue {
 
 interface PreferencesStringValue {
     fun write(value: String)
-    fun read(): String?
+    fun read(defaultValue: String): String
 }
