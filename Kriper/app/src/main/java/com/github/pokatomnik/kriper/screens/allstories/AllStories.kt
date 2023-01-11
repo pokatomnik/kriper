@@ -36,7 +36,7 @@ fun AllStories(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(SMALL_PADDING.dp)
+                    .padding(horizontal = SMALL_PADDING.dp)
             ) {
                 LazyList(list = allStoryTitles) { index, pageTitle ->
                     val isFirst = 0 == index

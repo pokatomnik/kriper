@@ -45,7 +45,7 @@ fun History(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(SMALL_PADDING.dp)
+                        .padding(horizontal = SMALL_PADDING.dp)
                 ) {
                     LazyList(list = pageMeta) { index, currentPageMeta ->
                         val isFirst = 0 == index
