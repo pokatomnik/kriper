@@ -4,35 +4,27 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import com.github.pokatomnik.kriper.services.preferences.global.ThemeIdentifier
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = DarkPrimary,
+    secondary = DarkSecondary
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    primary = LightPrimary,
+    secondary = LightSecondary
 )
 
 @Composable
 private fun KriperThemeInternal(
     content: @Composable () -> Unit
 ) {
+    val systemUIController = rememberSystemUiController()
     val themeState = rememberPreferences()
         .globalPreferences
         .themeSelection
@@ -43,6 +35,8 @@ private fun KriperThemeInternal(
         ThemeIdentifier.DARK -> DarkColorPalette
         else -> if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette
     }
+
+    systemUIController.setSystemBarsColor(colors.primarySurface)
 
     MaterialTheme(
         colors = colors,
