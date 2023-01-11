@@ -2,7 +2,8 @@ package com.github.pokatomnik.kriper.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val LightPrimary = Color(0xff212529)
+val LightSecondary = Color(0xff0d6efd)
+
+val DarkPrimary = Color(0xffffff1a)
+val DarkSecondary = Color(0xffcf0000)
