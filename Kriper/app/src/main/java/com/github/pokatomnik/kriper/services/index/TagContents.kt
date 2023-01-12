@@ -13,7 +13,7 @@ class TagContents(
     }
 
     val pageNames: Collection<String>
-        get() = tag.pages
+        get() = tag.pages.sortedWith { a, b -> a.compareTo(b) }
 
     fun getPageByTitle(pageTitle: String): PageMeta? = pageMetaMap[pageTitle]
 }

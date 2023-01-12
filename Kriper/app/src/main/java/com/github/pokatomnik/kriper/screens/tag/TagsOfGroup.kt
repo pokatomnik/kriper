@@ -14,7 +14,7 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 
 @Composable
-fun Tag(
+fun TagsOfGroup(
     tagGroupTitle: String,
     navigateBack: () -> Unit,
     navigateToStories: (tagName: String) -> Unit

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.widgets.StoryCardNavigationListItem
 
 @Composable
 fun History(

@@ -62,6 +62,6 @@ class Theme(private val preferencesValue: PreferencesStringValue) {
     }
 
     companion object {
-        const val defaultIdentifier = "AUTO"
+        private const val defaultIdentifier = "AUTO"
     }
 }

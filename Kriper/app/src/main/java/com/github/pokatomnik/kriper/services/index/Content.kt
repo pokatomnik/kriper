@@ -14,7 +14,7 @@ class Content(
     private val index: Index,
 ) {
     val groupNames: Collection<String>
-        get() = index.tagsMap.keys
+        get() = index.tagsMap.keys.sortedWith { a, b -> a.compareTo(b) }
 
     private val tagContentsMap = mutableMapOf<String, TagGroup>()
 

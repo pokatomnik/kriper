@@ -15,10 +15,9 @@ class GlobalPreferences(private val sharedPreferences: SharedPreferences) {
                 return sharedPreferences
                     .getString(
                         THEME_IDENTIFIER_KEY,
-                        Theme.defaultIdentifier
-                    ) ?: Theme.defaultIdentifier
+                        defaultValue
+                    ) ?: defaultValue
             }
-
         }
     )
 }
