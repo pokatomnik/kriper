@@ -1,18 +1,25 @@
 package com.github.pokatomnik.kriper.screens.storiesoftag
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
 import com.github.pokatomnik.kriper.ui.components.PageTitle
+import com.github.pokatomnik.kriper.ui.widgets.StoryCardNavigationListItem
+import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun StoriesOfTag(
     tagGroupName: String? = null,
@@ -20,7 +27,14 @@ fun StoriesOfTag(
     onNavigateBack: () -> Unit,
     onNavigateToStory: (storyTitle: String) -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     IndexServiceReadiness { indexService ->
+        val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
+        val (sortingState, renderSortingOptions) = sortingStateWithUI {
+            coroutineScope.launch { drawerState.close() }
+        }
+
         val tagContents = if (tagGroupName == null) {
                 indexService.content
                     .allTagsGroup
@@ -31,50 +45,75 @@ fun StoriesOfTag(
                     .getTagContentsByName(tagName)
             }
 
-        PageContainer(
-            priorButton = {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Назад к тегу $tagName"
-                    )
+        val requiredPageMeta = remember(sortingState.value, tagContents.pageNames) {
+            tagContents.pageNames.fold(mutableListOf<PageMeta>()) { acc, currentPageTitle ->
+                acc.apply {
+                    tagContents.getPageByTitle(currentPageTitle)?.let { acc.add(it) }
+                }
+            }.sortedWith { a, b -> sortingState.value.sort(a, b) }
+        }
+
+        BottomSheet(
+            drawerState = drawerState,
+            content = {
+                PageContainer(
+                    priorButton = {
+                        IconButton(onClick = onNavigateBack) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Назад к тегу $tagName"
+                            )
+                        }
+                    },
+                    header = {
+                        PageTitle(title = "#${tagName.uppercaseFirst()}")
+                    },
+                    trailingButton = {
+                        IconButton(
+                            onClick = {
+                                coroutineScope.launch { drawerState.open() }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.FilterList,
+                                contentDescription = "Сортировка"
+                            )
+                        }
+                    }
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = SMALL_PADDING.dp)
+                    ) {
+                        LazyList(list = requiredPageMeta) { index, pageMeta ->
+                            val isFirst = 0 == index
+
+                            if (isFirst) {
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(SMALL_PADDING.dp)
+                                )
+                            }
+                            StoryCardNavigationListItem(
+                                title = pageMeta.title,
+                                tags = pageMeta.tags,
+                                rating = pageMeta.rating,
+                                author = pageMeta.authorNickname,
+                                readingTimeMinutes = pageMeta.readingTimeMinutes,
+                                onClick = { onNavigateToStory(pageMeta.title) }
+                            )
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(SMALL_PADDING.dp)
+                            )
+                        }
+                    }
                 }
             },
-            header = {
-                PageTitle(title = "#${tagName.uppercaseFirst()}")
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = SMALL_PADDING.dp)
-            ) {
-                LazyList(list = tagContents.pageNames.toList()) { index, pageTitle ->
-                    val isFirst = 0 == index
-                    val pageMeta = indexService.content.getPageMetaByName(pageTitle)
-
-                    if (isFirst) {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(SMALL_PADDING.dp)
-                        )
-                    }
-                    StoryCardNavigationListItem(
-                        title = pageTitle,
-                        tags = pageMeta?.tags ?: listOf(),
-                        rating = pageMeta?.rating ?: 0,
-                        author = pageMeta?.authorNickname ?: "Автор не указан",
-                        readingTimeMinutes = pageMeta?.readingTimeMinutes ?: 0f,
-                        onClick = { onNavigateToStory(pageTitle) }
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(SMALL_PADDING.dp)
-                    )
-                }
-            }
-        }
+            drawerContent = { renderSortingOptions() }
+        )
     }
 }

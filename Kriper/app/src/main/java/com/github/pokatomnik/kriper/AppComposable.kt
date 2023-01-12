@@ -4,13 +4,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.allstories.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
@@ -19,10 +14,11 @@ import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.settings.Settings
 import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
 import com.github.pokatomnik.kriper.screens.story.Story
-import com.github.pokatomnik.kriper.screens.tag.Tag
+import com.github.pokatomnik.kriper.screens.tag.TagsOfGroup
 import com.github.pokatomnik.kriper.screens.taggroups.TagGroups
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.screen
+import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -46,18 +42,10 @@ fun AppComposable() {
                         ) {
                             navigation.homeRoute.Params {
                                 Home(
-                                    onNavigateToTagGroups = {
-                                        navigation.tagGroupsRoute.navigate()
-                                    },
-                                    onNavigateToAllTags = {
-                                        navigation.allTagsRoute.navigate()
-                                    },
-                                    onNavigateToAllStories = {
-                                        navigation.allStoriesRoute.navigate()
-                                    },
-                                    onNavigateToHistory = {
-                                        navigation.historyRoute.navigate()
-                                    }
+                                    onNavigateToTagGroups = { navigation.tagGroupsRoute.navigate() },
+                                    onNavigateToAllTags = { navigation.allTagsRoute.navigate() },
+                                    onNavigateToAllStories = { navigation.allStoriesRoute.navigate() },
+                                    onNavigateToHistory = { navigation.historyRoute.navigate() }
                                 )
                             }
                         }
@@ -66,12 +54,8 @@ fun AppComposable() {
                         ) {
                             navigation.tagGroupsRoute.Params {
                                 TagGroups(
-                                    onNavigateToGroup = {
-                                        navigation.tagsOfGroupRoute.navigate(it)
-                                    },
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    }
+                                    onNavigateToGroup = { navigation.tagsOfGroupRoute.navigate(it) },
+                                    onNavigateBack = { navigation.homeRoute.navigate() }
                                 )
                             }
                         }
@@ -79,11 +63,12 @@ fun AppComposable() {
                             route = navigation.tagsOfGroupRoute.route,
                         ) {
                             navigation.tagsOfGroupRoute.Params { groupName ->
-                                Tag(
+                                TagsOfGroup(
                                     tagGroupTitle = groupName,
                                     navigateBack = { navigation.tagGroupsRoute.navigate() },
                                     navigateToStories = { tagName ->
-                                        navigation.storiesOfTagOfGroupRoute.navigate(groupName, tagName)
+                                        navigation.storiesOfTagOfGroupRoute
+                                            .navigate(groupName, tagName)
                                     }
                                 )
                             }
@@ -95,9 +80,7 @@ fun AppComposable() {
                                 StoriesOfTag(
                                     tagGroupName = groupName,
                                     tagName = tagName,
-                                    onNavigateBack = {
-                                        navigation.tagsOfGroupRoute.navigate(groupName)
-                                    },
+                                    onNavigateBack = { navigation.tagsOfGroupRoute.navigate(groupName) },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -116,9 +99,7 @@ fun AppComposable() {
                         ) {
                             navigation.settingsRoute.Params {
                                 Settings(
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    }
+                                    onNavigateBack = { navigation.homeRoute.navigate() }
                                 )
                             }
                         }
@@ -127,9 +108,7 @@ fun AppComposable() {
                         ) {
                             navigation.allTagsRoute.Params {
                                 AllTags(
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    },
+                                    onNavigateBack = { navigation.homeRoute.navigate() },
                                     navigateToStories = { tagName ->
                                         navigation.storiesOfTagRoute.navigate(tagName)
                                     }
@@ -142,9 +121,7 @@ fun AppComposable() {
                             navigation.storiesOfTagRoute.Params { tagTitle ->
                                 StoriesOfTag(
                                     tagName = tagTitle,
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    },
+                                    onNavigateBack = { navigation.homeRoute.navigate() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -156,9 +133,7 @@ fun AppComposable() {
                         ) {
                             navigation.allStoriesRoute.Params {
                                 AllStories(
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    },
+                                    onNavigateBack = { navigation.homeRoute.navigate() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -170,9 +145,7 @@ fun AppComposable() {
                         ) {
                             navigation.historyRoute.Params {
                                 History(
-                                    onNavigateBack = {
-                                        navigation.homeRoute.navigate()
-                                    },
+                                    onNavigateBack = { navigation.homeRoute.navigate() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -182,42 +155,7 @@ fun AppComposable() {
                     }
                 }
             },
-            bottomBar = {
-                BottomNavigation(
-                    elevation = 1.dp
-                ) {
-                    BottomNavigationItem(
-                        selected = navigation.homeRoute.on(),
-                        onClick = { navigation.homeRoute.navigate() },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = "Главная"
-                            )
-                        }
-                    )
-                    BottomNavigationItem(
-                        selected = navigation.historyRoute.on(),
-                        onClick = { navigation.historyRoute.navigate() },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.History,
-                                contentDescription = "Хронология"
-                            )
-                        }
-                    )
-                    BottomNavigationItem(
-                        selected = navigation.settingsRoute.on(),
-                        onClick = { navigation.settingsRoute.navigate() },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = "Настройки"
-                            )
-                        }
-                    )
-                }
-            }
+            bottomBar = { KriperBottomNavigation(navigation = navigation) }
         )
     }
 }

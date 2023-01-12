@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.ui.components
+package com.github.pokatomnik.kriper.ui.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
