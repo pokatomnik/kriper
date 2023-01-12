@@ -5,5 +5,5 @@ import com.github.pokatomnik.kriper.domain.PageMeta
 interface PageMetaSorter {
     val id: String
     val title: String
-    fun sort(a: PageMeta, b: PageMeta): Int
+    fun compare(a: PageMeta, b: PageMeta): Int
 }

@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.screens.storiesoftag
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -30,9 +31,11 @@ fun StoriesOfTag(
     val coroutineScope = rememberCoroutineScope()
 
     IndexServiceReadiness { indexService ->
+        val lazyListState = rememberLazyListState()
         val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
         val (sortingState, renderSortingOptions) = sortingStateWithUI {
             coroutineScope.launch { drawerState.close() }
+            coroutineScope.launch { lazyListState.animateScrollToItem(0) }
         }
 
         val tagContents = if (tagGroupName == null) {
@@ -50,7 +53,7 @@ fun StoriesOfTag(
                 acc.apply {
                     tagContents.getPageByTitle(currentPageTitle)?.let { acc.add(it) }
                 }
-            }.sortedWith { a, b -> sortingState.value.sort(a, b) }
+            }.sortedWith { a, b -> sortingState.value.compare(a, b) }
         }
 
         BottomSheet(
@@ -86,7 +89,7 @@ fun StoriesOfTag(
                             .fillMaxSize()
                             .padding(horizontal = SMALL_PADDING.dp)
                     ) {
-                        LazyList(list = requiredPageMeta) { index, pageMeta ->
+                        LazyList(list = requiredPageMeta, lazyListState = lazyListState) { index, pageMeta ->
                             val isFirst = 0 == index
 
                             if (isFirst) {
