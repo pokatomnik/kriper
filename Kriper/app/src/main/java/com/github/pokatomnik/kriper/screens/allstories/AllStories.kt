@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.screens.allstories
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -27,16 +28,18 @@ fun AllStories(
     val coroutineScope = rememberCoroutineScope()
 
     IndexServiceReadiness { indexService ->
+        val lazyListState = rememberLazyListState()
         val drawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
         val (sortingState, renderSortingOptions) = sortingStateWithUI {
             coroutineScope.launch { drawerState.close() }
+            coroutineScope.launch { lazyListState.animateScrollToItem(0) }
         }
         val allPageMeta = remember(sortingState.value) {
             indexService.content.allStoryTitles.fold(mutableListOf<PageMeta>()) { acc, currentPageTitle ->
                 acc.apply {
                     indexService.content.getPageMetaByName(currentPageTitle)?.let { add(it) }
                 }
-            }.sortedWith { a, b -> sortingState.value.sort(a, b) }
+            }.sortedWith { a, b -> sortingState.value.compare(a, b) }
         }
 
         BottomSheet(
@@ -72,7 +75,7 @@ fun AllStories(
                             .fillMaxSize()
                             .padding(horizontal = SMALL_PADDING.dp)
                     ) {
-                        LazyList(list = allPageMeta) { index, pageMeta ->
+                        LazyList(list = allPageMeta, lazyListState = lazyListState) { index, pageMeta ->
                             val isFirst = 0 == index
 
                             if (isFirst) {
