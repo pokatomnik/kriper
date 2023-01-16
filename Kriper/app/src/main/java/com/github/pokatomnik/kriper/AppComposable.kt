@@ -88,7 +88,8 @@ fun AppComposable() {
                             }
                         }
                         screen(
-                            route = navigation.storyRoute.route
+                            route = navigation.storyRoute.route,
+                            keepScreenOn = true
                         ) {
                             navigation.storyRoute.Params { storyTitle ->
                                 Story(
