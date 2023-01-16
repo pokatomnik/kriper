@@ -55,7 +55,7 @@ fun AppComposable() {
                             navigation.tagGroupsRoute.Params {
                                 TagGroups(
                                     onNavigateToGroup = { navigation.tagsOfGroupRoute.navigate(it) },
-                                    onNavigateBack = { navigation.homeRoute.navigate() }
+                                    onNavigateBack = { navigation.navigateBack() }
                                 )
                             }
                         }
@@ -65,7 +65,7 @@ fun AppComposable() {
                             navigation.tagsOfGroupRoute.Params { groupName ->
                                 TagsOfGroup(
                                     tagGroupTitle = groupName,
-                                    navigateBack = { navigation.tagGroupsRoute.navigate() },
+                                    navigateBack = { navigation.navigateBack() },
                                     navigateToStories = { tagName ->
                                         navigation.storiesOfTagOfGroupRoute
                                             .navigate(groupName, tagName)
@@ -80,7 +80,7 @@ fun AppComposable() {
                                 StoriesOfTag(
                                     tagGroupName = groupName,
                                     tagName = tagName,
-                                    onNavigateBack = { navigation.tagsOfGroupRoute.navigate(groupName) },
+                                    onNavigateBack = { navigation.navigateBack() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -91,7 +91,12 @@ fun AppComposable() {
                             route = navigation.storyRoute.route
                         ) {
                             navigation.storyRoute.Params { storyTitle ->
-                                Story(storyTitle = storyTitle)
+                                Story(
+                                    storyTitle = storyTitle,
+                                    onNavigateToTag = { tag ->
+                                        navigation.storiesOfTagRoute.navigate(tag)
+                                    }
+                                )
                             }
                         }
                         screen(
@@ -99,7 +104,7 @@ fun AppComposable() {
                         ) {
                             navigation.settingsRoute.Params {
                                 Settings(
-                                    onNavigateBack = { navigation.homeRoute.navigate() }
+                                    onNavigateBack = { navigation.navigateBack() }
                                 )
                             }
                         }
@@ -108,7 +113,7 @@ fun AppComposable() {
                         ) {
                             navigation.allTagsRoute.Params {
                                 AllTags(
-                                    onNavigateBack = { navigation.homeRoute.navigate() },
+                                    onNavigateBack = { navigation.navigateBack() },
                                     navigateToStories = { tagName ->
                                         navigation.storiesOfTagRoute.navigate(tagName)
                                     }
@@ -121,7 +126,7 @@ fun AppComposable() {
                             navigation.storiesOfTagRoute.Params { tagTitle ->
                                 StoriesOfTag(
                                     tagName = tagTitle,
-                                    onNavigateBack = { navigation.homeRoute.navigate() },
+                                    onNavigateBack = { navigation.navigateBack() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -133,7 +138,7 @@ fun AppComposable() {
                         ) {
                             navigation.allStoriesRoute.Params {
                                 AllStories(
-                                    onNavigateBack = { navigation.homeRoute.navigate() },
+                                    onNavigateBack = { navigation.navigateBack() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }
@@ -145,7 +150,7 @@ fun AppComposable() {
                         ) {
                             navigation.historyRoute.Params {
                                 History(
-                                    onNavigateBack = { navigation.homeRoute.navigate() },
+                                    onNavigateBack = { navigation.navigateBack() },
                                     onNavigateToStory = { storyTitle ->
                                         navigation.storyRoute.navigate(storyTitle)
                                     }

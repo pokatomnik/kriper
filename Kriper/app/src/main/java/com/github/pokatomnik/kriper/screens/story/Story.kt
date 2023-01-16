@@ -29,7 +29,8 @@ import kotlinx.coroutines.launch
 )
 @Composable
 fun Story(
-    storyTitle: String
+    storyTitle: String,
+    onNavigateToTag: (tag: String) -> Unit
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
@@ -62,6 +63,15 @@ fun Story(
                         ) {
                             Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
                                 StoryTitle(title = storyTitle)
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(LARGE_PADDING.dp)
+                                )
+                                StoryTags(
+                                    pageTitle = storyTitle,
+                                    onTagClick = onNavigateToTag
+                                )
                                 Spacer(
                                     modifier = Modifier
                                         .fillMaxWidth()
