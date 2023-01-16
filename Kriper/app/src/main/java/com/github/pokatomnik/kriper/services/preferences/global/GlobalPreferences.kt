@@ -20,4 +20,14 @@ class GlobalPreferences(private val sharedPreferences: SharedPreferences) {
             }
         }
     )
+
+    val oneTimeRunners = OneTimeRunners(object : PreferencesStringValue {
+        private val ONE_TIME_RUNNERS_KEY = "ONE_TIME_RUNNERS_KEY"
+        override fun write(value: String) {
+            sharedPreferences.edit().putString(ONE_TIME_RUNNERS_KEY, value).apply()
+        }
+        override fun read(defaultValue: String): String {
+            return sharedPreferences.getString(ONE_TIME_RUNNERS_KEY, defaultValue) ?: defaultValue
+        }
+    })
 }
