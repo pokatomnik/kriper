@@ -6,6 +6,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 import com.google.accompanist.flowlayout.FlowRow
@@ -29,7 +30,7 @@ fun StoryTags(
                         }
                     ) {
                         Text(
-                            text = "#$tag",
+                            text = "#${tag.uppercaseFirst()}",
                             modifier = Modifier.alpha(ALPHA_GHOST)
                         )
                     }
