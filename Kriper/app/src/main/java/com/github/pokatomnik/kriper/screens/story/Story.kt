@@ -46,8 +46,8 @@ fun Story(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = LARGE_PADDING.dp)
                             .verticalScroll(scrollState)
+                            .padding(horizontal = LARGE_PADDING.dp)
                             .combinedClickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
