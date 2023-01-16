@@ -24,7 +24,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppComposable() {
-    IndexServiceReadiness {
+    IndexServiceReadiness { indexService ->
         val navigation = rememberNavigation()
         Scaffold(
             content = { scaffoldPaddingValues ->
@@ -96,6 +96,13 @@ fun AppComposable() {
                                     storyTitle = storyTitle,
                                     onNavigateToTag = { tag ->
                                         navigation.storiesOfTagRoute.navigate(tag)
+                                    },
+                                    onNavigateToPrevious = { navigation.navigateBack() },
+                                    onNavigateToRandom = {
+                                        indexService.content
+                                            .getRandomPageMeta()
+                                            ?.also { navigation.storyRoute.navigate(it.title) }
+                                            .let { it != null }
                                     }
                                 )
                             }
