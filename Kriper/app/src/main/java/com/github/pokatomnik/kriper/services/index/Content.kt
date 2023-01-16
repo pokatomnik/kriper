@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import kotlin.random.Random
 
 class Content(
     private val contentReaderService: ContentReaderService,
@@ -39,6 +40,10 @@ class Content(
     }
 
     fun getPageMetaByName(storyTitle: String): PageMeta? = index.pageMeta[storyTitle]
+
+    fun getRandomPageMeta() = allStoryTitles.random(Random(System.currentTimeMillis())).let {
+        index.pageMeta[it]
+    }
 
     fun getTagGroupByName(tagGroupName: String): TagGroup =
         tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->
