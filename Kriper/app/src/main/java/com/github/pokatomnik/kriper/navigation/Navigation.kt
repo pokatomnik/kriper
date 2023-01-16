@@ -25,10 +25,6 @@ data class Navigation(
         return this?.hierarchy?.any { it.route == route } == true
     }
 
-    fun navigateDistinct(route: String) {
-        navController.navigateDistinct(route)
-    }
-
     @Composable
     private fun rememberCurrentDestination(): NavDestination? {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -40,6 +36,10 @@ data class Navigation(
      */
     val defaultRoute: Route
         get() = homeRoute
+
+    fun navigateBack(): Boolean {
+        return navController.popBackStack()
+    }
 
     val homeRoute = object : RouteNoParameters {
         private val routePath = "/home"
