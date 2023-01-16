@@ -20,6 +20,7 @@ import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.widgets.ShowToastOncePerRunSideEffect
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -36,6 +37,7 @@ fun Story(
     val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
     val (fontSize, setFontSize) = rememberPreferences().pagePreferences.fontSize.collectAsState()
 
+    ShowToastOncePerRunSideEffect(message = "Долгое нажатие на текст для вызова меню")
     BottomSheet(
         drawerState = bottomDrawerState,
         content = {
