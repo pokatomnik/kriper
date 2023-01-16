@@ -42,32 +42,35 @@ fun Story(
         drawerState = bottomDrawerState,
         content = {
             PageContainer {
-                StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState)
-                            .padding(horizontal = LARGE_PADDING.dp)
-                            .combinedClickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                onClick = {},
-                                onLongClick = {
-                                    coroutineScope.launch { bottomDrawerState.open() }
-                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                            )
-                    ) {
-                        Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
-                            StoryTitle(title = storyTitle)
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(LARGE_PADDING.dp)
-                            )
-                            StoryContent(pageTitle = storyTitle, fontSize = fontSize)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
+                        ScrollPositionIndication(scrollState = scrollState)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(scrollState)
+                                .padding(horizontal = LARGE_PADDING.dp)
+                                .combinedClickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    onClick = {},
+                                    onLongClick = {
+                                        coroutineScope.launch { bottomDrawerState.open() }
+                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    }
+                                )
+                        ) {
+                            Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
+                                StoryTitle(title = storyTitle)
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(LARGE_PADDING.dp)
+                                )
+                                StoryContent(pageTitle = storyTitle, fontSize = fontSize)
+                            }
                         }
-                    }
+                    }   
                 }
             }
         },
