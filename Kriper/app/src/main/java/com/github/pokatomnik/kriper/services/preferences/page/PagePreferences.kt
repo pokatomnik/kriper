@@ -28,4 +28,18 @@ class PagePreferences(private val sharedPreferences: SharedPreferences) {
                 .getString(STORY_CONTENT_FONT_FAMILY_KEY, defaultValue) ?: defaultValue
         }
     })
+
+    val storyContentColorPreset = ColorPreset(object : PreferencesStringValue {
+        private val STORY_CONTENT_COLOR_PRESETS = "STORY_CONTENT_COLOR_PRESETS"
+        override fun write(value: String) {
+            sharedPreferences
+                .edit()
+                .putString(STORY_CONTENT_COLOR_PRESETS, value)
+                .apply()
+        }
+        override fun read(defaultValue: String): String {
+            return sharedPreferences
+                .getString(STORY_CONTENT_COLOR_PRESETS, defaultValue) ?: defaultValue
+        }
+    })
 }
