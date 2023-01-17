@@ -26,7 +26,7 @@ fun SelectableRow(
                 onClick = onClick,
                 role = Role.RadioButton
             )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = LARGE_PADDING.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         content()
