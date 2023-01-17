@@ -7,18 +7,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.github.pokatomnik.kriper.services.preferences.PreferencesStringValue
 
-enum class ThemeMeta {
-    DARK,
-    LIGHT,
-    AUTO
-}
-
 data class ColorsInfo(
     val id: String,
     val title: String,
     val backgroundColor: Color?,
     val contentColor: Color?,
-    val themeMeta: ThemeMeta,
 )
 
 class ColorPreset(private val preferencesValue: PreferencesStringValue) {
@@ -27,7 +20,6 @@ class ColorPreset(private val preferencesValue: PreferencesStringValue) {
         title = "Из темы",
         backgroundColor = null,
         contentColor = null,
-        themeMeta = ThemeMeta.AUTO
     )
 
     val availableColorPresets: Map<String, ColorsInfo> = mutableMapOf<String, ColorsInfo>()
@@ -38,42 +30,36 @@ class ColorPreset(private val preferencesValue: PreferencesStringValue) {
                 title = "Кремовый",
                 backgroundColor = Color(0xfffff3e0),
                 contentColor = Color(0xff000000),
-                themeMeta = ThemeMeta.LIGHT,
             ).apply { set(id, this) }
             ColorsInfo(
                 id = "LIGHT_CYAN",
                 title = "Светлый циан",
                 backgroundColor = Color(0xffe0f7fa),
                 contentColor = Color(0xff000000),
-                themeMeta = ThemeMeta.LIGHT,
             ).apply { set(id, this) }
             ColorsInfo(
                 id = "BLACK_WHITE",
                 title = "Черно-белый",
                 backgroundColor = Color(0xff000000),
                 contentColor = Color(0xffffffff),
-                themeMeta = ThemeMeta.DARK,
             ).apply { set(id, this) }
             ColorsInfo(
                 id = "WHITE_BLACK",
                 title = "Бело-черный",
                 backgroundColor = Color(0xffffffff),
                 contentColor = Color(0xff000000),
-                themeMeta = ThemeMeta.LIGHT,
             ).apply { set(id, this) }
             ColorsInfo(
                 id = "DARK_DEEP_BLUE",
                 title = "Темный синевато-черный",
                 backgroundColor = Color(0xff424242),
                 contentColor = Color(0xffffffff),
-                themeMeta = ThemeMeta.DARK,
             ).apply { set(id, this) }
             ColorsInfo(
                 id = "TERRACOTTA",
                 title = "Темный терракотовый",
                 backgroundColor = Color(0xff4e342e),
                 contentColor = Color(0xffffffff),
-                themeMeta = ThemeMeta.DARK,
             ).apply { set(id, this) }
         }
 
