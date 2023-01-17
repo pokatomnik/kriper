@@ -103,7 +103,8 @@ fun AppComposable() {
                                             .getRandomPageMeta()
                                             ?.also { navigation.storyRoute.navigate(it.title) }
                                             .let { it != null }
-                                    }
+                                    },
+                                    onNavigateToStory = { navigation.storyRoute.navigate(it) }
                                 )
                             }
                         }

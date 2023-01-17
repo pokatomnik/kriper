@@ -39,6 +39,7 @@ import kotlin.math.roundToInt
 fun Story(
     storyTitle: String,
     onNavigateToTag: (tag: String) -> Unit,
+    onNavigateToStory: (storyTitle: String) -> Unit,
     onNavigateToRandom: () -> Boolean,
     onNavigateToPrevious: () -> Boolean,
 ) {
@@ -126,6 +127,15 @@ fun Story(
                                     pageTitle = storyTitle,
                                     fontSize = fontSize,
                                     fontInfo = fontInfoState.value
+                                )
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(LARGE_PADDING.dp)
+                                )
+                                SeeAlso(
+                                    pageTitle = storyTitle,
+                                    onStoryClick = onNavigateToStory
                                 )
                             }
                         }

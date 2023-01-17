@@ -156,7 +156,7 @@ data class Navigation(
 
         override fun navigate(storyTitle: String) {
             val serializedStoryTitle = serializer.serialize(storyTitle)
-            navController.navigate("/story/${serializedStoryTitle}")
+            navController.navigateAllowSame("/story/${serializedStoryTitle}")
         }
 
         @Composable
