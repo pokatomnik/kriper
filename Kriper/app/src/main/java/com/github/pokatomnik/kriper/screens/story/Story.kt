@@ -25,6 +25,7 @@ import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.widgets.ShowToastOncePerRunSideEffect
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -45,7 +46,9 @@ fun Story(
     val coroutineScope = rememberCoroutineScope()
 
     val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
-    val (fontSize, setFontSize) = rememberPreferences().pagePreferences.fontSize.collectAsState()
+    val pagePreferences = rememberPreferences().pagePreferences
+    val (fontSize, setFontSize) = pagePreferences.fontSize.collectAsState()
+    val fontInfoState = pagePreferences.storyContentFontFamily.collectAsState()
 
     ShowToastOncePerRunSideEffect(message = "Долгое нажатие на текст для вызова меню")
     BottomSheet(
@@ -77,7 +80,8 @@ fun Story(
                                     offsetX.animateTo(0f)
                                     return@draggable
                                 }
-                                val navigate = if (offsetXValue < 0) onNavigateToPrevious else onNavigateToRandom
+                                val navigate =
+                                    if (offsetXValue < 0) onNavigateToPrevious else onNavigateToRandom
                                 val navigated = navigate()
                                 if (!navigated) {
                                     offsetX.animateTo(0f)
@@ -118,7 +122,11 @@ fun Story(
                                         .fillMaxWidth()
                                         .height(LARGE_PADDING.dp)
                                 )
-                                StoryContent(pageTitle = storyTitle, fontSize = fontSize)
+                                StoryContent(
+                                    pageTitle = storyTitle,
+                                    fontSize = fontSize,
+                                    fontInfo = fontInfoState.value
+                                )
                             }
                         }
                     }   
@@ -126,10 +134,16 @@ fun Story(
             }
         },
         drawerContent = {
-            BottomDrawerContent(
+            FontSizeSelection(
                 onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
                 onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
                 onIncreaseFontSizePress = { setFontSize(fontSize + 1) }
+            )
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(SMALL_PADDING.dp))
+            FontFamilySelection(
+                fontInfoState = fontInfoState
             )
         }
     )

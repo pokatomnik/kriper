@@ -1,7 +1,6 @@
 package com.github.pokatomnik.kriper.screens.story
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -12,11 +11,12 @@ import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
 @Composable
-fun BottomDrawerContent(
+fun FontSizeSelection(
     onResetFontSizePress: () -> Unit,
     onIncreaseFontSizePress: () -> Unit,
     onDecreaseFontSizePress: () -> Unit,
@@ -32,7 +32,10 @@ fun BottomDrawerContent(
                     .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Масштаб текста")
+                Text(
+                    text = "Масштаб текста",
+                    fontWeight = FontWeight.Bold
+                )
             }
             Column {
                 Row {
@@ -57,6 +60,5 @@ fun BottomDrawerContent(
                 }
             }
         }
-        Divider(modifier = Modifier.fillMaxWidth())
     }
 }

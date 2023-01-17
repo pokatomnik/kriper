@@ -28,7 +28,7 @@ fun MarkdownText(
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
 ) {
-    return key(fontSize) {
+    return key(fontSize, fontResource) {
         MarkdownTextComponent(
             markdown = markdown,
             modifier = modifier,
