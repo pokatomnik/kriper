@@ -50,6 +50,7 @@ fun Story(
     val pagePreferences = rememberPreferences().pagePreferences
     val (fontSize, setFontSize) = pagePreferences.fontSize.collectAsState()
     val fontInfoState = pagePreferences.storyContentFontFamily.collectAsState()
+    val colorPresetState = pagePreferences.storyContentColorPreset.collectAsState()
 
     ShowToastOncePerRunSideEffect(message = "Долгое нажатие на текст для вызова меню")
     BottomSheet(
@@ -90,56 +91,61 @@ fun Story(
                             }
                         )
                 ) {
-                    StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
-                        ScrollPositionIndication(scrollState = scrollState)
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(scrollState)
-                                .padding(horizontal = LARGE_PADDING.dp)
-                                .combinedClickable(
-                                    indication = null,
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    onClick = {},
-                                    onLongClick = {
-                                        coroutineScope.launch { bottomDrawerState.open() }
-                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    }
-                                )
-                        ) {
-                            Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
-                                StoryTitle(title = storyTitle)
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(LARGE_PADDING.dp)
-                                )
-                                StoryTags(
-                                    pageTitle = storyTitle,
-                                    onTagClick = onNavigateToTag
-                                )
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(LARGE_PADDING.dp)
-                                )
-                                StoryContent(
-                                    pageTitle = storyTitle,
-                                    fontSize = fontSize,
-                                    fontInfo = fontInfoState.value
-                                )
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(LARGE_PADDING.dp)
-                                )
-                                SeeAlso(
-                                    pageTitle = storyTitle,
-                                    onStoryClick = onNavigateToStory
-                                )
+                    ContentSurface(colorPresetState = colorPresetState) {
+                        StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
+                            ScrollPositionIndication(scrollState = scrollState)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(scrollState)
+                                    .padding(horizontal = LARGE_PADDING.dp)
+                                    .combinedClickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        onClick = {},
+                                        onLongClick = {
+                                            coroutineScope.launch { bottomDrawerState.open() }
+                                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        }
+                                    )
+                            ) {
+                                Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
+                                    StoryTitle(title = storyTitle)
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(LARGE_PADDING.dp)
+                                    )
+                                    StoryTags(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                        onTagClick = onNavigateToTag
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(LARGE_PADDING.dp)
+                                    )
+                                    StoryContent(
+                                        pageTitle = storyTitle,
+                                        fontSize = fontSize,
+                                        fontInfo = fontInfoState.value,
+                                        colorsInfo = colorPresetState.value
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(LARGE_PADDING.dp)
+                                    )
+                                    SeeAlso(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                        onStoryClick = onNavigateToStory
+                                    )
+                                }
                             }
                         }
-                    }   
+                    }
                 }
             }
         },
@@ -149,12 +155,18 @@ fun Story(
                 onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
                 onIncreaseFontSizePress = { setFontSize(fontSize + 1) }
             )
-            Spacer(modifier = Modifier
-                .fillMaxWidth()
-                .height(SMALL_PADDING.dp))
-            FontFamilySelection(
-                fontInfoState = fontInfoState
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
             )
+            FontFamilySelection(fontInfoState = fontInfoState)
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
+            ContentColorSelection(colorPresetState = colorPresetState)
         }
     )
 }

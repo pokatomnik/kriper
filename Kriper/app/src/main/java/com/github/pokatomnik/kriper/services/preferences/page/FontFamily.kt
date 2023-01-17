@@ -20,7 +20,7 @@ class FontFamily(private val preferencesValue: PreferencesStringValue) {
         fontResourceId = null
     )
 
-    val availableFontInfos: Map<String, FontInfo> = mutableMapOf<String ,FontInfo>()
+    val availableFontInfos: Map<String, FontInfo> = mutableMapOf<String, FontInfo>()
         .apply {
             defaultFontInfo.apply { set(id, this) }
             FontInfo(
