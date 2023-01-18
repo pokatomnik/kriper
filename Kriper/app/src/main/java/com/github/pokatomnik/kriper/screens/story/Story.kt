@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomDrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,7 +27,7 @@ import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
-import com.github.pokatomnik.kriper.ui.widgets.ShowToastOncePerRunSideEffect
+import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -46,13 +47,26 @@ fun Story(
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
 
+    val scaffoldState = LocalScaffoldState.current
     val bottomDrawerState = rememberBottomDrawerState(initialValue = BottomDrawerValue.Closed)
-    val pagePreferences = rememberPreferences().pagePreferences
+    val preferences = rememberPreferences()
+    val globalPreferences = preferences.globalPreferences
+    val pagePreferences = preferences.pagePreferences
     val (fontSize, setFontSize) = pagePreferences.fontSize.collectAsState()
     val fontInfoState = pagePreferences.storyContentFontFamily.collectAsState()
     val colorPresetState = pagePreferences.storyContentColorPreset.collectAsState()
 
-    ShowToastOncePerRunSideEffect(message = "Долгое нажатие на текст для вызова меню")
+    globalPreferences.oneTimeRunners.oncePerInstallActions.Once(key = "PAGE_QUICK_HELP_DISPLAYED") {
+        scaffoldState?.let {
+            coroutineScope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = "Нажмите и удерживайте для вызова меню",
+                    actionLabel = "Понятно",
+                    duration = SnackbarDuration.Indefinite
+                )
+            }
+        }
+    }
     BottomSheet(
         drawerState = bottomDrawerState,
         content = {
