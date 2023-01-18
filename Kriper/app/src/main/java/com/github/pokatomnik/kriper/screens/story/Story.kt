@@ -93,7 +93,10 @@ fun Story(
                 ) {
                     ContentSurface(colorPresetState = colorPresetState) {
                         StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
-                            ScrollPositionIndication(scrollState = scrollState)
+                            ScrollPositionIndication(
+                                scrollState = scrollState,
+                                colorsInfo = colorPresetState.value
+                            )
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
