@@ -133,6 +133,15 @@ fun Story(
                                             .fillMaxWidth()
                                             .height(LARGE_PADDING.dp)
                                     )
+                                    StoryDetails(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(SMALL_PADDING.dp)
+                                    )
                                     StoryTags(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,

@@ -19,16 +19,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
-import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
-import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
-import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
-import com.github.pokatomnik.kriper.ui.components.VerticalDivider
-
-private fun Float.format(digits: Int) = if (this - this.toInt() > 0) {
-    "%.${digits}f".format(this).replace(",", ".")
-} else {
-    this.toInt().toString()
-}
+import com.github.pokatomnik.kriper.ui.components.*
 
 @Composable
 fun StoryCardNavigationListItem(
