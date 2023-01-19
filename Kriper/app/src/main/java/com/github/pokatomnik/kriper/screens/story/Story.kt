@@ -168,6 +168,15 @@ fun Story(
                                         colorsInfo = colorPresetState.value,
                                         onStoryClick = onNavigateToStory
                                     )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(LARGE_PADDING.dp)
+                                    )
+                                    SourceButton(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                    )
                                 }
                             }
                         }

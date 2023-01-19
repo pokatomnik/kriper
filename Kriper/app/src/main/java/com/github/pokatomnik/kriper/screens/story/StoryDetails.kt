@@ -13,10 +13,12 @@ import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
+import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.components.format
 import com.google.accompanist.flowlayout.FlowRow
@@ -40,7 +42,8 @@ fun StoryDetails(
                         overflow = TextOverflow.Ellipsis,
                         color = colorsInfo.contentColor ?: contentColorFor(
                             MaterialTheme.colors.surface
-                        )
+                        ),
+                        modifier = Modifier.alpha(ALPHA_GHOST)
                     )
                 }
                 Spacer(modifier = Modifier.height(SMALL_PADDING.dp))
@@ -56,14 +59,15 @@ fun StoryDetails(
                                 else -> Icons.Filled.Favorite
                             },
                             contentDescription = "Рейтинг",
-                            modifier = Modifier.size(18.dp),
+                            modifier = Modifier.size(18.dp).alpha(ALPHA_GHOST),
                             tint = colorsInfo.contentColor ?: contentColorFor(MaterialTheme.colors.surface)
                         )
                         Text(
                             text = " ${pageMeta.rating}",
                             color = colorsInfo.contentColor ?: contentColorFor(
                                 MaterialTheme.colors.surface
-                            )
+                            ),
+                            modifier = Modifier.alpha(ALPHA_GHOST)
                         )
                     }
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
@@ -71,7 +75,7 @@ fun StoryDetails(
                         Icon(
                             imageVector = Icons.Filled.Timer,
                             contentDescription = "Время на прочтение",
-                            modifier = Modifier.size(18.dp),
+                            modifier = Modifier.size(18.dp).alpha(ALPHA_GHOST),
                             tint = colorsInfo.contentColor ?: contentColorFor(
                                 MaterialTheme.colors.surface
                             )
@@ -80,7 +84,8 @@ fun StoryDetails(
                             text = " ${pageMeta.readingTimeMinutes.format(1)}",
                             color = colorsInfo.contentColor ?: contentColorFor(
                                 MaterialTheme.colors.surface
-                            )
+                            ),
+                            modifier = Modifier.alpha(ALPHA_GHOST)
                         )
                     }
                 }
