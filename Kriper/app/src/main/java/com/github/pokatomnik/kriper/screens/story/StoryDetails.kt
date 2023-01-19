@@ -1,0 +1,90 @@
+package com.github.pokatomnik.kriper.screens.story
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.HeartBroken
+import androidx.compose.material.icons.filled.Timer
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.components.format
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
+
+@Composable
+fun StoryDetails(
+    pageTitle: String,
+    colorsInfo: ColorsInfo
+) {
+    IndexServiceReadiness { indexService ->
+        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "© ${pageMeta.authorNickname}",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = colorsInfo.contentColor ?: contentColorFor(
+                            MaterialTheme.colors.surface
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(SMALL_PADDING.dp))
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    mainAxisAlignment = MainAxisAlignment.Center
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = when (pageMeta.rating) {
+                                in Int.MIN_VALUE until 0 -> Icons.Filled.HeartBroken
+                                0 -> Icons.Filled.FavoriteBorder
+                                else -> Icons.Filled.Favorite
+                            },
+                            contentDescription = "Рейтинг",
+                            modifier = Modifier.size(18.dp),
+                            tint = colorsInfo.contentColor ?: contentColorFor(MaterialTheme.colors.surface)
+                        )
+                        Text(
+                            text = " ${pageMeta.rating}",
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.Timer,
+                            contentDescription = "Время на прочтение",
+                            modifier = Modifier.size(18.dp),
+                            tint = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
+                        Text(
+                            text = " ${pageMeta.readingTimeMinutes.format(1)}",
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
