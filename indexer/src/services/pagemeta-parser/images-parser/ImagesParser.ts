@@ -5,7 +5,8 @@ import { DOMParser } from "../../dom-parser/DOMParser.ts";
 import { URLConfiguration } from "../../configuration/URLConfiguration.ts";
 
 export class ImagesParser implements IParser<ReadonlyArray<string>> {
-  private static readonly CONTENT_CONTAINER_SELECTOR = "div.img-fix";
+  private static readonly CONTENT_CONTAINER_SELECTOR =
+    "div.card-body.mt-2 > div";
 
   private static readonly IMAGE_SELECTOR = "img";
 

@@ -4,7 +4,7 @@ import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class NumberOfViewsParser implements IParser<number> {
   private static readonly NUMBER_OF_VIEWS_ELEMENT_SELECTOR =
-    "div.img-fix + div";
+    "div.card-body.mt-2 > div + div";
 
   public constructor(private readonly domParser: DOMParser) {}
 
