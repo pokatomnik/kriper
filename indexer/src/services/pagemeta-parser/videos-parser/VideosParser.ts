@@ -3,7 +3,7 @@ import { provide } from "provide";
 import { DOMParser } from "../../dom-parser/DOMParser.ts";
 
 export class VideosParser implements IParser<ReadonlyArray<string>> {
-  private static readonly CONTENT_CONTAINER_SELECTOR = "div.img-fix";
+  private static readonly CONTENT_CONTAINER_SELECTOR = "div.card-body.mt-2";
 
   private static readonly IFRAME_SELECTOR = "iframe";
 

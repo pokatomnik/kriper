@@ -4,7 +4,8 @@ import { DOMParser } from "../../dom-parser/DOMParser.ts";
 import { HTMLProcessor } from "./HTMLProcessor.ts";
 
 export class ContentParser implements IParser<string> {
-  private static readonly CONTENT_CONTAINER_SELECTOR = "div.img-fix";
+  private static readonly CONTENT_CONTAINER_SELECTOR =
+    "div.card-body.mt-2 > div";
 
   public constructor(
     private readonly domParser: DOMParser,
