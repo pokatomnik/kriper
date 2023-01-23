@@ -89,7 +89,7 @@ fun AllStories(
                                 title = pageMeta.title,
                                 tags = pageMeta.tags,
                                 rating = pageMeta.rating,
-                                author = pageMeta.authorNickname,
+                                author = pageMeta.authorship,
                                 readingTimeMinutes = pageMeta.readingTimeMinutes,
                                 onClick = { onNavigateToStory(pageMeta.title) }
                             )

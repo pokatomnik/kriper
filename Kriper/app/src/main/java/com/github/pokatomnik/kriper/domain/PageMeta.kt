@@ -4,6 +4,7 @@ data class PageMeta(
     val contentId: String,
     val title: String,
     val authorNickname: String,
+    val authorRealName: String?,
     val dateCreated: UncheckedDate,
     val numberOfViews: Int,
     val readingTimeMinutes: Float,
@@ -13,4 +14,7 @@ data class PageMeta(
     val seeAlso: Set<String>,
     val images: Set<String>,
     val videos: Set<String>
-)
+) {
+    val authorship: String
+        get() = authorRealName ?: authorNickname
+}

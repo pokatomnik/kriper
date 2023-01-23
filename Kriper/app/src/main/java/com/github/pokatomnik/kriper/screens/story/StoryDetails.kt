@@ -37,7 +37,7 @@ fun StoryDetails(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "© ${pageMeta.authorNickname}",
+                        text = "© ${pageMeta.authorship}",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = colorsInfo.contentColor ?: contentColorFor(
