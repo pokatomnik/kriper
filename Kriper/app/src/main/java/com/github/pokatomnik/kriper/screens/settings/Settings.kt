@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun Settings(
@@ -45,7 +47,24 @@ fun Settings(
             SectionDivider()
             Spacer(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                mainAxisAlignment = MainAxisAlignment.Center
+            ) {
+                AuthorshipNotificationButton()
+            }
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
+            SectionDivider()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(SMALL_PADDING.dp)
             )
             BuildInfo()
