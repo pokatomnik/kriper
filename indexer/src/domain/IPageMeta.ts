@@ -13,6 +13,11 @@ export interface IPageMeta {
   readonly title: string;
 
   /**
+   * The real name of story author. Optional, but presented in some stories.
+   */
+  readonly authorRealName?: string;
+
+  /**
    * Nickname of the author at kriper.net
    */
   readonly authorNickname: string;
