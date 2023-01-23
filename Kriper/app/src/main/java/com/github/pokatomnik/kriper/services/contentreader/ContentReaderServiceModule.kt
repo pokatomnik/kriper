@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.contentreader
+package com.github.pokatomnik.kriper.services.contentreader
 
 import android.app.Application
 import dagger.Module

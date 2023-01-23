@@ -1,6 +1,6 @@
 package com.github.pokatomnik.kriper.services.index
 
-import com.github.pokatomnik.kriper.contentreader.ContentReaderService
+import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

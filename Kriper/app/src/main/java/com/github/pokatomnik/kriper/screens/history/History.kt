@@ -62,7 +62,7 @@ fun History(
                             title = currentPageMeta.title,
                             tags = currentPageMeta.tags,
                             rating = currentPageMeta.rating,
-                            author = currentPageMeta.authorNickname,
+                            author = currentPageMeta.authorship,
                             readingTimeMinutes = currentPageMeta.readingTimeMinutes,
                             onClick = { onNavigateToStory(currentPageMeta.title) }
                         )
