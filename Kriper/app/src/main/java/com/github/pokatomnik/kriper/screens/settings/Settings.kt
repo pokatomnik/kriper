@@ -52,7 +52,9 @@ fun Settings(
                     .height(SMALL_PADDING.dp)
             )
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = LARGE_PADDING.dp),
                 mainAxisAlignment = MainAxisAlignment.Center
             ) {
                 AuthorshipNotificationButton()
