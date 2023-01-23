@@ -48,6 +48,7 @@ fun Settings(
                     .fillMaxSize()
                     .height(SMALL_PADDING.dp)
             )
+            BuildInfo()
         }
     }
 }
