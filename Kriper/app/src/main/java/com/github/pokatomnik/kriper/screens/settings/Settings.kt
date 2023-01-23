@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
@@ -55,6 +56,14 @@ fun Settings(
                 mainAxisAlignment = MainAxisAlignment.Center
             ) {
                 AuthorshipNotificationButton()
+                Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
+                WebsiteButton()
+                Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
+                SourcesButton()
+                Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
+                ContactViaEmailButton()
+                Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
+                OpenWebmasterContactsButton()
             }
             Spacer(
                 modifier = Modifier
@@ -67,7 +76,7 @@ fun Settings(
                     .fillMaxWidth()
                     .height(SMALL_PADDING.dp)
             )
-            BuildInfo()
+            BuildInfoSection()
         }
     }
 }

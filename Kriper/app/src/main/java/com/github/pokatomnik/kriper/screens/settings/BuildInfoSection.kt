@@ -22,7 +22,7 @@ private fun Instant.formatCreationDate(format: String): String {
 }
 
 @Composable
-fun BuildInfo() {
+fun BuildInfoSection() {
     val versionCode = BuildConfig.VERSION_CODE
     val versionName = BuildConfig.VERSION_NAME
     
@@ -33,7 +33,7 @@ fun BuildInfo() {
                 .padding(horizontal = LARGE_PADDING.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "О приложении", fontWeight = FontWeight.Bold)
+                Text(text = "Сборка", fontWeight = FontWeight.Bold)
             }
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Версия: $versionCode ($versionName)")
