@@ -8,6 +8,7 @@ import { NameHasher } from "../name-hasher/NameHasher.ts";
 import { TitleParser } from "./title-parser/TitleParser.ts";
 import { ContentParser } from "./content-parser/ContentParser.ts";
 import { AuthorNicknameParser } from "./author-nickname-parser/AuthorNicknameParser.ts";
+import { AuthorRealNameParser } from "./author-realname-parser/AuthorRealNameParser.ts";
 import { DateCreatedParser } from "./date-created-parser/DateCreatedParser.ts";
 import { NumberOfViewsParser } from "./number-of-views-parser/NumberOfViewsParser.ts";
 import { ReadingTimeMinutesParser } from "./reading-time-minutes-parser/ReadingTimeMinutesParser.ts";
@@ -25,6 +26,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly titleParser: IParser<string>,
     private readonly contentParser: IParser<string>,
     private readonly authorNicknameParser: IParser<string>,
+    private readonly authorRealNameParser: IParser<string | null>,
     private readonly dateCreatedParser: IParser<IUncheckedDate>,
     private readonly numberOfViewsParser: IParser<number>,
     private readonly readingTimeMinutesParser: IParser<number>,
@@ -42,6 +44,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       title,
       content,
       authorNickname,
+      authorRealName,
       dateCreated,
       numberOfViews,
       readingTimeMinutes,
@@ -55,6 +58,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.titleParser.parse(rawHTML),
       this.contentParser.parse(rawHTML),
       this.authorNicknameParser.parse(rawHTML),
+      this.authorRealNameParser.parse(rawHTML),
       this.dateCreatedParser.parse(rawHTML),
       this.numberOfViewsParser.parse(rawHTML),
       this.readingTimeMinutesParser.parse(rawHTML),
@@ -74,6 +78,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       contentId,
       title,
       authorNickname,
+      authorRealName: authorRealName ?? undefined,
       dateCreated,
       numberOfViews,
       readingTimeMinutes,
@@ -92,6 +97,7 @@ provide(PageMetaParser, [
   TitleParser,
   ContentParser,
   AuthorNicknameParser,
+  AuthorRealNameParser,
   DateCreatedParser,
   NumberOfViewsParser,
   ReadingTimeMinutesParser,
