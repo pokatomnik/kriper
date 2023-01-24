@@ -97,7 +97,14 @@ class Content(
 
                     for (currentPageName in currentTag.pageNames) {
                         val currentPageMeta = currentTag.getPageByTitle(currentPageName)
-                        if (matchSearchStr(currentPageName, searchStringLower)) {
+                        val titleMatch = matchSearchStr(currentPageName, searchStringLower)
+                        val authorNicknameMatch = currentPageMeta?.let {
+                            matchSearchStr(it.authorNickname, searchStringLower)
+                        } ?: false
+                        val authorRealNameMatch = currentPageMeta?.authorRealName?.let {
+                            matchSearchStr(it, searchStringLower)
+                        } ?: false
+                        if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
                             currentPageMeta?.let { pageMetaFound[currentPageName] = currentPageMeta }
                         }
                     }
