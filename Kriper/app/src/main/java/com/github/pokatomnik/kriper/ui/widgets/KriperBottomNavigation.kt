@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,16 @@ fun KriperBottomNavigation(navigation: Navigation) {
                 Icon(
                     imageVector = Icons.Filled.Home,
                     contentDescription = "Главная"
+                )
+            }
+        )
+        BottomNavigationItem(
+            selected = navigation.searchRoute.on(),
+            onClick = { navigation.searchRoute.navigate() },
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Поиск"
                 )
             }
         )

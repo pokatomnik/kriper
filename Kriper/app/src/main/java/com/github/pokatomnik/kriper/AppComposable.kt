@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
+import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.allstories.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.history.History
@@ -167,6 +168,24 @@ fun AppComposable() {
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStory = { storyTitle ->
                                             navigation.storyRoute.navigate(storyTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.searchRoute.route
+                            ) {
+                                navigation.searchRoute.Params {
+                                    Search(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
+                                        },
+                                        onNavigateToTag = { tagTitle ->
+                                            navigation.storiesOfTagRoute.navigate(tagTitle)
+                                        },
+                                        onNavigateToTagGroup = { tagGroupTitle ->
+                                            navigation.tagsOfGroupRoute.navigate(tagGroupTitle)
                                         }
                                     )
                                 }

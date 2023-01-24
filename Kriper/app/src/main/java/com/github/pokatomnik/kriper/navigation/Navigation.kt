@@ -296,5 +296,27 @@ data class Navigation(
         override val route: String
             get() = routePath
     }
+
+    val searchRoute = object : RouteNoParameters {
+        private val routePath = "/search"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
 }
 
