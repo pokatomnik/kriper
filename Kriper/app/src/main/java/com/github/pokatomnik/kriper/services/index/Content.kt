@@ -4,6 +4,7 @@ import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
+import com.github.pokatomnik.kriper.ext.valuableChars
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
@@ -68,5 +69,68 @@ class Content(
             } catch (e: IOException) {
                 ""
             }
+        }
+
+    private fun matchSearchStr(searchItem: String, sample: String): Boolean {
+        return searchItem.lowercase().contains(sample)
+    }
+
+    suspend fun search(rawSearchString: String) =
+        withContext(Dispatchers.Default + SupervisorJob()) {
+            val searchStringLower = rawSearchString.trim().lowercase()
+
+            val tagGroupsFound = mutableMapOf<String, TagGroup>()
+            val tagContentItemsFound = mutableMapOf<String, TagContents>()
+            val pageMetaFound = mutableMapOf<String, PageMeta>()
+
+            for (currentTagGroupName in groupNames) {
+                val currentTagGroup = getTagGroupByName(currentTagGroupName)
+                if (matchSearchStr(currentTagGroupName, searchStringLower)) {
+                    tagGroupsFound[currentTagGroupName] = currentTagGroup
+                }
+
+                for (currentTagName in currentTagGroup.tagNames) {
+                    val currentTag = currentTagGroup.getTagContentsByName(currentTagName)
+                    if (matchSearchStr(currentTagName, searchStringLower)) {
+                        tagContentItemsFound[currentTagName] = currentTag
+                    }
+
+                    for (currentPageName in currentTag.pageNames) {
+                        val currentPageMeta = currentTag.getPageByTitle(currentPageName)
+                        val titleMatch = matchSearchStr(currentPageName, searchStringLower)
+                        val authorNicknameMatch = currentPageMeta?.let {
+                            matchSearchStr(it.authorNickname, searchStringLower)
+                        } ?: false
+                        val authorRealNameMatch = currentPageMeta?.authorRealName?.let {
+                            matchSearchStr(it, searchStringLower)
+                        } ?: false
+                        if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
+                            currentPageMeta?.let { pageMetaFound[currentPageName] = currentPageMeta }
+                        }
+                    }
+                }
+            }
+
+            val tagGroups = tagGroupsFound.values.sortedWith { a, b ->
+                a.tagGroupName.valuableChars().lowercase().compareTo(
+                    b.tagGroupName.valuableChars().lowercase()
+                )
+            }
+            val tagContentItems = tagContentItemsFound.values.sortedWith { a, b ->
+                a.tagName.valuableChars().lowercase().compareTo(
+                    b.tagName.valuableChars().lowercase()
+                )
+            }
+            val pageMeta = pageMetaFound.values.sortedWith { a, b ->
+                a.title.valuableChars().lowercase().compareTo(
+                    b.title.valuableChars().lowercase()
+                )
+            }
+
+            SearchResults(
+                tagGroups = tagGroups,
+                tagContentItems = tagContentItems,
+                pageMeta = pageMeta
+            )
         }
 }

@@ -1,11 +1,7 @@
 package com.github.pokatomnik.kriper.services.preferences.sorting
 
 import com.github.pokatomnik.kriper.domain.PageMeta
-
-private val valuableChars = "abcdefghijklmnopqrstuvwxyzабвгдеёжзиклмнопрстуфхцчшщъыьэюя"
-    .let { it + it.uppercase() } + "0123456789".split("").toSet()
-
-private fun String.valuableChars(): String = this.filter { char -> valuableChars.contains(char) }
+import com.github.pokatomnik.kriper.ext.valuableChars
 
 class AlphaASC : PageMetaSorter {
     override val id = "ALPHA_ASC"
