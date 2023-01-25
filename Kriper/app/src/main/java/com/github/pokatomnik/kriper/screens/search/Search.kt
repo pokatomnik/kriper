@@ -17,14 +17,29 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.index.SearchResults
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.makeToast
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-const val PAGES_INDEX = 0
-const val TAGS_INDEX = 1
-const val TAG_GROUPS_INDEX = 2
+private const val REQUIRED_CHARS_NUMBER_TO_SEARCH = 4
+
+private const val PAGES_INDEX = 0
+private const val TAGS_INDEX = 1
+private const val TAG_GROUPS_INDEX = 2
+
+private fun SearchResults.getTabIndexToScrollTo(): Int {
+    return if (pageMeta.isNotEmpty()) {
+        PAGES_INDEX
+    } else if (tagContentItems.isNotEmpty()) {
+        TAGS_INDEX
+    } else if (tagGroups.isNotEmpty()) {
+        TAG_GROUPS_INDEX
+    } else {
+        PAGES_INDEX
+    }
+}
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -38,6 +53,8 @@ fun Search(
     val searchStringState = remember { mutableStateOf("") }
     val searchResultsState = remember { mutableStateOf<SearchResults?>(null) }
     val pagerState = rememberPagerState(PAGES_INDEX)
+
+    val toast = makeToast()
 
     val focusRequester = remember { FocusRequester() }
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
@@ -62,6 +79,10 @@ fun Search(
         val doSearch = fun() {
             if (searchingState.value) return
             val strToSearch = searchStringState.value.trim()
+            if (strToSearch.length < REQUIRED_CHARS_NUMBER_TO_SEARCH) {
+                toast("Введите больше 4 букв")
+                return
+            }
             coroutineScope.launch {
                 val searchResults = indexService.content.search(strToSearch)
                 searchResultsState.value = searchResults
@@ -69,15 +90,9 @@ fun Search(
 
                 freeFocus()
 
-                if (searchResults.pageMeta.isNotEmpty()) {
-                    pagerState.animateScrollToPage(PAGES_INDEX)
-                } else if (searchResults.tagContentItems.isNotEmpty()) {
-                    pagerState.animateScrollToPage(TAGS_INDEX)
-                } else if (searchResults.tagGroups.isNotEmpty()) {
-                    pagerState.animateScrollToPage(TAG_GROUPS_INDEX)
-                } else {
-                    pagerState.animateScrollToPage(PAGES_INDEX)
-                }
+                pagerState.animateScrollToPage(
+                    searchResults.getTabIndexToScrollTo()
+                )
             }
         }
 
@@ -108,7 +123,9 @@ fun Search(
         ) {
             ScrollableTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                modifier = Modifier.wrapContentWidth().height(48.dp),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(48.dp),
                 edgePadding = LARGE_PADDING.dp
             ) {
                 Tab(
