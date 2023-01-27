@@ -1,15 +1,17 @@
 package com.github.pokatomnik.kriper.screens.search
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
-import com.github.pokatomnik.kriper.ui.components.LazyList
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
-import com.github.pokatomnik.kriper.ui.widgets.StoryCardNavigationListItem
+import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 
 @Composable
 fun PagesSearchResults(
@@ -18,7 +20,9 @@ fun PagesSearchResults(
 ) {
     if (pageMeta == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -26,7 +30,9 @@ fun PagesSearchResults(
         }
     } else if (pageMeta.isEmpty()) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -38,26 +44,10 @@ fun PagesSearchResults(
                 .fillMaxSize()
                 .padding(horizontal = SMALL_PADDING.dp)
         ) {
-            LazyList(list = pageMeta.toList()) { index, pageMeta ->
-                val isFirst = 0 == index
-
-                if (isFirst) {
-                    Spacer(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(SMALL_PADDING.dp))
-                }
-                StoryCardNavigationListItem(
-                    title = pageMeta.title,
-                    tags = pageMeta.tags,
-                    rating = pageMeta.rating,
-                    author = pageMeta.authorship,
-                    readingTimeMinutes = pageMeta.readingTimeMinutes,
-                    onClick = { onNavigateToStory(pageMeta.title) }
-                )
-                Spacer(
-                    modifier = Modifier.fillMaxWidth().height(SMALL_PADDING.dp)
-                )
-            }
+            PageMetaLazyList(
+                pageMeta = pageMeta.toList(),
+                onPageMetaClick = { onNavigateToStory(it.title) }
+            )
         }
     }
 }

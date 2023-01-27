@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
@@ -28,6 +29,7 @@ fun StoryCardNavigationListItem(
     rating: Int,
     author: String,
     readingTimeMinutes: Float,
+    liked: Boolean,
     onClick: () -> Unit
 ) {
     Card(
@@ -60,12 +62,28 @@ fun StoryCardNavigationListItem(
                         .height(32.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.h6,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.h6,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    Column(
+                        modifier = Modifier.width(72.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        if (liked) {
+                            Text(
+                                text = "Избранное",
+                                style = MaterialTheme.typography.caption,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
                 Row(
                     modifier = Modifier

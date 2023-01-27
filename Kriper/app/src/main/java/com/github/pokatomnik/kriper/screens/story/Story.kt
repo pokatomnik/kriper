@@ -9,10 +9,7 @@ import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomDrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.rememberBottomDrawerState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,10 +20,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.preferences.page.FontSize
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
-import com.github.pokatomnik.kriper.ui.components.BottomSheet
-import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
-import com.github.pokatomnik.kriper.ui.components.PageContainer
-import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.components.*
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -55,12 +49,13 @@ fun Story(
     val (fontSize, setFontSize) = pagePreferences.fontSize.collectAsState()
     val fontInfoState = pagePreferences.storyContentFontFamily.collectAsState()
     val colorPresetState = pagePreferences.storyContentColorPreset.collectAsState()
+    val favoriteState = rememberStoryFavorite(selectedPageTitle = storyTitle)
 
-    globalPreferences.oneTimeRunners.oncePerInstallActions.Once(key = "PAGE_QUICK_HELP_DISPLAYED") {
+    globalPreferences.oneTimeRunners.oncePerInstallActions.Once(key = "MENU_LIKE_INFO") {
         scaffoldState?.let {
             coroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
-                    message = "Нажмите и удерживайте для вызова меню",
+                    message = "Долгий тап для меню, двойной тап — лайк",
                     actionLabel = "Понятно",
                     duration = SnackbarDuration.Indefinite
                 )
@@ -123,6 +118,11 @@ fun Story(
                                         onLongClick = {
                                             coroutineScope.launch { bottomDrawerState.open() }
                                             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        },
+                                        onDoubleClick = {
+                                            val oldLiked = favoriteState.state.value
+                                            val newLiked = oldLiked == null || !oldLiked
+                                            favoriteState.onFavoritePress(newLiked)
                                         }
                                     )
                             ) {
@@ -182,6 +182,14 @@ fun Story(
                         }
                     }
                 }
+            }
+            favoriteState.state.value?.let {
+                LikeBox(
+                    liked = it,
+                    color = colorPresetState.value.contentColor ?: contentColorFor(
+                        MaterialTheme.colors.surface
+                    )
+                )
             }
         },
         drawerContent = {

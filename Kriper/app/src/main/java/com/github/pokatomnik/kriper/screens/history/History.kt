@@ -1,6 +1,9 @@
 package com.github.pokatomnik.kriper.screens.history
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -10,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.pokatomnik.kriper.ui.components.*
-import com.github.pokatomnik.kriper.ui.widgets.StoryCardNavigationListItem
+import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.PageTitle
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 
 @Composable
 fun History(
@@ -48,26 +53,10 @@ fun History(
                         .fillMaxSize()
                         .padding(horizontal = SMALL_PADDING.dp)
                 ) {
-                    LazyList(list = pageMeta) { index, currentPageMeta ->
-                        val isFirst = 0 == index
-
-                        if (isFirst) {
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(SMALL_PADDING.dp)
-                            )
-                        }
-                        StoryCardNavigationListItem(
-                            title = currentPageMeta.title,
-                            tags = currentPageMeta.tags,
-                            rating = currentPageMeta.rating,
-                            author = currentPageMeta.authorship,
-                            readingTimeMinutes = currentPageMeta.readingTimeMinutes,
-                            onClick = { onNavigateToStory(currentPageMeta.title) }
-                        )
-                        Spacer(modifier = Modifier.fillMaxWidth().height(SMALL_PADDING.dp))
-                    }
+                    PageMetaLazyList(
+                        pageMeta = pageMeta,
+                        onPageMetaClick = { onNavigateToStory(it.title) }
+                    )
                 }
             }
         }

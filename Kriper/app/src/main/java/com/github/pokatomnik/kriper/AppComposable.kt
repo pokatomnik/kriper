@@ -11,6 +11,7 @@ import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.allstories.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
+import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.settings.Settings
@@ -51,7 +52,8 @@ fun AppComposable() {
                                         onNavigateToTagGroups = { navigation.tagGroupsRoute.navigate() },
                                         onNavigateToAllTags = { navigation.allTagsRoute.navigate() },
                                         onNavigateToAllStories = { navigation.allStoriesRoute.navigate() },
-                                        onNavigateToHistory = { navigation.historyRoute.navigate() }
+                                        onNavigateToHistory = { navigation.historyRoute.navigate() },
+                                        onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() }
                                     )
                                 }
                             }
@@ -186,6 +188,18 @@ fun AppComposable() {
                                         },
                                         onNavigateToTagGroup = { tagGroupTitle ->
                                             navigation.tagsOfGroupRoute.navigate(tagGroupTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.favoriteStoriesRoute.route
+                            ) {
+                                navigation.favoriteStoriesRoute.Params {
+                                    FavoriteStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
                                         }
                                     )
                                 }
