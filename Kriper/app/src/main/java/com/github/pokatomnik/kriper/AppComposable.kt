@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper
 
+import android.content.pm.ActivityInfo
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,9 @@ import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
 import com.github.pokatomnik.kriper.screens.story.Story
 import com.github.pokatomnik.kriper.screens.tag.TagsOfGroup
 import com.github.pokatomnik.kriper.screens.taggroups.TagGroups
+import com.github.pokatomnik.kriper.screens.video.Video
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.ui.components.LockScreenOrientation
 import com.github.pokatomnik.kriper.ui.components.screen
 import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
@@ -112,7 +115,10 @@ fun AppComposable() {
                                                 ?.also { navigation.storyRoute.navigate(it.title) }
                                                 .let { it != null }
                                         },
-                                        onNavigateToStory = { navigation.storyRoute.navigate(it) }
+                                        onNavigateToStory = { navigation.storyRoute.navigate(it) },
+                                        onNavigateToVideo = { videoURL ->
+                                            navigation.videoRoute.navigate(videoURL)
+                                        }
                                     )
                                 }
                             }
@@ -202,6 +208,15 @@ fun AppComposable() {
                                             navigation.storyRoute.navigate(storyTitle)
                                         }
                                     )
+                                }
+                            }
+                            screen(
+                                route = navigation.videoRoute.route
+                            ) {
+                                LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                                    navigation.videoRoute.Params { videoURL ->
+                                        Video(videoURL = videoURL)
+                                    }
                                 }
                             }
                         }

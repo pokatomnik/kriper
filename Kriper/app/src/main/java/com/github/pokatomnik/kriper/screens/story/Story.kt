@@ -37,6 +37,7 @@ fun Story(
     onNavigateToStory: (storyTitle: String) -> Unit,
     onNavigateToRandom: () -> Boolean,
     onNavigateToPrevious: () -> Boolean,
+    onNavigateToVideo: (videoURL: String) -> Unit,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
@@ -157,6 +158,16 @@ fun Story(
                                         fontSize = fontSize,
                                         fontInfo = fontInfoState.value,
                                         colorsInfo = colorPresetState.value
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(LARGE_PADDING.dp)
+                                    )
+                                    VideoButtons(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                        onNavigateToVideo = onNavigateToVideo
                                     )
                                     Spacer(
                                         modifier = Modifier
