@@ -118,7 +118,7 @@ fun HorizontalSwipeableRow(
                             val offsetXValueInPixels = -1 * offsetXInPixels.value
                             val absoluteOffset = abs(offsetXValueInPixels)
                             val smallDrag =
-                                absoluteOffset < maxDragDp.asDpToPixels(context) - (maxDragDp.asDpToPixels(
+                                absoluteOffset < SIDE_DRAG.asDpToPixels(context) - (SIDE_DRAG.asDpToPixels(
                                     context
                                 ) / 2)
                             if (smallDrag) {
