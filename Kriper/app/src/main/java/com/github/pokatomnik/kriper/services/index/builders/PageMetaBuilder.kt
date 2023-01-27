@@ -29,7 +29,7 @@ fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
 
     val videos =
         pageMetaElement.asJsonObject["videos"].asJsonArray.fold(mutableSetOf<String>()) { acc, current ->
-            acc.apply { add(current.toString()) }
+            acc.apply { add(current.asString) }
         }
 
     val pageMeta = PageMeta(

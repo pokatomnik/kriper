@@ -225,6 +225,31 @@ data class Navigation(
             get() = "/tag/{${TAG_NAME_KEY}}"
     }
 
+    val videoRoute = object : RouteSingleParameter {
+        private val VIDEO_URL_KEY = "VIDEO_URL_KEY"
+
+        override fun navigate(videoURL: String) {
+            val serializedVideoURL = serializer.serialize(videoURL)
+            navController.navigateDistinct("/video/$serializedVideoURL")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (videoURL: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val videoURL = arguments
+                ?.getString(VIDEO_URL_KEY)
+                ?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
+            videoURL?.let { content(it) }
+        }
+
+        override val route: String
+            get() = "/video/{${VIDEO_URL_KEY}}"
+    }
+
     /**
      * This route must display all stories presented in the content
      */
