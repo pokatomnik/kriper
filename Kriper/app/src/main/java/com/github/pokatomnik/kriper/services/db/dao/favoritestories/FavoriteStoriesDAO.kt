@@ -21,7 +21,7 @@ abstract class FavoriteStoriesDAO {
     protected abstract suspend fun deleteFavoriteStory(favoriteStory: FavoriteStory)
 
     suspend fun getAllFavoriteTitles(): List<String> {
-        return getAllFavoriteStories().map { it.title }
+        return getAllFavoriteStories().map { it.title }.reversed()
     }
 
     suspend fun isFavorite(storyTitle: String): Boolean {

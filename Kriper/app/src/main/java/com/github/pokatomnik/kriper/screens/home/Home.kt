@@ -8,10 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Category
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.HistoryEdu
-import androidx.compose.material.icons.filled.Tag
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -38,6 +35,7 @@ fun Home(
     onNavigateToAllTags: () -> Unit,
     onNavigateToAllStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
+    onNavigateToFavoriteStories: () -> Unit,
 ) {
     val animatedTitleTranslateX = remember { Animatable(-100f) }
     val animatedTitleAlpha = remember { Animatable(0.3f) }
@@ -111,12 +109,27 @@ fun Home(
                     }
                 }
                 HomeHorizontalSpacer()
-                IconicCardFull(
-                    title = "Хронология",
-                    icon = Icons.Filled.History,
-                    description = "Прочитано ранее",
-                    onClick = onNavigateToHistory
-                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
+                        IconicCardSmall(
+                            title = "Хронология",
+                            icon = Icons.Filled.History,
+                            onClick = onNavigateToHistory
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
+                        IconicCardSmall(
+                            title = "Избранное",
+                            icon = Icons.Filled.Favorite,
+                            onClick = onNavigateToFavoriteStories
+                        )
+                    }
+                }
                 HomeHorizontalSpacer()
             }
         }

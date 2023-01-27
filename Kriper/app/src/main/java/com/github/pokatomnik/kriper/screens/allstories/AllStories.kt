@@ -14,8 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
-import com.github.pokatomnik.kriper.ui.components.PageTitle
-import com.github.pokatomnik.kriper.ui.widgets.StoryCardNavigationListItem
+import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
 import kotlinx.coroutines.launch
 
@@ -75,30 +74,11 @@ fun AllStories(
                             .fillMaxSize()
                             .padding(horizontal = SMALL_PADDING.dp)
                     ) {
-                        LazyList(list = allPageMeta, lazyListState = lazyListState) { index, pageMeta ->
-                            val isFirst = 0 == index
-
-                            if (isFirst) {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(SMALL_PADDING.dp)
-                                )
-                            }
-                            StoryCardNavigationListItem(
-                                title = pageMeta.title,
-                                tags = pageMeta.tags,
-                                rating = pageMeta.rating,
-                                author = pageMeta.authorship,
-                                readingTimeMinutes = pageMeta.readingTimeMinutes,
-                                onClick = { onNavigateToStory(pageMeta.title) }
-                            )
-                            Spacer(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(SMALL_PADDING.dp)
-                            )
-                        }
+                        PageMetaLazyList(
+                            pageMeta = allPageMeta,
+                            lazyListState = lazyListState,
+                            onPageMetaClick = { onNavigateToStory(it.title) }
+                        )
                     }
                 }
             },

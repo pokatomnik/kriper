@@ -26,7 +26,7 @@ private const val ICON_GROWTH_MULTIPLIER = 1.5f
 interface SwipeableActionParams {
     val icon: ImageVector
     val contentDescription: String
-    suspend fun onSwipe()
+    suspend fun onSwipe(): suspend () -> Unit
 }
 
 @Composable
@@ -132,8 +132,9 @@ fun HorizontalSwipeableRow(
                             } else {
                                 null
                             }
-                            coroutineScope.launch { handler?.onSwipe() }
+                            val onAnimationEnd = handler?.onSwipe()
                             offsetXInPixels.animateTo(0f)
+                            onAnimationEnd?.invoke()
                         }
                     )
             ) { content() }
