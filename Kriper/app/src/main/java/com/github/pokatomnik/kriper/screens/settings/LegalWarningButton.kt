@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
 @Composable
-fun LegalWarning() {
+fun LegalWarningButton() {
     val dialogOpen = remember { mutableStateOf(false) }
     val showDialog = { dialogOpen.value = true }
     val hideDialog = { dialogOpen.value = false }
