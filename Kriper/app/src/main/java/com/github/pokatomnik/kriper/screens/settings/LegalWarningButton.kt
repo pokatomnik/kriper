@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
 @Composable
-fun AuthorshipNotificationButton() {
+fun LegalWarningButton() {
     val dialogOpen = remember { mutableStateOf(false) }
     val showDialog = { dialogOpen.value = true }
     val hideDialog = { dialogOpen.value = false }
@@ -31,7 +31,7 @@ fun AuthorshipNotificationButton() {
             title = { Text("О приложении") },
             text = {
                 Text(
-                    text = "Kriper - приложение с открытым исходным кодом для чтения историй с сайте https://kriper.net. " +
+                    text = "Kriper - приложение с открытым исходным кодом для чтения историй с сайта https://kriper.net. " +
                             "Авторство всех историй, имеющихся в данном приложении принадлежит только " +
                             "их создателям. Все совпадения с реальными личностями, местами, верованиями и " +
                             "исповеданиями случайны. Ни вебсайт https://kriper.net, ни данное приложение " +

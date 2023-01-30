@@ -57,7 +57,7 @@ fun Settings(
                     .padding(horizontal = LARGE_PADDING.dp),
                 mainAxisAlignment = MainAxisAlignment.Center
             ) {
-                AuthorshipNotificationButton()
+                LegalWarningButton()
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
                 WebsiteButton()
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
