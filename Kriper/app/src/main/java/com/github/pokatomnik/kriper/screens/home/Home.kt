@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.ui.components.IconicCardFull
+import com.github.pokatomnik.kriper.ui.components.IconicCardSmall
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import kotlinx.coroutines.launch
