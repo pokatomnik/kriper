@@ -20,6 +20,12 @@ abstract class FavoriteStoriesDAO {
     @Delete
     protected abstract suspend fun deleteFavoriteStory(favoriteStory: FavoriteStory)
 
+    @Query("DELETE FROM favorite_stories")
+    abstract suspend fun clearAllFavoriteTitles()
+
+    @Query("SELECT COUNT(*) FROM favorite_stories")
+    abstract suspend fun getTitlesQuantity(): Int
+
     suspend fun getAllFavoriteTitles(): List<String> {
         return getAllFavoriteStories().map { it.title }.reversed()
     }
