@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.screens.home
+package com.github.pokatomnik.kriper.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,14 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IconicCardSmall(
+fun IconicCardFull(
     title: String,
     icon: ImageVector,
+    description: String,
     onClick: () -> Unit,
 ) {
     Card(
@@ -29,22 +31,25 @@ fun IconicCardSmall(
             .fillMaxWidth()
             .height(128.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .clipToBounds()
                 .clickable(
-                    indication = rememberRipple(),
+                    indication = rememberRipple(bounded = true),
                     onClick = onClick,
                     interactionSource = remember { MutableInteractionSource() }
-                ),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                )
+                .padding(
+                    top = LARGE_PADDING.dp,
+                    end = LARGE_PADDING.dp,
+                    bottom = LARGE_PADDING.dp
+                )
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier.size(width = 64.dp, height = 128.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     imageVector = icon,
@@ -52,14 +57,18 @@ fun IconicCardSmall(
                     modifier = Modifier.size(32.dp)
                 )
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            VerticalDivider()
+            Column(
+                modifier = Modifier.fillMaxSize().weight(1f).padding(LARGE_PADDING.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.h6,
+                )
+                Text(
+                    text = description,
+                    modifier = Modifier.alpha(ALPHA_GHOST)
                 )
             }
         }

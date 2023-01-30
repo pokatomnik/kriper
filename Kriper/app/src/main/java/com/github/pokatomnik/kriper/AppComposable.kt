@@ -66,6 +66,9 @@ fun AppComposable() {
                                 navigation.tagGroupsRoute.Params {
                                     TagGroups(
                                         onNavigateToGroup = { navigation.tagsOfGroupRoute.navigate(it) },
+                                        onNavigateToStoriesOfTagOfTagGroup = { groupTitle, tagTitle ->
+                                            navigation.storiesOfTagOfGroupRoute.navigate(groupTitle, tagTitle)
+                                        },
                                         onNavigateBack = { navigation.navigateBack() }
                                     )
                                 }
