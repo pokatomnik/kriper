@@ -78,6 +78,18 @@ fun Settings(
                     .fillMaxWidth()
                     .height(SMALL_PADDING.dp)
             )
+            AuthorsSection()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
+            SectionDivider()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
             BuildInfoSection()
         }
     }
