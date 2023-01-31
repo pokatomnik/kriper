@@ -1,6 +1,5 @@
 package com.github.pokatomnik.kriper
 
-import android.content.pm.ActivityInfo
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
-import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.allstories.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
+import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.settings.Settings
 import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
 import com.github.pokatomnik.kriper.screens.story.Story
@@ -22,7 +21,6 @@ import com.github.pokatomnik.kriper.screens.tag.TagsOfGroup
 import com.github.pokatomnik.kriper.screens.taggroups.TagGroups
 import com.github.pokatomnik.kriper.screens.video.Video
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
-import com.github.pokatomnik.kriper.ui.components.LockScreenOrientation
 import com.github.pokatomnik.kriper.ui.components.screen
 import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
@@ -216,10 +214,8 @@ fun AppComposable() {
                             screen(
                                 route = navigation.videoRoute.route
                             ) {
-                                LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                                    navigation.videoRoute.Params { videoURL ->
-                                        Video(videoURL = videoURL)
-                                    }
+                                navigation.videoRoute.Params { videoURL ->
+                                    Video(videoURL = videoURL)
                                 }
                             }
                         }
