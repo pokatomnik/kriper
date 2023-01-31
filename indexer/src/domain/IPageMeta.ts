@@ -38,9 +38,16 @@ export interface IPageMeta {
   readonly readingTimeMinutes: number;
 
   /**
-   * Optional source of the page. Can be omitted.
+   * Optional source of the story.
+   * Shows where this story came from.
+   * Actually, this field describes a website, i.e. https://mrakopedia.net, https://4stor.ru, etc
    */
   readonly source?: string;
+
+  /**
+   * Where is the web version of the story located.
+   */
+  readonly webpageURL: string;
 
   /**
    * Rating of the page. Zero if no rating provided.

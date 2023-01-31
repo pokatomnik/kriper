@@ -13,6 +13,7 @@ import { DateCreatedParser } from "./date-created-parser/DateCreatedParser.ts";
 import { NumberOfViewsParser } from "./number-of-views-parser/NumberOfViewsParser.ts";
 import { ReadingTimeMinutesParser } from "./reading-time-minutes-parser/ReadingTimeMinutesParser.ts";
 import { SourceParser } from "./source-parser/SourceParser.ts";
+import { WebPageURLParser } from "./webpage-url-parser/WebPageURLParser.ts";
 import { RatingParser } from "./rating-parser/RatingParser.ts";
 import { TagsParser } from "./tags-parser/TagsParser.ts";
 import { SeeAlsoParser } from "./see-also-parser/SeeAlsoParser.ts";
@@ -31,6 +32,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly numberOfViewsParser: IParser<number>,
     private readonly readingTimeMinutesParser: IParser<number>,
     private readonly sourceParser: IParser<string | null>,
+    private readonly webpageURLParser: IParser<string>,
     private readonly ratingParser: IParser<number>,
     private readonly tagsParser: IParser<ReadonlyArray<string>>,
     private readonly seeAlsoParser: IParser<ReadonlyArray<string>>,
@@ -49,6 +51,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       numberOfViews,
       readingTimeMinutes,
       source,
+      webpageURL,
       rating,
       tags,
       seeAlso,
@@ -63,6 +66,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.numberOfViewsParser.parse(rawHTML),
       this.readingTimeMinutesParser.parse(rawHTML),
       this.sourceParser.parse(rawHTML),
+      this.webpageURLParser.parse(rawHTML),
       this.ratingParser.parse(rawHTML),
       this.tagsParser.parse(rawHTML),
       this.seeAlsoParser.parse(rawHTML),
@@ -83,6 +87,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       numberOfViews,
       readingTimeMinutes,
       source: source ?? undefined,
+      webpageURL,
       rating: rating ?? undefined,
       tags: tags,
       seeAlso: seeAlso,
@@ -102,6 +107,7 @@ provide(PageMetaParser, [
   NumberOfViewsParser,
   ReadingTimeMinutesParser,
   SourceParser,
+  WebPageURLParser,
   RatingParser,
   TagsParser,
   SeeAlsoParser,
