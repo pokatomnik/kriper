@@ -36,15 +36,16 @@ class Content(
         )
     }
 
-    val allStoryTitles: Collection<String> by lazy {
-        index.pageMeta.keys.sortedWith { a, b -> a.compareTo(b) }
-    }
+    val selections = Selections(index)
 
     fun getPageMetaByName(storyTitle: String): PageMeta? = index.pageMeta[storyTitle]
 
-    fun getRandomPageMeta() = allStoryTitles.random(Random(System.currentTimeMillis())).let {
-        index.pageMeta[it]
-    }
+    fun getRandomPageMeta() = selections
+        .allStoryTitles
+        .random(Random(System.currentTimeMillis()))
+        .let {
+            index.pageMeta[it]
+        }
 
     fun getTagGroupByName(tagGroupName: String): TagGroup =
         tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->

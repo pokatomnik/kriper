@@ -8,12 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
-import com.github.pokatomnik.kriper.screens.allstories.AllStories
+import com.github.pokatomnik.kriper.screens.selections.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.search.Search
+import com.github.pokatomnik.kriper.screens.selections.LongStories
+import com.github.pokatomnik.kriper.screens.selections.NewStories
+import com.github.pokatomnik.kriper.screens.selections.ShortStories
 import com.github.pokatomnik.kriper.screens.settings.Settings
 import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
 import com.github.pokatomnik.kriper.screens.story.Story
@@ -53,6 +56,9 @@ fun AppComposable() {
                                         onNavigateToTagGroups = { navigation.tagGroupsRoute.navigate() },
                                         onNavigateToAllTags = { navigation.allTagsRoute.navigate() },
                                         onNavigateToAllStories = { navigation.allStoriesRoute.navigate() },
+                                        onNavigateToShortStories = { navigation.shortMostVotedStoriesRoute.navigate() },
+                                        onNavigateToLongStories = { navigation.longMostVotedStoriesRoute.navigate() },
+                                        onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() }
                                     )
@@ -162,6 +168,42 @@ fun AppComposable() {
                             ) {
                                 navigation.allStoriesRoute.Params {
                                     AllStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.shortMostVotedStoriesRoute.route
+                            ) {
+                                navigation.shortMostVotedStoriesRoute.Params {
+                                    ShortStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.longMostVotedStoriesRoute.route
+                            ) {
+                                navigation.longMostVotedStoriesRoute.Params {
+                                    LongStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.newStoriesRoute.route
+                            ) {
+                                navigation.newStoriesRoute.Params {
+                                    NewStories(
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStory = { storyTitle ->
                                             navigation.storyRoute.navigate(storyTitle)

@@ -43,7 +43,7 @@ fun BuildInfoSection() {
                 Text(text = "База историй за $dateStr")
             }
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Всего историй: ${indexService.content.allStoryTitles.size}")
+                Text(text = "Всего историй: ${indexService.content.selections.allStoryTitles.size}")
             }
         }
     }

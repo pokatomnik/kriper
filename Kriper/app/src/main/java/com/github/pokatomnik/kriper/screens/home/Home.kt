@@ -2,6 +2,7 @@ package com.github.pokatomnik.kriper.screens.home
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,16 +15,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
-import com.github.pokatomnik.kriper.ui.components.IconicCardFull
-import com.github.pokatomnik.kriper.ui.components.IconicCardSmall
-import com.github.pokatomnik.kriper.ui.components.PageContainer
-import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.components.*
 import kotlinx.coroutines.launch
 
 @Composable
-private fun HomeHorizontalSpacer() {
+private fun HomeHorizontalSpacerSmall() {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,10 +30,22 @@ private fun HomeHorizontalSpacer() {
 }
 
 @Composable
+private fun HomeHorizontalSpacerLarge() {
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(LARGE_PADDING.dp)
+    )
+}
+
+@Composable
 fun Home(
     onNavigateToTagGroups: () -> Unit,
     onNavigateToAllTags: () -> Unit,
     onNavigateToAllStories: () -> Unit,
+    onNavigateToShortStories: () -> Unit,
+    onNavigateToLongStories: () -> Unit,
+    onNavigateToNewStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
 ) {
@@ -57,83 +67,153 @@ fun Home(
         }
     }
 
-    IndexServiceReadiness { indexService ->
-        PageContainer {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = SMALL_PADDING.dp)
-                    .verticalScroll(rememberScrollState())
+    PageContainer {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            HomeHorizontalSpacerSmall()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                HomeHorizontalSpacer()
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
+                Text(
+                    text = "...Kriper",
+                    style = MaterialTheme.typography.h1,
+                    modifier = Modifier.graphicsLayer {
+                        translationX = animatedTitleTranslateX.value
+                        alpha = animatedTitleAlpha.value
+                    }
+                )
+            }
+            HomeHorizontalSpacerSmall()
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                    Spacer(
+                        modifier = Modifier.width(LARGE_PADDING.dp)
+                    )
                     Text(
-                        text = "...Kriper",
-                        style = MaterialTheme.typography.h1,
-                        modifier = Modifier.graphicsLayer {
-                            translationX = animatedTitleTranslateX.value
-                            alpha = animatedTitleAlpha.value
-                        }
+                        text = "ГЛАВНОЕ",
+                        fontWeight = FontWeight.Bold
                     )
                 }
-                HomeHorizontalSpacer()
-                IconicCardFull(
-                    title = "Группы меток",
-                    icon = Icons.Filled.Category,
-                    description = "Проще выбрать что почитать",
-                    onClick = onNavigateToTagGroups
+                Spacer(
+                    modifier = Modifier.height(SMALL_PADDING.dp)
                 )
-                HomeHorizontalSpacer()
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)) {
-                        IconicCardSmall(
-                            title = "Все метки",
-                            icon = Icons.Filled.Tag,
-                            onClick = onNavigateToAllTags
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    ) {
-                        IconicCardSmall(
-                            title = "Все истории",
-                            icon = Icons.Filled.HistoryEdu,
-                            onClick = onNavigateToAllStories
-                        )
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)
+                ) {
+                    IconicCardFull(
+                        title = "Группы меток",
+                        icon = Icons.Filled.Category,
+                        description = "Проще выбрать что почитать",
+                        onClick = onNavigateToTagGroups
+                    )
                 }
-                HomeHorizontalSpacer()
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)) {
-                        IconicCardSmall(
-                            title = "Хронология",
-                            icon = Icons.Filled.History,
-                            onClick = onNavigateToHistory
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)) {
-                        IconicCardSmall(
-                            title = "Избранное",
-                            icon = Icons.Filled.Favorite,
-                            onClick = onNavigateToFavoriteStories
-                        )
-                    }
+                HomeHorizontalSpacerSmall()
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)
+                ) {
+                    IconicCardFull(
+                        title = "Все метки",
+                        icon = Icons.Filled.Tag,
+                        description = "Если удобнее по алфавиту",
+                        onClick = onNavigateToAllTags
+                    )
                 }
-                HomeHorizontalSpacer()
             }
+            HomeHorizontalSpacerLarge()
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                    Spacer(
+                        modifier = Modifier.width(LARGE_PADDING.dp)
+                    )
+                    Text(
+                        text = "ПОДБОРКИ",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(SMALL_PADDING.dp)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    Spacer(
+                        modifier = Modifier.width(SMALL_PADDING.dp)
+                    )
+                    IconicCardSmall(
+                        icon = Icons.Filled.HistoryEdu,
+                        title = "Все",
+                        modifier = Modifier.width(128.dp),
+                        onClick = onNavigateToAllStories
+                    )
+                    Spacer(
+                        modifier = Modifier.width(SMALL_PADDING.dp)
+                    )
+                    IconicCardSmall(
+                        icon = Icons.Filled.ReceiptLong,
+                        title = "Короткие",
+                        modifier = Modifier.width(128.dp),
+                        onClick = onNavigateToShortStories,
+                    )
+                    Spacer(
+                        modifier = Modifier.width(SMALL_PADDING.dp)
+                    )
+                    IconicCardSmall(
+                        icon = Icons.Filled.AutoStories,
+                        title = "Длинные",
+                        modifier = Modifier.width(128.dp),
+                        onClick = onNavigateToLongStories,
+                    )
+                    Spacer(
+                        modifier = Modifier.width(SMALL_PADDING.dp)
+                    )
+                    IconicCardSmall(
+                        icon = Icons.Filled.FiberNew,
+                        title = "Новые",
+                        modifier = Modifier.width(128.dp),
+                        onClick = onNavigateToNewStories,
+                    )
+                    Spacer(
+                        modifier = Modifier.width(SMALL_PADDING.dp)
+                    )
+                }
+            }
+            HomeHorizontalSpacerLarge()
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                    Spacer(
+                        modifier = Modifier.width(LARGE_PADDING.dp)
+                    )
+                    Text(
+                        text = "МОЁ",
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(
+                    modifier = Modifier.height(SMALL_PADDING.dp)
+                )
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                    IconicCardSmall(
+                        title = "Хронология",
+                        modifier = Modifier.width(128.dp),
+                        icon = Icons.Filled.History,
+                        onClick = onNavigateToHistory
+                    )
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    IconicCardSmall(
+                        title = "Избранное",
+                        modifier = Modifier.width(128.dp),
+                        icon = Icons.Filled.Favorite,
+                        onClick = onNavigateToFavoriteStories
+                    )
+                }
+            }
+            HomeHorizontalSpacerLarge()
         }
     }
 }
