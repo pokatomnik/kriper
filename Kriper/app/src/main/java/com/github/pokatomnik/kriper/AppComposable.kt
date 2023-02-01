@@ -48,6 +48,13 @@ fun AppComposable() {
                             startDestination = navigation.defaultRoute.route,
                             modifier = Modifier.padding(scaffoldPaddingValues)
                         ) {
+                            val onNavigateToRandom = {
+                                indexService.content
+                                    .getRandomPageMeta()
+                                    ?.also { navigation.storyRoute.navigate(it.title) }
+                                    .let { it != null }
+                            }
+
                             screen(
                                 route = navigation.homeRoute.route,
                             ) {
@@ -60,7 +67,8 @@ fun AppComposable() {
                                         onNavigateToLongStories = { navigation.longMostVotedStoriesRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
-                                        onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() }
+                                        onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
+                                        onNavigateToRandom = onNavigateToRandom
                                     )
                                 }
                             }
@@ -116,12 +124,7 @@ fun AppComposable() {
                                             navigation.storiesOfTagRoute.navigate(tag)
                                         },
                                         onNavigateToPrevious = { navigation.navigateBack() },
-                                        onNavigateToRandom = {
-                                            indexService.content
-                                                .getRandomPageMeta()
-                                                ?.also { navigation.storyRoute.navigate(it.title) }
-                                                .let { it != null }
-                                        },
+                                        onNavigateToRandom = onNavigateToRandom,
                                         onNavigateToStory = { navigation.storyRoute.navigate(it) },
                                         onNavigateToVideo = { videoURL ->
                                             navigation.videoRoute.navigate(videoURL)

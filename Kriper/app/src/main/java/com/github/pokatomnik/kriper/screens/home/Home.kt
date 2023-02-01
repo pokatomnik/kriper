@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ fun Home(
     onNavigateToNewStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
+    onNavigateToRandom: () -> Any,
 ) {
     val animatedTitleTranslateX = remember { Animatable(-100f) }
     val animatedTitleAlpha = remember { Animatable(0.3f) }
@@ -89,7 +91,9 @@ fun Home(
             }
             HomeHorizontalSpacerSmall()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SMALL_PADDING.dp)) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -102,7 +106,9 @@ fun Home(
                     modifier = Modifier.height(SMALL_PADDING.dp)
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
                 ) {
                     IconicCardFull(
                         title = "Группы меток",
@@ -113,7 +119,9 @@ fun Home(
                 }
                 HomeHorizontalSpacerSmall()
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
                 ) {
                     IconicCardFull(
                         title = "Все метки",
@@ -122,10 +130,25 @@ fun Home(
                         onClick = onNavigateToAllTags
                     )
                 }
+                HomeHorizontalSpacerSmall()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
+                ) {
+                    IconicCardFull(
+                        title = "Случайная",
+                        icon = Icons.Outlined.Casino,
+                        description = "Просто откройте мне историю",
+                        onClick = { onNavigateToRandom() }
+                    )
+                }
             }
             HomeHorizontalSpacerLarge()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SMALL_PADDING.dp)) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -185,7 +208,9 @@ fun Home(
             }
             HomeHorizontalSpacerLarge()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SMALL_PADDING.dp)) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -197,7 +222,9 @@ fun Home(
                 Spacer(
                     modifier = Modifier.height(SMALL_PADDING.dp)
                 )
-                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp)) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SMALL_PADDING.dp)) {
                     IconicCardSmall(
                         title = "Хронология",
                         modifier = Modifier.width(128.dp),
