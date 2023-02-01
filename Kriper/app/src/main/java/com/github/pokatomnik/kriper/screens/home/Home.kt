@@ -77,7 +77,7 @@ fun Home(
         ) {
             HomeHorizontalSpacerSmall()
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(LARGE_PADDING.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 Text(
