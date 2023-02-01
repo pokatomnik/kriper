@@ -254,7 +254,73 @@ data class Navigation(
      * This route must display all stories presented in the content
      */
     val allStoriesRoute = object : RouteNoParameters {
-        private val routePath = "/all-stories"
+        private val routePath = "/selections/all-stories"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val shortMostVotedStoriesRoute = object : RouteNoParameters {
+        private val routePath = "/selections/short"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val longMostVotedStoriesRoute = object : RouteNoParameters {
+        private val routePath = "/selections/long"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val newStoriesRoute = object : RouteNoParameters {
+        private val routePath = "/selections/new"
 
         @Composable
         override fun on(): Boolean {
