@@ -47,6 +47,7 @@ fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
         } catch (e: Exception) {
             null
         },
+        webpageURL = pageMetaElement.asJsonObject["webpageURL"].asString,
         rating = pageMetaElement.asJsonObject["rating"].asInt,
         tags = tags,
         seeAlso = seeAlso,

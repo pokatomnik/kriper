@@ -9,6 +9,7 @@ data class PageMeta(
     val numberOfViews: Int,
     val readingTimeMinutes: Float,
     val source: String?,
+    val webpageURL: String,
     val rating: Int,
     val tags: Set<String>,
     val seeAlso: Set<String>,

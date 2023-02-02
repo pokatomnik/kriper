@@ -28,35 +28,47 @@ fun SourceButton(
     val context = LocalContext.current
 
     IndexServiceReadiness { indexService ->
-        val pageMeta = indexService.content.getPageMetaByName(pageTitle)
-        pageMeta?.source?.let { source ->
-            val uri = remember(source) {
-                try { Uri.parse(source) } catch (e: Exception) { null }
+        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+            val source = pageMeta.source
+            val webpageURL = pageMeta.webpageURL
+
+            val sourceURI = remember(source) {
+                source?.let { try { Uri.parse(source) } catch (e: Exception) { null } }
             }
 
-            val handleClick: () -> Unit = {
-                uri?.let {
-                    val intent = Intent(Intent.ACTION_VIEW, uri)
+            val handleOpenSourceURL: () -> Unit = {
+                sourceURI?.let {
+                    val intent = Intent(Intent.ACTION_VIEW, sourceURI)
                     context.startActivity(intent)
                 }
             }
 
+            val handleReadOnKriper: () -> Unit = {
+                try { Uri.parse(webpageURL) } catch (e: Exception) { null }
+                    ?.let { uri ->
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        context.startActivity(intent)
+                    }
+            }
+
             val renderText = @Composable {
-                Text(
-                    text = source,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.alpha(ALPHA_GHOST),
-                    color = colorsInfo.contentColor ?: contentColorFor(
-                        MaterialTheme.colors.surface
+                source?.let {
+                    Text(
+                        text = it,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.alpha(ALPHA_GHOST),
+                        color = colorsInfo.contentColor ?: contentColorFor(
+                            MaterialTheme.colors.surface
+                        )
                     )
-                )
+                }
             }
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Источник:",
+                        text = "ИСТОЧНИК:",
                         fontWeight = FontWeight.Bold,
                         color = colorsInfo.contentColor ?: contentColorFor(
                             MaterialTheme.colors.surface
@@ -65,12 +77,17 @@ fun SourceButton(
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    if (uri != null) {
-                        TextButton(onClick = handleClick) {
+                    if (sourceURI != null) {
+                        TextButton(onClick = handleOpenSourceURL) {
                             renderText()
                         }
                     } else {
                         renderText()
+                    }
+                }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(onClick = handleReadOnKriper) {
+                        Text("Читать на Kriper")
                     }
                 }
             }
