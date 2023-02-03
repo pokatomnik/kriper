@@ -20,6 +20,7 @@ fun StoryTags(
     pageTitle: String,
     colorsInfo: ColorsInfo,
     onTagClick: (tag: String) -> Unit,
+    displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
         indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
@@ -43,6 +44,7 @@ fun StoryTags(
                     }
                 }
             }
+            displayAfter()
         }
     }
 }

@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun StoryTitle(title: String) {
+fun StoryTitle(
+    title: String,
+    displayAfter: @Composable () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -21,4 +24,5 @@ fun StoryTitle(title: String) {
             text = title
         )
     }
+    displayAfter()
 }

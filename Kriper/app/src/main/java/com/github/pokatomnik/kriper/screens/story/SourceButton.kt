@@ -23,7 +23,8 @@ import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 @Composable
 fun SourceButton(
     pageTitle: String,
-    colorsInfo: ColorsInfo
+    colorsInfo: ColorsInfo,
+    displayAfter: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -91,6 +92,7 @@ fun SourceButton(
                     }
                 }
             }
+            displayAfter()
         }
     }
 }

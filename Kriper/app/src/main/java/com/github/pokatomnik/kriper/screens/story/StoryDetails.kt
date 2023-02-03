@@ -27,7 +27,8 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 @Composable
 fun StoryDetails(
     pageTitle: String,
-    colorsInfo: ColorsInfo
+    colorsInfo: ColorsInfo,
+    displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
         indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
@@ -90,6 +91,7 @@ fun StoryDetails(
                     }
                 }
             }
+            displayAfter()
         }
     }
 }

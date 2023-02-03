@@ -35,6 +35,7 @@ fun Story(
     storyTitle: String,
     onNavigateToTag: (tag: String) -> Unit,
     onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToGallery: () -> Unit,
     onNavigateToRandom: () -> Boolean,
     onNavigateToPrevious: () -> Boolean,
     onNavigateToVideo: (videoURL: String) -> Unit,
@@ -128,66 +129,83 @@ fun Story(
                                     )
                             ) {
                                 Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
-                                    StoryTitle(title = storyTitle)
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(LARGE_PADDING.dp)
-                                    )
+                                    StoryTitle(title = storyTitle) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
                                     StoryDetails(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
-                                    )
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(SMALL_PADDING.dp)
-                                    )
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(SMALL_PADDING.dp)
+                                        )
+                                    }
                                     StoryTags(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
                                         onTagClick = onNavigateToTag
-                                    )
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(LARGE_PADDING.dp)
-                                    )
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
                                     StoryContent(
                                         pageTitle = storyTitle,
                                         fontSize = fontSize,
                                         fontInfo = fontInfoState.value,
                                         colorsInfo = colorPresetState.value
-                                    )
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(LARGE_PADDING.dp)
-                                    )
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
+                                    GalleryButton(
+                                        pageTitle = storyTitle,
+                                        colorsInfo = colorPresetState.value,
+                                        onNavigateToGallery = onNavigateToGallery,
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
                                     VideoButtons(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
                                         onNavigateToVideo = onNavigateToVideo
-                                    )
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(LARGE_PADDING.dp)
-                                    )
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
                                     SeeAlso(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
                                         onStoryClick = onNavigateToStory
-                                    )
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(LARGE_PADDING.dp)
-                                    )
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
                                     SourceButton(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
-                                    )
+                                    ) {}
                                 }
                             }
                         }
