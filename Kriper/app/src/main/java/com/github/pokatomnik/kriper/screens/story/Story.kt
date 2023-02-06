@@ -222,6 +222,7 @@ fun Story(
             }
         },
         drawerContent = {
+            ShareStoryControls(storyTitle = storyTitle)
             FontSizeSelection(
                 onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
                 onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
