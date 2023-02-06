@@ -163,7 +163,7 @@ data class Navigation(
         override fun Params(
             content: @Composable (storyName: String) -> Unit
         ) {
-            val arguments = navController.currentBackStackEntry?.arguments
+            val arguments = navController.currentBackStackEntryAsState().value?.arguments
             val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
                 .let { rememberLastNonNull(it) }
             if (storyName != null) content(
@@ -173,6 +173,61 @@ data class Navigation(
 
         override val route: String
             get() = "/story/{$STORY_TITLE_KEY}"
+    }
+
+    val storyGalleryRoute = object : RouteSingleParameter {
+        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+
+        override fun navigate(storyTitle: String) {
+            val serializedStoryTitle = serializer.serialize(storyTitle)
+            navController.navigate("/story/${serializedStoryTitle}/images")
+        }
+
+        @Composable
+        override fun Params(
+            content: @Composable (storyName: String) -> Unit,
+        ) {
+            val arguments = navController.currentBackStackEntryAsState().value?.arguments
+            val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            if (storyName != null) content(
+                storyName
+            )
+        }
+
+        override val route: String
+            get() = "/story/{${STORY_TITLE_KEY}}/images"
+    }
+
+    val storyGalleryImageRoute = object : RouteTwoParameters {
+        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+
+        private val STORY_IMAGE_INDEX_KEY = "STORY_IMAGE_INDEX_KEY"
+
+        override fun navigate(storyTitle: String, imageIndexAsString: String) {
+            val serializedStoryTitle = serializer.serialize(storyTitle)
+            val serializedStoryImageIndex = serializer.serialize(imageIndexAsString)
+            navController.navigate("/story/${serializedStoryTitle}/images/${serializedStoryImageIndex}")
+        }
+
+        @Composable
+        override fun Params(
+            content: @Composable (storyName: String, imageIndex: String) -> Unit
+        ) {
+            val arguments = navController.currentBackStackEntryAsState().value?.arguments
+            val storyName = arguments?.getString(STORY_TITLE_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            val imageIndex = arguments?.getString(STORY_IMAGE_INDEX_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            if (storyName != null && imageIndex != null) {
+                content(storyName, imageIndex)
+            }
+        }
+
+        override val route: String
+            get() = "/story/{${STORY_TITLE_KEY}}/images/{${STORY_IMAGE_INDEX_KEY}}"
     }
 
     /**

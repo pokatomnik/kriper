@@ -11,47 +11,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import com.github.pokatomnik.kriper.ext.getPluralNoun
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
 import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
-import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun SeeAlso(
+fun GalleryButton(
     pageTitle: String,
     colorsInfo: ColorsInfo,
-    onStoryClick: (storyTitle: String) -> Unit,
+    onNavigateToGallery: () -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        val seeAlsoTitles = indexService.content.getPageMetaByName(pageTitle)?.seeAlso
-        if (!seeAlsoTitles.isNullOrEmpty()) {
+        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+            val numberOfImages = pageMeta.images.size
+            val storiesPlural = numberOfImages.getPluralNoun(
+                form1 = "картинка",
+                form2 = "картинки",
+                form3 = "картинок"
+            )
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "СМОТРИТЕ ТАКЖЕ:",
+                        text = "ГАЛЕРЕЯ",
                         fontWeight = FontWeight.Bold,
                         color = colorsInfo.contentColor ?: contentColorFor(
                             MaterialTheme.colors.surface
                         ),
-                        modifier = Modifier.alpha(ALPHA_GHOST),
+                        modifier = Modifier.alpha(ALPHA_GHOST)
                     )
                 }
-                FlowRow(modifier = Modifier.fillMaxWidth()) {
-                    seeAlsoTitles.forEach { seeAlsoTitle ->
-                        TextButton(
-                            onClick = {
-                                onStoryClick(seeAlsoTitle)
-                            }
-                        ) {
-                            Text(
-                                text = seeAlsoTitle,
-                                color = colorsInfo.contentColor ?: contentColorFor(
-                                    MaterialTheme.colors.surface
-                                ),
-                                modifier = Modifier.alpha(ALPHA_GHOST),
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(onClick = onNavigateToGallery) {
+                        Text(
+                            text = "Смотреть $numberOfImages $storiesPlural",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.alpha(ALPHA_GHOST),
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
                             )
-                        }
+                        )
                     }
                 }
             }

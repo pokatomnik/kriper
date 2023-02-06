@@ -11,6 +11,8 @@ import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.selections.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
+import com.github.pokatomnik.kriper.screens.gallery.Gallery
+import com.github.pokatomnik.kriper.screens.galleryimage.GalleryImage
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.search.Search
@@ -126,9 +128,40 @@ fun AppComposable() {
                                         onNavigateToPrevious = { navigation.navigateBack() },
                                         onNavigateToRandom = onNavigateToRandom,
                                         onNavigateToStory = { navigation.storyRoute.navigate(it) },
+                                        onNavigateToGallery = {
+                                            navigation.storyGalleryRoute.navigate(storyTitle)
+                                        },
                                         onNavigateToVideo = { videoURL ->
                                             navigation.videoRoute.navigate(videoURL)
                                         }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.storyGalleryRoute.route,
+                            ) {
+                                navigation.storyGalleryRoute.Params { storyTitle ->
+                                    Gallery(
+                                        storyTitle = storyTitle,
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToImage = { index ->
+                                            navigation.storyGalleryImageRoute.navigate(
+                                                storyTitle,
+                                                index.toString()
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.storyGalleryImageRoute.route,
+                            ) {
+                                navigation.storyGalleryImageRoute.Params { storyTitle, storyIndexAsString ->
+                                    val imageIndex = storyIndexAsString.toInt()
+                                    GalleryImage(
+                                        storyTitle = storyTitle,
+                                        imageIndex = imageIndex,
+                                        onNavigateBack = { navigation.navigateBack() }
                                     )
                                 }
                             }

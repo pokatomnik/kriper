@@ -23,7 +23,8 @@ import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 @Composable
 fun SourceButton(
     pageTitle: String,
-    colorsInfo: ColorsInfo
+    colorsInfo: ColorsInfo,
+    displayAfter: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -87,10 +88,19 @@ fun SourceButton(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     TextButton(onClick = handleReadOnKriper) {
-                        Text("Читать на Kriper")
+                        Text(
+                            text = "Читать на Kriper",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.alpha(ALPHA_GHOST),
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
                     }
                 }
             }
+            displayAfter()
         }
     }
 }

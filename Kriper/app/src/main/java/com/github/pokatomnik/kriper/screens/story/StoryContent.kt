@@ -14,6 +14,7 @@ fun StoryContent(
     fontSize: Int,
     fontInfo: FontInfo,
     colorsInfo: ColorsInfo,
+    displayAfter: @Composable () -> Unit,
 ) {
     StoryMarkdown(pageTitle = pageTitle) { storyMarkdown ->
         if (storyMarkdown != "") {
@@ -26,6 +27,7 @@ fun StoryContent(
                     fontResource = fontInfo.fontResourceId
                 )
             }
+            displayAfter()
         }
     }
 }

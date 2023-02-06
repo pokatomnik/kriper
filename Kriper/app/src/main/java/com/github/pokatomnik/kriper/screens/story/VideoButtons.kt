@@ -21,6 +21,7 @@ fun VideoButtons(
     pageTitle: String,
     colorsInfo: ColorsInfo,
     onNavigateToVideo: (videoURL: String) -> Unit,
+    displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
         val videos = indexService.content.getPageMetaByName(pageTitle)?.videos
@@ -50,6 +51,7 @@ fun VideoButtons(
                     }
                 }
             }
+            displayAfter()
         }
     }
 }
