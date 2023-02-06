@@ -23,11 +23,12 @@ import coil.compose.AsyncImage
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
-import kotlin.math.PI
-import kotlin.math.cos
 import kotlin.math.roundToInt
-import kotlin.math.sin
 
+/**
+ * Rotation temporarily disabled here.
+ * Get back if needed
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GalleryImage(
@@ -54,18 +55,18 @@ fun GalleryImage(
                     PageTitle(title = "Изображение")
                 }) else null
             ) {
-                val angleState = remember { mutableStateOf(0f) }
+//                val angleState = remember { mutableStateOf(0f) }
                 val zoomState = remember { mutableStateOf(1f) }
                 val offsetXState = remember { mutableStateOf(0f) }
                 val offsetYState = remember { mutableStateOf(0f) }
 
-                val angleStateAnimated = animateFloatAsState(targetValue = angleState.value)
+//                val angleStateAnimated = animateFloatAsState(targetValue = angleState.value)
                 val zoomStateAnimated = animateFloatAsState(targetValue = zoomState.value)
                 val offsetXStateAnimated = animateFloatAsState(targetValue = offsetXState.value)
                 val offsetYStateAnimated = animateFloatAsState(targetValue = offsetYState.value)
 
                 val resetView = {
-                    angleState.value = 0f
+//                    angleState.value = 0f
                     zoomState.value = 1f
                     offsetXState.value = 0f
                     offsetYState.value = 0f
@@ -96,18 +97,26 @@ fun GalleryImage(
                             .graphicsLayer(
                                 scaleX = zoomStateAnimated.value,
                                 scaleY = zoomStateAnimated.value,
-                                rotationZ = angleStateAnimated.value
+//                                rotationZ = angleStateAnimated.value
                             )
                             .pointerInput(Unit) {
                                 detectTransformGestures(
-                                    onGesture = { _, pan, gestureZoom, gestureRotate ->
-                                        angleState.value += gestureRotate
+                                    onGesture = {
+                                            _,
+                                            pan,
+                                            gestureZoom,
+//                                            gestureRotate,
+                                            _
+                                            ->
+//                                        angleState.value += gestureRotate
                                         zoomState.value = (zoomState.value * gestureZoom).coerceIn(1f, 5f)
                                         val x = pan.x * zoomState.value
                                         val y = pan.y * zoomState.value
-                                        val angleRad = angleState.value * PI / 180.0
-                                        offsetXState.value += (x * cos(angleRad) - y * sin(angleRad)).toFloat()
-                                        offsetYState.value += (x * sin(angleRad) + y * cos(angleRad)).toFloat()
+//                                        val angleRad = angleState.value * PI / 180.0
+//                                        offsetXState.value += (x * cos(angleRad) - y * sin(angleRad)).toFloat()
+//                                        offsetYState.value += (x * sin(angleRad) + y * cos(angleRad)).toFloat()
+                                        offsetXState.value += x
+                                        offsetYState.value += y
                                     }
                                 )
                             }
