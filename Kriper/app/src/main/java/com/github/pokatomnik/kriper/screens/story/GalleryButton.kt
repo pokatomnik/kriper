@@ -32,32 +32,34 @@ fun GalleryButton(
                 form2 = "картинки",
                 form3 = "картинок"
             )
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "ГАЛЕРЕЯ",
-                        fontWeight = FontWeight.Bold,
-                        color = colorsInfo.contentColor ?: contentColorFor(
-                            MaterialTheme.colors.surface
-                        ),
-                        modifier = Modifier.alpha(ALPHA_GHOST)
-                    )
-                }
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    TextButton(onClick = onNavigateToGallery) {
+            if (numberOfImages > 0) {
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "Смотреть $numberOfImages $storiesPlural",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.alpha(ALPHA_GHOST),
+                            text = "ГАЛЕРЕЯ",
+                            fontWeight = FontWeight.Bold,
                             color = colorsInfo.contentColor ?: contentColorFor(
                                 MaterialTheme.colors.surface
-                            )
+                            ),
+                            modifier = Modifier.alpha(ALPHA_GHOST)
                         )
                     }
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        TextButton(onClick = onNavigateToGallery) {
+                            Text(
+                                text = "Смотреть $numberOfImages $storiesPlural",
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.alpha(ALPHA_GHOST),
+                                color = colorsInfo.contentColor ?: contentColorFor(
+                                    MaterialTheme.colors.surface
+                                )
+                            )
+                        }
+                    }
                 }
+                displayAfter()
             }
-            displayAfter()
         }
     }
 }
