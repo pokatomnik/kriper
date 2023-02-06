@@ -199,6 +199,37 @@ data class Navigation(
             get() = "/story/{${STORY_TITLE_KEY}}/images"
     }
 
+    val storyGalleryImageRoute = object : RouteTwoParameters {
+        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+
+        private val STORY_IMAGE_INDEX_KEY = "STORY_IMAGE_INDEX_KEY"
+
+        override fun navigate(storyTitle: String, imageIndexAsString: String) {
+            val serializedStoryTitle = serializer.serialize(storyTitle)
+            val serializedStoryImageIndex = serializer.serialize(imageIndexAsString)
+            navController.navigate("/story/${serializedStoryTitle}/images/${serializedStoryImageIndex}")
+        }
+
+        @Composable
+        override fun Params(
+            content: @Composable (storyName: String, imageIndex: String) -> Unit
+        ) {
+            val arguments = navController.currentBackStackEntryAsState().value?.arguments
+            val storyName = arguments?.getString(STORY_TITLE_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            val imageIndex = arguments?.getString(STORY_IMAGE_INDEX_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            if (storyName != null && imageIndex != null) {
+                content(storyName, imageIndex)
+            }
+        }
+
+        override val route: String
+            get() = "/story/{${STORY_TITLE_KEY}}/images/{${STORY_IMAGE_INDEX_KEY}}"
+    }
+
     /**
      * This route must display all tags presented in the content.
      */

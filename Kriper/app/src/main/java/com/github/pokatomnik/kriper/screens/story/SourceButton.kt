@@ -88,7 +88,15 @@ fun SourceButton(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     TextButton(onClick = handleReadOnKriper) {
-                        Text("Читать на Kriper")
+                        Text(
+                            text = "Читать на Kriper",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.alpha(ALPHA_GHOST),
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
                     }
                 }
             }

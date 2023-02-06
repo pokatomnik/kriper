@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.github.pokatomnik.kriper.ext.getPluralNoun
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
@@ -44,7 +45,15 @@ fun GalleryButton(
                 }
                 Row(modifier = Modifier.fillMaxWidth()) {
                     TextButton(onClick = onNavigateToGallery) {
-                        Text("Смотреть $numberOfImages $storiesPlural")
+                        Text(
+                            text = "Смотреть $numberOfImages $storiesPlural",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.alpha(ALPHA_GHOST),
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            )
+                        )
                     }
                 }
             }
