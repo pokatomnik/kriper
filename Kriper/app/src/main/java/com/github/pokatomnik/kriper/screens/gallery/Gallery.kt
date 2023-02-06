@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
+import com.github.pokatomnik.kriper.R
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
@@ -59,7 +61,9 @@ fun Gallery(
                                     interactionSource = remember { MutableInteractionSource() },
                                     onClick = { onNavigateToImage(index) }
                                 ),
-                            contentScale = ContentScale.Fit
+                            contentScale = ContentScale.Fit,
+                            placeholder = painterResource(id = R.drawable.loading_placeholder),
+                            error = painterResource(id = R.drawable.error_placeholder)
                         )
                     }
                 }

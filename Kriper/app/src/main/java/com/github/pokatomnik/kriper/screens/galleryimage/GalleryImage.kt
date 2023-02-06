@@ -18,8 +18,10 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import coil.compose.AsyncImage
+import com.github.pokatomnik.kriper.R
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
@@ -38,6 +40,7 @@ fun GalleryImage(
 ) {
     val displayHeaderState = remember { mutableStateOf(false) }
     val toggleHeaderState = { displayHeaderState.value = !displayHeaderState.value }
+    val loadedState = remember { mutableStateOf(false) }
 
     IndexServiceReadiness { indexService ->
         indexService.content.getPageMetaByName(storyTitle)?.let { pageMeta ->
@@ -87,7 +90,7 @@ fun GalleryImage(
                         model = imageUrl,
                         contentDescription = "image",
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier
+                        modifier = if (loadedState.value) Modifier
                             .offset {
                                 IntOffset(
                                     offsetXStateAnimated.value.roundToInt(),
@@ -121,7 +124,10 @@ fun GalleryImage(
                                     }
                                 )
                             }
-                            .fillMaxSize()
+                            .fillMaxSize() else Modifier.fillMaxSize(),
+                        placeholder = painterResource(id = R.drawable.loading_placeholder),
+                        error = painterResource(id = R.drawable.error_placeholder),
+                        onSuccess = { loadedState.value = true }
                     )
                 }
             }
