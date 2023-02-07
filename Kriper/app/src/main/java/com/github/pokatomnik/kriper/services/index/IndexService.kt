@@ -16,7 +16,7 @@ class IndexService(private val contentReaderService: ContentReaderService) {
     @Synchronized
     fun prepareIndex(): Index {
         val indexJSONContent = contentReaderService
-            .readContents("content/index.json")
+            .getTextContent("content/index.json")
         return parseFromString(indexJSONContent).apply { _index = this }
     }
 

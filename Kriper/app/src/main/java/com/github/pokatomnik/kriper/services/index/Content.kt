@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper.services.index
 
+import android.graphics.drawable.Drawable
 import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.PageMeta
@@ -32,7 +33,8 @@ class Content(
         TagGroup(
             pageMetaMap = index.pageMeta,
             tagGroupName = "ВСЕ",
-            tagGroupSource = tagGroupSource
+            tagGroupSource = tagGroupSource,
+            getDrawableByTagName = this::getTagImage
         )
     }
 
@@ -47,26 +49,33 @@ class Content(
             index.pageMeta[it]
         }
 
+    private fun getTagImage(tagName: String): Drawable? {
+        val tagNameLower = tagName.lowercase()
+        return contentReaderService.getDrawable("tag-icons/$tagNameLower.png")
+    }
+
     fun getTagGroupByName(tagGroupName: String): TagGroup =
         tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->
             TagGroup(
                 pageMetaMap = index.pageMeta,
                 tagGroupName = tagGroupName,
-                tagGroupSource = tagGroupSource
+                tagGroupSource = tagGroupSource,
+                getDrawableByTagName = this::getTagImage
             ).apply {
                 tagContentsMap[tagGroupName] = this
             }
         } ?: TagGroup(
             pageMetaMap = index.pageMeta,
             tagGroupName = "",
-            tagGroupSource = mapOf()
+            tagGroupSource = mapOf(),
+            getDrawableByTagName = this::getTagImage
         )
 
     suspend fun getStoryMarkdown(storyTitle: String) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             try {
                 val pageMeta = index.pageMeta[storyTitle] ?: throw IOException("No content for page meta with title $storyTitle")
-                contentReaderService.readContents("content/${pageMeta.contentId}.md")
+                contentReaderService.getTextContent("content/${pageMeta.contentId}.md")
             } catch (e: IOException) {
                 ""
             }
