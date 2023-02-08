@@ -34,7 +34,7 @@ class Content(
             pageMetaMap = index.pageMeta,
             tagGroupName = "ВСЕ",
             tagGroupSource = tagGroupSource,
-            getDrawableByTagName = this::getTagImage
+            getDrawableByTagName = { getTagImage(it) }
         )
     }
 
@@ -49,9 +49,15 @@ class Content(
             index.pageMeta[it]
         }
 
-    private fun getTagImage(tagName: String): Drawable? {
-        val tagNameLower = tagName.lowercase()
-        return contentReaderService.getDrawable("tag-icons/$tagNameLower.png")
+    private val getTagImage = object : (String) -> Drawable? {
+        private val allowedChars = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+            .let { it + it.uppercase() }
+            .let { "$it " }
+            .plus("0123456789".split("").toSet())
+        override fun invoke(tagName: String): Drawable? {
+            val tagNameClean = tagName.lowercase().filter { allowedChars.contains(it) }
+            return contentReaderService.getDrawable("tag-icons/$tagNameClean.png")
+        }
     }
 
     fun getTagGroupByName(tagGroupName: String): TagGroup =
@@ -60,7 +66,7 @@ class Content(
                 pageMetaMap = index.pageMeta,
                 tagGroupName = tagGroupName,
                 tagGroupSource = tagGroupSource,
-                getDrawableByTagName = this::getTagImage
+                getDrawableByTagName = { getTagImage(it) }
             ).apply {
                 tagContentsMap[tagGroupName] = this
             }
@@ -68,7 +74,7 @@ class Content(
             pageMetaMap = index.pageMeta,
             tagGroupName = "",
             tagGroupSource = mapOf(),
-            getDrawableByTagName = this::getTagImage
+            getDrawableByTagName = { getTagImage(it) }
         )
 
     suspend fun getStoryMarkdown(storyTitle: String) =
