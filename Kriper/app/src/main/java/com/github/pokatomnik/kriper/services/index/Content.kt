@@ -52,11 +52,15 @@ class Content(
     private val getTagImage = object : (String) -> Drawable? {
         private val allowedChars = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
             .let { it + it.uppercase() }
-            .let { "$it " }
+            .plus(" _-")
             .plus("0123456789".split("").toSet())
         override fun invoke(tagName: String): Drawable? {
             val tagNameClean = tagName.lowercase().filter { allowedChars.contains(it) }
-            return contentReaderService.getDrawable("tag-icons/$tagNameClean.png")
+            return try {
+                contentReaderService.getDrawable("tag-icons/$tagNameClean.png")
+            } catch (e: IOException) {
+                contentReaderService.getDrawable("tag-icons/$tagNameClean.jpg")
+            }
         }
     }
 
