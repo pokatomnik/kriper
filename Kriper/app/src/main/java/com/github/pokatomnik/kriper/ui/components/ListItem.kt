@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -13,19 +14,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+
+private const val CARD_HEIGHT = 96
 
 @Composable
 fun CardNavigationListItem(
     title: String,
     description: String,
+    iconPainter: Painter? = null,
     onClick: () -> Unit
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
         elevation = 3.dp,
-        modifier = Modifier.fillMaxWidth().height(96.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(CARD_HEIGHT.dp)
     ) {
         Row(
             modifier = Modifier
@@ -36,12 +44,30 @@ fun CardNavigationListItem(
                     onClick = onClick,
                     interactionSource = remember { MutableInteractionSource() }
                 )
-                .padding(LARGE_PADDING.dp)
         ) {
+            iconPainter?.let { iconPainter ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(CARD_HEIGHT.dp),
+                ) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        painter = iconPainter,
+                        contentDescription = "Изображение $title",
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .weight(1f),
+                    .weight(1f)
+                    .padding(
+                        top = LARGE_PADDING.dp,
+                        bottom = LARGE_PADDING.dp
+                    ),
                 verticalArrangement = Arrangement.Center
             ) {
                 Row(
@@ -57,7 +83,9 @@ fun CardNavigationListItem(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Spacer(modifier = Modifier.fillMaxWidth().height(SMALL_PADDING.dp))
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -73,7 +101,7 @@ fun CardNavigationListItem(
                 }
             }
             Column(
-                modifier = Modifier.fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight().padding(end = LARGE_PADDING.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -82,47 +110,6 @@ fun CardNavigationListItem(
                     contentDescription = "Перейти к $title"
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun OneRowNavigationListItem(
-    title: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-            .clickable(
-                indication = rememberRipple(bounded = true),
-                onClick = onClick,
-                interactionSource = remember { MutableInteractionSource() }
-            )
-            .padding(horizontal = LARGE_PADDING.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        Column(
-            modifier = Modifier.height(64.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-               imageVector = Icons.Filled.ChevronRight,
-               contentDescription = "Перейти к $title"
-            )
         }
     }
 }

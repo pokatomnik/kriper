@@ -37,7 +37,9 @@ fun TagsOfGroup(
                 PageTitle(title = tagGroupTitle)
             }
         ) {
-            Column(modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp)) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp)) {
                 LazyList(list = tags) { index, tagTitle ->
                     val tagContents = tagGroup.getTagContentsByName(tagTitle)
                     val isFirst = 0 == index
@@ -61,6 +63,7 @@ fun TagsOfGroup(
                     CardNavigationListItem(
                         title = "#${tagTitle.uppercaseFirst()}, $storiesInTag $storiesPlural",
                         description = shortIntro,
+                        iconPainter = tagContents.image(),
                         onClick = { navigateToStories(tagTitle) }
                     )
                     Spacer(

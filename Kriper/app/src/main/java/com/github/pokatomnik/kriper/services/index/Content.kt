@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper.services.index
 
+import android.graphics.drawable.Drawable
 import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.PageMeta
@@ -32,7 +33,8 @@ class Content(
         TagGroup(
             pageMetaMap = index.pageMeta,
             tagGroupName = "ВСЕ",
-            tagGroupSource = tagGroupSource
+            tagGroupSource = tagGroupSource,
+            getDrawableByTagName = { getTagImage(it) }
         )
     }
 
@@ -47,26 +49,43 @@ class Content(
             index.pageMeta[it]
         }
 
+    private val getTagImage = object : (String) -> Drawable? {
+        private val allowedChars = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+            .let { it + it.uppercase() }
+            .plus(" _-")
+            .plus("0123456789".split("").toSet())
+        override fun invoke(tagName: String): Drawable? {
+            val tagNameClean = tagName.lowercase().filter { allowedChars.contains(it) }
+            return try {
+                contentReaderService.getDrawable("tag-icons/$tagNameClean.png")
+            } catch (e: IOException) {
+                contentReaderService.getDrawable("tag-icons/$tagNameClean.jpg")
+            }
+        }
+    }
+
     fun getTagGroupByName(tagGroupName: String): TagGroup =
         tagContentsMap[tagGroupName] ?: index.tagsMap[tagGroupName]?.let { tagGroupSource ->
             TagGroup(
                 pageMetaMap = index.pageMeta,
                 tagGroupName = tagGroupName,
-                tagGroupSource = tagGroupSource
+                tagGroupSource = tagGroupSource,
+                getDrawableByTagName = { getTagImage(it) }
             ).apply {
                 tagContentsMap[tagGroupName] = this
             }
         } ?: TagGroup(
             pageMetaMap = index.pageMeta,
             tagGroupName = "",
-            tagGroupSource = mapOf()
+            tagGroupSource = mapOf(),
+            getDrawableByTagName = { getTagImage(it) }
         )
 
     suspend fun getStoryMarkdown(storyTitle: String) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             try {
                 val pageMeta = index.pageMeta[storyTitle] ?: throw IOException("No content for page meta with title $storyTitle")
-                contentReaderService.readContents("content/${pageMeta.contentId}.md")
+                contentReaderService.getTextContent("content/${pageMeta.contentId}.md")
             } catch (e: IOException) {
                 ""
             }

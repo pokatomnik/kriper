@@ -64,6 +64,7 @@ fun AllTags(
                     CardNavigationListItem(
                         title = "#${tagTitle.uppercaseFirst()}, $storiesInTag $storiesPlural",
                         description = shortIntro,
+                        iconPainter = tagContents.image(),
                         onClick = { navigateToStories(tagTitle) }
                     )
                     Spacer(

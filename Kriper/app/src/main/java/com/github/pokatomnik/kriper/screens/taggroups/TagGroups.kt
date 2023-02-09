@@ -10,7 +10,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Tag
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -71,14 +70,15 @@ fun TagGroups(
                     }
                     LazyRow(modifier = Modifier.fillMaxSize()) {
                         itemsIndexed(tagsInGroup.toList()) { index, tagName ->
+                            val tag = tagGroup.getTagContentsByName(tagName)
                             val isLast = index == tagsInGroup.size - 1
                             Spacer(
                                 modifier = Modifier.width(SMALL_PADDING.dp)
                             )
                             IconicCardSmall(
-                                icon = Icons.Filled.Tag,
                                 title = tagName.uppercaseFirst(),
                                 modifier = Modifier.width(128.dp),
+                                backgroundPainter = tag.image(),
                                 onClick = {
                                     onNavigateToStoriesOfTagOfTagGroup(
                                         groupTitle,

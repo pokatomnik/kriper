@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper.services.index
 
+import android.graphics.drawable.Drawable
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
@@ -7,7 +8,8 @@ import com.github.pokatomnik.kriper.ext.uppercaseFirst
 data class TagGroup(
     private val pageMetaMap: Map<String, PageMeta>,
     val tagGroupName: String,
-    private val tagGroupSource: Map<String, Tag>
+    private val tagGroupSource: Map<String, Tag>,
+    private val getDrawableByTagName: (tagName: String) -> Drawable?,
 ) {
     private val tagsByName = mutableMapOf<String, TagContents>()
 
@@ -24,7 +26,8 @@ data class TagGroup(
             TagContents(
                 tagName = tagName,
                 pageMetaMap = pageMetaMap,
-                tag = tag
+                tag = tag,
+                getDrawableByTagName = getDrawableByTagName
             ).apply {
                 tagsByName[tagName] = this
             }
@@ -34,6 +37,7 @@ data class TagGroup(
             tag = Tag(
                 tagName = "",
                 pages = mutableSetOf()
-            )
+            ),
+            getDrawableByTagName = getDrawableByTagName,
         )
 }
