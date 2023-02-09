@@ -20,7 +20,9 @@ fun TagsSearchResults(
 ) {
     if (tagContentItems == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -28,7 +30,9 @@ fun TagsSearchResults(
         }
     } else if (tagContentItems.isEmpty()) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = SMALL_PADDING.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -59,6 +63,7 @@ fun TagsSearchResults(
                 CardNavigationListItem(
                     title = "#${tagContents.tagName.uppercaseFirst()}, $storiesInTag $storiesPlural",
                     description = shortIntro,
+                    iconPainter = tagContents.image(),
                     onClick = { onNavigateToTag(tagContents.tagName) }
                 )
                 Spacer(
