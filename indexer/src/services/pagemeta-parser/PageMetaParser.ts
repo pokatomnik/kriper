@@ -4,7 +4,7 @@ import type { IHasher } from "../lib/IHasher.ts";
 import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
 import type { IUncheckedDate } from "../../domain/IUncheckedDate.ts";
 import { provide } from "provide";
-import { NameHasher } from "../name-hasher/NameHasher.ts";
+import { URLNamer } from "../url-namer/URLNamer.ts";
 import { TitleParser } from "./title-parser/TitleParser.ts";
 import { ContentParser } from "./content-parser/ContentParser.ts";
 import { AuthorNicknameParser } from "./author-nickname-parser/AuthorNicknameParser.ts";
@@ -74,7 +74,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.videosParser.parse(rawHTML),
     ]);
 
-    const contentId = this.namer.compute(title);
+    const contentId = this.namer.compute(webpageURL);
 
     await this.asyncStorage.set(contentId, content);
 
@@ -98,7 +98,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
 }
 
 provide(PageMetaParser, [
-  NameHasher,
+  URLNamer,
   TitleParser,
   ContentParser,
   AuthorNicknameParser,

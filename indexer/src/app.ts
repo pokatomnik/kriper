@@ -107,6 +107,10 @@ export class App {
     }
   }
 
+  private makeNumeratedTitle(title: string, number: number) {
+    return `${title} (${number})`;
+  }
+
   public async start() {
     const tagsGroupMap = await this.getTagsGroupMap();
     const pagination = await this.getPagination();
@@ -114,8 +118,29 @@ export class App {
     const pageMeta = await this.getPageMeta(pagesToFetch);
 
     const pageMetaIndex: { [pageTitle: string]: IPageMeta } = {};
-    for (const pageMetaItem of pageMeta) {
-      pageMetaIndex[pageMetaItem.title] = pageMetaItem;
+    for (let pageMetaItem of pageMeta) {
+      if (pageMetaIndex[pageMetaItem.title] === undefined) {
+        // Current page title is not a duplicate
+        pageMetaIndex[pageMetaItem.title] = pageMetaItem;
+      } else {
+        // Otherwise, rename this story to "Story Name (N)" to make the name unique
+        let i = 1;
+        while (
+          pageMetaIndex[this.makeNumeratedTitle(pageMetaItem.title, i)] !==
+          undefined
+        ) {
+          ++i;
+        }
+
+        const numeratedTitle = this.makeNumeratedTitle(pageMetaItem.title, i);
+
+        pageMetaItem = {
+          ...pageMetaItem,
+          title: numeratedTitle,
+        };
+
+        pageMetaIndex[numeratedTitle] = pageMetaItem;
+      }
 
       for (const currentTagTitle of pageMetaItem.tags) {
         for (const [_, tagGroup] of Object.entries(tagsGroupMap)) {
