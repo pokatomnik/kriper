@@ -39,6 +39,7 @@ fun Story(
     onNavigateToRandom: () -> Boolean,
     onNavigateToPrevious: () -> Boolean,
     onNavigateToVideo: (videoURL: String) -> Unit,
+    onNavigateToAuthor: (authorRealName: String) -> Unit,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
@@ -139,6 +140,7 @@ fun Story(
                                     StoryDetails(
                                         pageTitle = storyTitle,
                                         colorsInfo = colorPresetState.value,
+                                        onNavigateToAuthor = onNavigateToAuthor,
                                     ) {
                                         Spacer(
                                             modifier = Modifier
