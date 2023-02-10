@@ -68,9 +68,13 @@ fun GalleryImage(
                 val offsetXStateAnimated = animateFloatAsState(targetValue = offsetXState.value)
                 val offsetYStateAnimated = animateFloatAsState(targetValue = offsetYState.value)
 
-                val resetView = {
-//                  angleState.value = 0f
-                    zoomState.value = 1f
+                val toggleView = {
+//                  angleState.value == 0f
+                    if (zoomState.value == 1f) {
+                        zoomState.value = 5f
+                    } else {
+                        zoomState.value = 1f
+                    }
                     offsetXState.value = 0f
                     offsetYState.value = 0f
                 }
@@ -83,7 +87,7 @@ fun GalleryImage(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = toggleHeaderState,
-                            onDoubleClick = resetView
+                            onDoubleClick = toggleView
                         )
                 ) {
                     AsyncImage(
