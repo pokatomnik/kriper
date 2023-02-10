@@ -1,15 +1,16 @@
 package com.github.pokatomnik.kriper.services.index
 
 import android.graphics.drawable.Drawable
-import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
 import com.github.pokatomnik.kriper.ext.valuableChars
+import com.github.pokatomnik.kriper.services.contentreader.ContentReaderService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.random.Random
 
 class Content(
@@ -54,6 +55,7 @@ class Content(
             .let { it + it.uppercase() }
             .plus(" _-")
             .plus("0123456789".split("").toSet())
+
         override fun invoke(tagName: String): Drawable? {
             val tagNameClean = tagName.lowercase().filter { allowedChars.contains(it) }
             return try {
@@ -84,13 +86,43 @@ class Content(
     suspend fun getStoryMarkdown(storyTitle: String) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             try {
-                val pageMeta = index.pageMeta[storyTitle] ?: throw IOException("No content for page meta with title $storyTitle")
+                val pageMeta = index.pageMeta[storyTitle]
+                    ?: throw IOException("No content for page meta with title $storyTitle")
                 contentReaderService.getTextContent("content/${pageMeta.contentId}.md")
             } catch (e: IOException) {
                 ""
             }
         }
 
+    /**
+     * It seems there are too many authors to precompute all author-to-stories
+     * matching, so this will be computed on demand (but with memoization)
+     */
+    val getAllStoriesByAuthor = object : suspend (String) -> Collection<PageMeta> {
+        private val authorRealNameToPageMetaMapping =
+            ConcurrentHashMap<String, Collection<PageMeta>>()
+
+        override suspend fun invoke(authorRealName: String): Collection<PageMeta> =
+            authorRealNameToPageMetaMapping[authorRealName]
+                ?: withContext(Dispatchers.Default + SupervisorJob()) {
+                    index.pageMeta.values.filter { pageMeta ->
+                        pageMeta.authorRealName == authorRealName
+                    }.apply {
+                        authorRealNameToPageMetaMapping[authorRealName] = this
+                    }
+                }
+    }
+
+    /**
+     * Searches for pageMeta, tags or tag groups using provided search string.
+     * Please note, searching process works on CPU thread, not in the render one.
+     * PageMeta fields used for search are:
+     * - authorNickname
+     * - authorRealName
+     * - title
+     * Only "valuable" chars are used for searching: cyrillic and latin alphabet and numbers.
+     * Search is case insensitive.
+     */
     val search = object : suspend (String) -> SearchResults {
         private fun matchSearchStr(searchItem: String, sample: String): Boolean {
             return searchItem.lowercase().contains(sample)
@@ -126,7 +158,9 @@ class Content(
                                 matchSearchStr(it, searchStringLower)
                             } ?: false
                             if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
-                                currentPageMeta?.let { pageMetaFound[currentPageName] = currentPageMeta }
+                                currentPageMeta?.let {
+                                    pageMetaFound[currentPageName] = currentPageMeta
+                                }
                             }
                         }
                     }

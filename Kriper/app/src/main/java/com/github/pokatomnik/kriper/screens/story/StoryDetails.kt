@@ -1,10 +1,7 @@
 package com.github.pokatomnik.kriper.screens.story
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -28,6 +25,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 fun StoryDetails(
     pageTitle: String,
     colorsInfo: ColorsInfo,
+    onNavigateToAuthor: (authorRealName: String) -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
@@ -37,15 +35,29 @@ fun StoryDetails(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "© ${pageMeta.authorship}",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = colorsInfo.contentColor ?: contentColorFor(
-                            MaterialTheme.colors.surface
-                        ),
-                        modifier = Modifier.alpha(ALPHA_GHOST)
-                    )
+                    if (pageMeta.authorRealName != null) {
+                        TextButton(onClick = { onNavigateToAuthor(pageMeta.authorRealName) }) {
+                            Text(
+                                text = "© ${pageMeta.authorRealName}",
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                color = colorsInfo.contentColor ?: contentColorFor(
+                                    MaterialTheme.colors.surface
+                                ),
+                                modifier = Modifier.alpha(ALPHA_GHOST)
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = "Добвил(а) ${pageMeta.authorNickname}",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = colorsInfo.contentColor ?: contentColorFor(
+                                MaterialTheme.colors.surface
+                            ),
+                            modifier = Modifier.alpha(ALPHA_GHOST)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(SMALL_PADDING.dp))
                 FlowRow(

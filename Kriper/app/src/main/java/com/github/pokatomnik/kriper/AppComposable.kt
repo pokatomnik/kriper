@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
+import com.github.pokatomnik.kriper.screens.allstoriesbyauthor.AllStoriesByAuthor
 import com.github.pokatomnik.kriper.screens.selections.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
@@ -133,6 +134,9 @@ fun AppComposable() {
                                         },
                                         onNavigateToVideo = { videoURL ->
                                             navigation.videoRoute.navigate(videoURL)
+                                        },
+                                        onNavigateToAuthor = { authorRealName ->
+                                            navigation.allStoriesRouteByAuthor.navigate(authorRealName)
                                         }
                                     )
                                 }
@@ -204,6 +208,19 @@ fun AppComposable() {
                             ) {
                                 navigation.allStoriesRoute.Params {
                                     AllStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStory = { storyTitle ->
+                                            navigation.storyRoute.navigate(storyTitle)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.allStoriesRouteByAuthor.route
+                            ) {
+                                navigation.allStoriesRouteByAuthor.Params { authorRealName ->
+                                    AllStoriesByAuthor(
+                                        authorRealName = authorRealName,
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStory = { storyTitle ->
                                             navigation.storyRoute.navigate(storyTitle)

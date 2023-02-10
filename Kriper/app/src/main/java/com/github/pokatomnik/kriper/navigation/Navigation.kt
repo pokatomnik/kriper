@@ -330,6 +330,31 @@ data class Navigation(
             get() = routePath
     }
 
+    val allStoriesRouteByAuthor = object : RouteSingleParameter {
+        private val AUTHOR_KEY = "AUTHOR_KEY"
+
+        override fun navigate(authorRealName: String) {
+            val serializedAuthorRealName = serializer.serialize(authorRealName)
+            navController.navigateDistinct("/selections/all-stories/author/$serializedAuthorRealName")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (authorRealName: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val authorRealName = arguments
+                ?.getString(AUTHOR_KEY)
+                ?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
+            authorRealName?.let { content(it) }
+        }
+
+        override val route: String
+            get() = "/selections/all-stories/author/{${AUTHOR_KEY}}"
+    }
+
     val shortMostVotedStoriesRoute = object : RouteNoParameters {
         private val routePath = "/selections/short"
 
