@@ -15,11 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ui.components.*
 import kotlinx.coroutines.launch
+import com.github.pokatomnik.kriper.R
+import com.github.pokatomnik.kriper.ui.theme.isLocalAppDarkThemeEnabled
 
 @Composable
 private fun HomeHorizontalSpacerSmall() {
@@ -77,7 +81,9 @@ fun Home(
         ) {
             HomeHorizontalSpacerSmall()
             Row(
-                modifier = Modifier.fillMaxWidth().padding(LARGE_PADDING.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(LARGE_PADDING.dp),
                 horizontalArrangement = Arrangement.End
             ) {
                 Text(
@@ -91,9 +97,11 @@ fun Home(
             }
             HomeHorizontalSpacerSmall()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SMALL_PADDING.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
+                ) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -114,6 +122,13 @@ fun Home(
                         title = "Группы меток",
                         icon = Icons.Filled.Category,
                         description = "Проще выбрать что почитать",
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_tag_group_dark
+                            } else {
+                                R.drawable.pattern_tag_group_light
+                            }
+                        ),
                         onClick = onNavigateToTagGroups
                     )
                 }
@@ -127,7 +142,14 @@ fun Home(
                         title = "Все метки",
                         icon = Icons.Filled.Tag,
                         description = "Если удобнее по алфавиту",
-                        onClick = onNavigateToAllTags
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_tag_dark
+                            } else {
+                                R.drawable.pattern_tag_light
+                            }
+                        ),
+                        onClick = onNavigateToAllTags,
                     )
                 }
                 HomeHorizontalSpacerSmall()
@@ -140,15 +162,24 @@ fun Home(
                         title = "Случайная",
                         icon = Icons.Outlined.Casino,
                         description = "Просто откройте мне историю",
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_random_dark
+                            } else {
+                                R.drawable.pattern_random_light
+                            }
+                        ),
                         onClick = { onNavigateToRandom() }
                     )
                 }
             }
             HomeHorizontalSpacerLarge()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SMALL_PADDING.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
+                ) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -171,7 +202,13 @@ fun Home(
                     IconicCardSmall(
                         icon = Icons.Filled.HistoryEdu,
                         title = "Все",
-                        modifier = Modifier.width(128.dp),
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_all_stories_dark
+                            } else {
+                                R.drawable.pattern_all_stories_light
+                            }
+                        ),
                         onClick = onNavigateToAllStories
                     )
                     Spacer(
@@ -180,7 +217,13 @@ fun Home(
                     IconicCardSmall(
                         icon = Icons.Filled.ReceiptLong,
                         title = "Короткие",
-                        modifier = Modifier.width(128.dp),
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_short_stories_dark
+                            } else {
+                                R.drawable.pattern_short_stories_light
+                            }
+                        ),
                         onClick = onNavigateToShortStories,
                     )
                     Spacer(
@@ -189,7 +232,13 @@ fun Home(
                     IconicCardSmall(
                         icon = Icons.Filled.AutoStories,
                         title = "Длинные",
-                        modifier = Modifier.width(128.dp),
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_long_stories_dark
+                            } else {
+                                R.drawable.pattern_long_stories_light
+                            }
+                        ),
                         onClick = onNavigateToLongStories,
                     )
                     Spacer(
@@ -198,7 +247,13 @@ fun Home(
                     IconicCardSmall(
                         icon = Icons.Filled.FiberNew,
                         title = "Новые",
-                        modifier = Modifier.width(128.dp),
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_new_stories_dark
+                            } else {
+                                R.drawable.pattern_new_stories_light
+                            }
+                        ),
                         onClick = onNavigateToNewStories,
                     )
                     Spacer(
@@ -208,9 +263,11 @@ fun Home(
             }
             HomeHorizontalSpacerLarge()
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SMALL_PADDING.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = SMALL_PADDING.dp)
+                ) {
                     Spacer(
                         modifier = Modifier.width(LARGE_PADDING.dp)
                     )
@@ -222,22 +279,38 @@ fun Home(
                 Spacer(
                     modifier = Modifier.height(SMALL_PADDING.dp)
                 )
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SMALL_PADDING.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                ) {
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
                     IconicCardSmall(
                         title = "Хронология",
-                        modifier = Modifier.width(128.dp),
                         icon = Icons.Filled.History,
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_history_dark
+                            } else {
+                                R.drawable.pattern_history_light
+                            }
+                        ),
                         onClick = onNavigateToHistory
                     )
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
                     IconicCardSmall(
                         title = "Избранное",
-                        modifier = Modifier.width(128.dp),
                         icon = Icons.Filled.Favorite,
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_favorite_dark
+                            } else {
+                                R.drawable.pattern_favorite_light
+                            }
+                        ),
                         onClick = onNavigateToFavoriteStories
                     )
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
                 }
             }
             HomeHorizontalSpacerLarge()

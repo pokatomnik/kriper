@@ -77,7 +77,6 @@ fun TagGroups(
                             )
                             IconicCardSmall(
                                 title = tagName.uppercaseFirst(),
-                                modifier = Modifier.width(128.dp),
                                 backgroundPainter = tag.image(),
                                 onClick = {
                                     onNavigateToStoriesOfTagOfTagGroup(

@@ -15,6 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageShader
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -26,50 +30,63 @@ import androidx.compose.ui.unit.dp
 fun IconicCardSmall(
     title: String,
     icon: ImageVector,
-    modifier: Modifier = Modifier,
+    backgroundTile: ImageBitmap? = null,
     onClick: () -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
         elevation = 3.dp,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .width(128.dp)
             .height(128.dp)
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clipToBounds()
-                .clickable(
-                    indication = rememberRipple(),
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() }
-                ),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .let { modifier ->
+                    backgroundTile?.let { imageBitmap ->
+                        remember(imageBitmap) {
+                            ShaderBrush(ImageShader(imageBitmap, TileMode.Repeated, TileMode.Repeated))
+                        }.let { modifier.background(it) }
+                    } ?: modifier
+                }
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clipToBounds()
+                    .clickable(
+                        indication = rememberRipple(),
+                        onClick = onClick,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = title,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = SMALL_PADDING.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
