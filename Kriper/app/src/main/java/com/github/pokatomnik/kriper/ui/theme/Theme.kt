@@ -6,6 +6,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import com.github.pokatomnik.kriper.services.preferences.global.ThemeIdentifier
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -36,14 +37,22 @@ private fun KriperThemeInternal(
         else -> if (isSystemInDarkTheme()) DarkColorPalette else LightColorPalette
     }
 
+    val isDarkThemeSelectedByUserOrDefinedBySystem = when (themeState.value) {
+        ThemeIdentifier.LIGHT -> false
+        ThemeIdentifier.DARK -> true
+        else -> isSystemInDarkTheme()
+    }
+
     systemUIController.setSystemBarsColor(colors.primarySurface)
 
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(LocalAppDarkTheme provides isDarkThemeSelectedByUserOrDefinedBySystem) {
+        MaterialTheme(
+            colors = colors,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }
 
 @Composable

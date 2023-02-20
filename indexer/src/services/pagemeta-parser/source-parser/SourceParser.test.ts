@@ -55,3 +55,21 @@ Deno.test(
     );
   }
 );
+
+Deno.test(
+  {
+    name: "Test SourceParser - source has incorrect chars",
+    permissions: { read: true, write: true },
+  },
+  async () => {
+    const rawHTML = await new FileReader(import.meta).getFileContents(
+      "./SourceParser3.source.html"
+    );
+    const source = await new SourceParser(new DOMParser()).parse(rawHTML);
+
+    await new Snapshot(import.meta).snapshotCheck(
+      String(source),
+      "./SourceParser3.snapshot.txt"
+    );
+  }
+);
