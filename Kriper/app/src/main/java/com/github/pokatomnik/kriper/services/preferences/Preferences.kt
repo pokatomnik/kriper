@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.github.pokatomnik.kriper.services.preferences.global.GlobalPreferences
 import com.github.pokatomnik.kriper.services.preferences.page.PagePreferences
+import com.github.pokatomnik.kriper.services.preferences.search.SearchPreferences
 import com.github.pokatomnik.kriper.services.preferences.sorting.PageMetaSortingPreferences
 
 class Preferences(private val context: Context) {
@@ -22,4 +23,6 @@ class Preferences(private val context: Context) {
     val sortingPreferences = PageMetaSortingPreferences(
         getPreferencesByName("SORTING_PREFERENCES")
     )
+
+    val searchPreferences = SearchPreferences()
 }

@@ -11,10 +11,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.screens.history.TopBarSearchInput
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.index.SearchResults
+import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.makeToast
@@ -49,8 +52,21 @@ fun Search(
     onNavigateToTag: (tagTitle: String) -> Unit,
     onNavigateToStory: (storyTitle: String) -> Unit,
 ) {
+    val searchStringState = rememberPreferences().searchPreferences.let {
+        remember {
+            mutableStateOf(
+                TextFieldValue(
+                    text = it.searchValue,
+                    selection = TextRange(it.searchValue.length)
+                )
+            )
+        }.apply {
+            LaunchedEffect(value) {
+                it.searchValue = value.text
+            }
+        }
+    }
     val searchingState = remember { mutableStateOf(false) }
-    val searchStringState = remember { mutableStateOf("") }
     val searchResultsState = remember { mutableStateOf<SearchResults?>(null) }
     val pagerState = rememberPagerState(PAGES_INDEX)
 
@@ -78,7 +94,7 @@ fun Search(
     IndexServiceReadiness { indexService ->
         val doSearch = fun() {
             if (searchingState.value) return
-            val strToSearch = searchStringState.value.trim()
+            val strToSearch = searchStringState.value.text.trim()
             if (strToSearch.length < REQUIRED_CHARS_NUMBER_TO_SEARCH) {
                 toast("Введите больше 4 букв")
                 return
@@ -107,7 +123,8 @@ fun Search(
             },
             header = {
                 TopBarSearchInput(
-                    searchTextState = searchStringState,
+                    textFieldValue = searchStringState.value,
+                    onTextFieldValueChange = { searchStringState.value = it },
                     onSearchButtonPress = doSearch,
                     focusRequester = focusRequester
                 )
