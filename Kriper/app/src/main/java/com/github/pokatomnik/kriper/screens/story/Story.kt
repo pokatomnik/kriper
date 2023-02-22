@@ -58,7 +58,7 @@ fun Story(
         scaffoldState?.let {
             coroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
-                    message = "Долгий тап для меню, двойной тап — лайк",
+                    message = "Долгий тап для меню, двойной тап — в избранное",
                     actionLabel = "Понятно",
                     duration = SnackbarDuration.Indefinite
                 )
