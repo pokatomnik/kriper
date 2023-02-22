@@ -81,12 +81,12 @@
 Отдельную благодарность хотелось бы выразить rainbow666 [rainbow666@kriper.net](rainbow666@kriper.net) и его команде, а также авторам историй Вебсайта, без них приложение не случилось бы.
 
 ## Скриншоты
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/history.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen1.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen2.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/search.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/settings.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story_settings.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tag_groups.png" width="300">
-<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tags.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/history.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen1.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen2.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/search.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/settings.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story_settings.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tag_groups.jpg" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tags.jpg" width="300">
