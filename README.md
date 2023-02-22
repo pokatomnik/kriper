@@ -1,7 +1,6 @@
 # Kriper
 Ой, а что это тут у нас?
-Конечно же приложение для чтения историй с веб сайта https://kriper.net (далее -- просто Вебсайт).
-
+Конечно же приложение для чтения историй с веб сайта https://kriper.net (далее - просто Вебсайт).
 # Содержание
 - [Обзор возможностей](#Обзор-возможностей)
     - [Что оно умеет](#Что-оно-умеет)
@@ -18,6 +17,7 @@
 - [Как это работает](#Как-это-работает)
 - [Сбор данных](#Сбор-данных)
 - [Благодарности](#Благодарности)
+- [Cкриншоты](#Скриншоты)
 
 ## Обзор возможностей
 ### Что оно умеет
@@ -79,3 +79,14 @@
 
 ## Благодарности
 Отдельную благодарность хотелось бы выразить rainbow666 [rainbow666@kriper.net](rainbow666@kriper.net) и его команде, а также авторам историй Вебсайта, без них приложение не случилось бы.
+
+## Скриншоты
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/history.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen1.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/main_screen2.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/search.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/settings.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/story_settings.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tag_groups.png" width="300">
+<img src="https://raw.githubusercontent.com/pokatomnik/kriper/dungeon-master/readme_images/tags.png" width="300">
