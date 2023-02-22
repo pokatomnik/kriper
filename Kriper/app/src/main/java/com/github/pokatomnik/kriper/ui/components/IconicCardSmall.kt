@@ -95,15 +95,14 @@ fun IconicCardSmall(
 @Composable
 fun IconicCardSmall(
     title: String,
-    modifier: Modifier = Modifier,
     backgroundPainter: Painter? = null,
     onClick: () -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
         elevation = 3.dp,
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = Modifier
+            .width(128.dp)
             .height(128.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
