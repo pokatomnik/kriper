@@ -15,3 +15,9 @@
 local.properties
 /app/release/app-release.apk
 /app/release/output-metadata.json
+
+/caches/*
+/daemon/*
+/kotlin-profile/*
+/native/*
+/wrapper/*
