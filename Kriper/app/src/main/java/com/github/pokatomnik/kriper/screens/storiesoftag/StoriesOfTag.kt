@@ -25,7 +25,7 @@ fun StoriesOfTag(
     tagGroupName: String? = null,
     tagName: String,
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit
+    onNavigateToStoryById: (storyId: String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -47,10 +47,10 @@ fun StoriesOfTag(
                     .getTagContentsByName(tagName)
             }
 
-        val requiredPageMeta = remember(sortingState.value, tagContents.pageNames) {
-            tagContents.pageNames.fold(mutableListOf<PageMeta>()) { acc, currentPageTitle ->
+        val requiredPageMeta = remember(sortingState.value, tagContents.storyIds) {
+            tagContents.storyIds.fold(mutableListOf<PageMeta>()) { acc, currentStoryId ->
                 acc.apply {
-                    tagContents.getPageByTitle(currentPageTitle)?.let { acc.add(it) }
+                    tagContents.getPageByStoryId(currentStoryId)?.let { acc.add(it) }
                 }
             }.sortedWith { a, b -> sortingState.value.compare(a, b) }
         }
@@ -90,7 +90,7 @@ fun StoriesOfTag(
                     ) {
                         PageMetaLazyList(
                             pageMeta = requiredPageMeta,
-                            onPageMetaClick = { onNavigateToStory(it.title) }
+                            onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                         )
                     }
                 }

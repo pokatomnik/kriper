@@ -50,7 +50,7 @@ fun Search(
     onNavigateBack: () -> Unit,
     onNavigateToTagGroup: (tagGroupTitle: String) -> Unit,
     onNavigateToTag: (tagTitle: String) -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     val searchStringState = rememberPreferences().searchPreferences.let {
         remember {
@@ -174,7 +174,7 @@ fun Search(
                 if (it == PAGES_INDEX) {
                     PagesSearchResults(
                         pageMeta = searchResultsState.value?.pageMeta,
-                        onNavigateToStory = onNavigateToStory
+                        onNavigateToStoryById = onNavigateToStoryById
                     )
                 }
                 if (it == TAGS_INDEX) {

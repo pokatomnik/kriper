@@ -8,14 +8,14 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 
 @Composable
 fun StoryMarkdown(
-    pageTitle: String,
+    storyId: String,
     content: @Composable (markdown: String) -> Unit
 ) {
     IndexServiceReadiness { indexService ->
         val (storyMarkdown, setStoryMarkdown) = remember { mutableStateOf<String?>(null) }
 
-        LaunchedEffect(pageTitle) {
-            val markdown = indexService.content.getStoryMarkdown(pageTitle).ifEmpty { null }
+        LaunchedEffect(storyId) {
+            val markdown = indexService.content.getStoryMarkDownByStoryId(storyId).ifEmpty { null }
             setStoryMarkdown(markdown)
         }
 

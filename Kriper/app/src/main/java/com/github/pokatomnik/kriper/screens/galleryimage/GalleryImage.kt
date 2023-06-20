@@ -34,7 +34,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GalleryImage(
-    storyTitle: String,
+    storyId: String,
     imageIndex: Int,
     onNavigateBack: () -> Unit,
 ) {
@@ -43,7 +43,7 @@ fun GalleryImage(
     val loadedState = remember { mutableStateOf(false) }
 
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(storyTitle)?.let { pageMeta ->
+        indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
             val imageUrl = pageMeta.images.toList()[imageIndex]
             PageContainer(
                 priorButton = if (displayHeaderState.value) ({

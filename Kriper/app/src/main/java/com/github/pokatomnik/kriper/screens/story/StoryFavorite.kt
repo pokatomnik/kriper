@@ -12,23 +12,23 @@ internal data class StoryFavoriteState(
 
 @Composable
 internal fun rememberStoryFavorite(
-    selectedPageTitle: String
+    selectedStoryId: String
 ): StoryFavoriteState {
     val coroutineScope = rememberCoroutineScope()
     val favoriteStoriesDAO = rememberKriperDatabase().favoriteStoriesDAO()
     val favoriteState = remember { mutableStateOf<Boolean?>(null) }
 
-    LaunchedEffect(selectedPageTitle) {
-        val isCurrentFavorite = favoriteStoriesDAO.isFavorite(selectedPageTitle)
+    LaunchedEffect(selectedStoryId) {
+        val isCurrentFavorite = favoriteStoriesDAO.isFavorite(selectedStoryId)
         favoriteState.value = isCurrentFavorite
     }
     val onFavoritePress: (isFavorite: Boolean) -> Unit = {
         favoriteState.value = it
         coroutineScope.launch {
             if (it) {
-                favoriteStoriesDAO.addToFavorites(selectedPageTitle)
+                favoriteStoriesDAO.addToFavorites(selectedStoryId)
             } else {
-                favoriteStoriesDAO.removeFromFavorites(selectedPageTitle)
+                favoriteStoriesDAO.removeFromFavorites(selectedStoryId)
             }
         }
     }

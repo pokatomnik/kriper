@@ -22,14 +22,14 @@ import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 
 @Composable
 fun SourceButton(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
     displayAfter: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
 
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+        indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
             val source = pageMeta.source
             val webpageURL = pageMeta.webpageURL
 

@@ -17,13 +17,13 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun StoryTags(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
     onTagClick: (tag: String) -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+        indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
             FlowRow(
                 modifier = Modifier.fillMaxSize(),
                 mainAxisAlignment = MainAxisAlignment.Center

@@ -16,7 +16,7 @@ import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 @Composable
 fun PagesSearchResults(
     pageMeta: Collection<PageMeta>?,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     if (pageMeta == null) {
         Column(
@@ -46,7 +46,7 @@ fun PagesSearchResults(
         ) {
             PageMetaLazyList(
                 pageMeta = pageMeta.toList(),
-                onPageMetaClick = { onNavigateToStory(it.title) }
+                onPageMetaClick = { onNavigateToStoryById(it.storyId) }
             )
         }
     }

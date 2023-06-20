@@ -19,13 +19,13 @@ import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 
 @Composable
 fun GalleryButton(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
     onNavigateToGallery: () -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+        indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
             val numberOfImages = pageMeta.images.size
             val storiesPlural = numberOfImages.getPluralNoun(
                 form1 = "картинка",

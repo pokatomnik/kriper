@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.services.index
 
 import com.github.pokatomnik.kriper.domain.Index
+import com.github.pokatomnik.kriper.domain.PageMeta
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -12,29 +13,27 @@ private const val MONTH_SECONDS = 60 * 60 * 24 * 31
 
 
 data class Selections(private val index: Index) {
-    val allStoryTitles: Collection<String> by lazy {
-        index.pageMeta.keys.sortedWith { a, b -> a.compareTo(b) }
+    val allStoryTitles: Collection<PageMeta> by lazy {
+        index.pageMeta.values.sortedWith { a, b -> a.title.compareTo(b.title) }
     }
 
-    val shortAndMostUpVoted: Collection<String> by lazy {
+    val shortAndMostUpVoted: Collection<PageMeta> by lazy {
         index.pageMeta.values
             .filter {
                 it.rating >= AVG_RATING && it.readingTimeMinutes <= SHORT_STORY_READING_TIME_MAX
             }
-            .map { it.title }
-            .sortedWith { a, b -> a.compareTo(b) }
+            .sortedWith { a, b -> a.title.compareTo(b.title) }
     }
 
-    val longAndMostUpVoted: Collection<String> by lazy {
+    val longAndMostUpVoted: Collection<PageMeta> by lazy {
         index.pageMeta.values
             .filter {
                 it.rating >= AVG_RATING && it.readingTimeMinutes >= LONG_STORY_READING_TIME_MIN
             }
-            .map { it.title }
-            .sortedWith { a, b -> a.compareTo(b) }
+            .sortedWith { a, b -> a.title.compareTo(b.title) }
     }
 
-    val new: Collection<String> by lazy {
+    val new: Collection<PageMeta> by lazy {
         index.pageMeta.values
             .filter {
                 val dateCreatedSecondsTimestamp = LocalDate.of(
@@ -45,7 +44,6 @@ data class Selections(private val index: Index) {
                 val now = Instant.now().epochSecond
                 now - dateCreatedSecondsTimestamp <= MONTH_SECONDS
             }
-            .map { it.title }
-            .sortedWith { a, b -> a.compareTo(b) }
+            .sortedWith { a, b -> a.title.compareTo(b.title) }
     }
 }

@@ -46,7 +46,7 @@ fun TagsSearchResults(
         ) {
             LazyList(list = tagContentItems.toList()) { index, tagContents ->
                 val isFirst = 0 == index
-                val storiesInTag = tagContents.pageNames.size
+                val storiesInTag = tagContents.storyIds.size
                 val shortIntro = tagContents.shortIntro
 
                 val storiesPlural = storiesInTag.getPluralNoun(

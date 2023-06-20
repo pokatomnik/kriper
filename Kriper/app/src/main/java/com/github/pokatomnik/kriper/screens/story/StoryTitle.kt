@@ -8,21 +8,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 
 @Composable
 fun StoryTitle(
-    title: String,
+    storyId: String,
     displayAfter: @Composable () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Text(
-            style = MaterialTheme.typography.h3,
-            textAlign = TextAlign.Center,
-            text = title
-        )
+    IndexServiceReadiness { indexService ->
+        val pageMetaTitle = indexService.content.getPageMetaByStoryId(storyId)?.title ?: ""
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                style = MaterialTheme.typography.h3,
+                textAlign = TextAlign.Center,
+                text = pageMetaTitle
+            )
+        }
+        displayAfter()
     }
-    displayAfter()
 }

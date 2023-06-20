@@ -1,10 +1,9 @@
 import type { IPageMeta } from "../../domain/IPageMeta.ts";
 import type { IParser } from "../lib/IParser.ts";
-import type { IHasher } from "../lib/IHasher.ts";
 import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
 import type { IUncheckedDate } from "../../domain/IUncheckedDate.ts";
 import { provide } from "provide";
-import { URLNamer } from "../url-namer/URLNamer.ts";
+import { StoryIdentifierParser } from "./story-identifier-parser/StoryIdentifierParser.ts";
 import { TitleParser } from "./title-parser/TitleParser.ts";
 import { ContentParser } from "./content-parser/ContentParser.ts";
 import { AuthorNicknameParser } from "./author-nickname-parser/AuthorNicknameParser.ts";
@@ -23,7 +22,7 @@ import { ContentSaver } from "../storage/ContentSaver.ts";
 
 export class PageMetaParser implements IParser<IPageMeta> {
   public constructor(
-    private readonly namer: IHasher,
+    private readonly storyIdentifierParser: IParser<string>,
     private readonly titleParser: IParser<string>,
     private readonly contentParser: IParser<string>,
     private readonly authorNicknameParser: IParser<string>,
@@ -43,6 +42,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
 
   public async parse(rawHTML: string): Promise<IPageMeta> {
     const [
+      storyId,
       title,
       content,
       authorNickname,
@@ -58,6 +58,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       images,
       videos,
     ] = await Promise.all([
+      this.storyIdentifierParser.parse(rawHTML),
       this.titleParser.parse(rawHTML),
       this.contentParser.parse(rawHTML),
       this.authorNicknameParser.parse(rawHTML),
@@ -74,12 +75,10 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.videosParser.parse(rawHTML),
     ]);
 
-    const contentId = this.namer.compute(webpageURL);
-
-    await this.asyncStorage.set(contentId, content);
+    await this.asyncStorage.set(storyId, content);
 
     return Promise.resolve({
-      contentId,
+      storyId,
       title,
       authorNickname,
       authorRealName: authorRealName ?? undefined,
@@ -98,7 +97,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
 }
 
 provide(PageMetaParser, [
-  URLNamer,
+  StoryIdentifierParser,
   TitleParser,
   ContentParser,
   AuthorNicknameParser,

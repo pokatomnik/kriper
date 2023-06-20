@@ -2,10 +2,9 @@ import type { IUncheckedDate } from "./IUncheckedDate.ts";
 
 export interface IPageMeta {
   /**
-   * The identifier of the markdown contents placed in a file with name `{contentId}.md`
+   * Unique identifier of the story
    */
-
-  readonly contentId: string;
+  readonly storyId: string;
 
   /**
    * The title of a page

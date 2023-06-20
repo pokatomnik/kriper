@@ -21,7 +21,7 @@ import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 @Composable
 fun History(
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     PageContainer(
         priorButton = {
@@ -55,7 +55,7 @@ fun History(
                 ) {
                     PageMetaLazyList(
                         pageMeta = pageMeta,
-                        onPageMetaClick = { onNavigateToStory(it.title) }
+                        onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }
             }

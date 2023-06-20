@@ -23,13 +23,13 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 
 @Composable
 fun StoryDetails(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
     onNavigateToAuthor: (authorRealName: String) -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(pageTitle)?.let { pageMeta ->
+        indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),

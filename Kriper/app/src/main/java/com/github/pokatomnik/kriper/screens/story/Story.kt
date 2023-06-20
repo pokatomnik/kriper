@@ -7,9 +7,21 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.BottomDrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.contentColorFor
+import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,7 +32,11 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.preferences.page.FontSize
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
-import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.components.BottomSheet
+import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
+import com.github.pokatomnik.kriper.ui.components.LikeBox
+import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -32,9 +48,9 @@ import kotlin.math.roundToInt
 )
 @Composable
 fun Story(
-    storyTitle: String,
+    storyId: String,
     onNavigateToTag: (tag: String) -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToSearch: () -> Unit,
     onNavigateToGallery: () -> Unit,
     onNavigateToRandom: () -> Boolean,
     onNavigateToPrevious: () -> Boolean,
@@ -52,7 +68,7 @@ fun Story(
     val (fontSize, setFontSize) = pagePreferences.fontSize.collectAsState()
     val fontInfoState = pagePreferences.storyContentFontFamily.collectAsState()
     val colorPresetState = pagePreferences.storyContentColorPreset.collectAsState()
-    val favoriteState = rememberStoryFavorite(selectedPageTitle = storyTitle)
+    val favoriteState = rememberStoryFavorite(selectedStoryId = storyId)
 
     globalPreferences.oneTimeRunners.oncePerInstallActions.Once(key = "MENU_LIKE_INFO") {
         scaffoldState?.let {
@@ -104,7 +120,7 @@ fun Story(
                         )
                 ) {
                     ContentSurface(colorPresetState = colorPresetState) {
-                        StoryScrollPosition(pageTitle = storyTitle) { scrollState ->
+                        StoryScrollPosition(storyId) { scrollState ->
                             ScrollPositionIndication(
                                 scrollState = scrollState,
                                 colorsInfo = colorPresetState.value
@@ -130,7 +146,7 @@ fun Story(
                                     )
                             ) {
                                 Column(modifier = Modifier.padding(vertical = LARGE_PADDING.dp)) {
-                                    StoryTitle(title = storyTitle) {
+                                    StoryTitle(storyId = storyId) {
                                         Spacer(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -138,7 +154,7 @@ fun Story(
                                         )
                                     }
                                     StoryDetails(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
                                         onNavigateToAuthor = onNavigateToAuthor,
                                     ) {
@@ -149,7 +165,7 @@ fun Story(
                                         )
                                     }
                                     StoryTags(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
                                         onTagClick = onNavigateToTag
                                     ) {
@@ -160,7 +176,7 @@ fun Story(
                                         )
                                     }
                                     StoryContent(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         fontSize = fontSize,
                                         fontInfo = fontInfoState.value,
                                         colorsInfo = colorPresetState.value
@@ -172,7 +188,7 @@ fun Story(
                                         )
                                     }
                                     GalleryButton(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
                                         onNavigateToGallery = onNavigateToGallery,
                                     ) {
@@ -183,7 +199,7 @@ fun Story(
                                         )
                                     }
                                     VideoButtons(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
                                         onNavigateToVideo = onNavigateToVideo
                                     ) {
@@ -194,9 +210,9 @@ fun Story(
                                         )
                                     }
                                     SeeAlso(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
-                                        onStoryClick = onNavigateToStory
+                                        onNavigateToSearch = onNavigateToSearch,
                                     ) {
                                         Spacer(
                                             modifier = Modifier
@@ -205,7 +221,7 @@ fun Story(
                                         )
                                     }
                                     SourceButton(
-                                        pageTitle = storyTitle,
+                                        storyId = storyId,
                                         colorsInfo = colorPresetState.value,
                                     ) {}
                                 }
@@ -224,7 +240,7 @@ fun Story(
             }
         },
         drawerContent = {
-            ShareStoryControls(storyTitle = storyTitle)
+            ShareStoryControls(storyId = storyId)
             FontSizeSelection(
                 onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
                 onDecreaseFontSizePress = { setFontSize(fontSize - 1) },

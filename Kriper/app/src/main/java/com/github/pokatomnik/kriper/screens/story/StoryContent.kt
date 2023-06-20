@@ -10,13 +10,13 @@ import com.github.pokatomnik.kriper.ui.components.MarkdownText
 
 @Composable
 fun StoryContent(
-    pageTitle: String,
+    storyId: String,
     fontSize: Int,
     fontInfo: FontInfo,
     colorsInfo: ColorsInfo,
     displayAfter: @Composable () -> Unit,
 ) {
-    StoryMarkdown(pageTitle = pageTitle) { storyMarkdown ->
+    StoryMarkdown(storyId) { storyMarkdown ->
         if (storyMarkdown != "") {
             key(colorsInfo.id) {
                 MarkdownText(

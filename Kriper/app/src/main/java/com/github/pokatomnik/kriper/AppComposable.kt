@@ -54,7 +54,7 @@ fun AppComposable() {
                             val onNavigateToRandom = {
                                 indexService.content
                                     .getRandomPageMeta()
-                                    ?.also { navigation.storyRoute.navigate(it.title) }
+                                    ?.also { navigation.storyRoute.navigate(it.storyId) }
                                     .let { it != null }
                             }
 
@@ -110,8 +110,8 @@ fun AppComposable() {
                                         tagGroupName = groupName,
                                         tagName = tagName,
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -120,17 +120,17 @@ fun AppComposable() {
                                 route = navigation.storyRoute.route,
                                 keepScreenOn = true
                             ) {
-                                navigation.storyRoute.Params { storyTitle ->
+                                navigation.storyRoute.Params { storyId ->
                                     Story(
-                                        storyTitle = storyTitle,
+                                        storyId = storyId,
                                         onNavigateToTag = { tag ->
                                             navigation.storiesOfTagRoute.navigate(tag)
                                         },
                                         onNavigateToPrevious = { navigation.navigateBack() },
                                         onNavigateToRandom = onNavigateToRandom,
-                                        onNavigateToStory = { navigation.storyRoute.navigate(it) },
+                                        onNavigateToSearch = { navigation.searchRoute.navigate() },
                                         onNavigateToGallery = {
-                                            navigation.storyGalleryRoute.navigate(storyTitle)
+                                            navigation.storyGalleryRoute.navigate(storyId)
                                         },
                                         onNavigateToVideo = { videoURL ->
                                             navigation.videoRoute.navigate(videoURL)
@@ -144,13 +144,13 @@ fun AppComposable() {
                             screen(
                                 route = navigation.storyGalleryRoute.route,
                             ) {
-                                navigation.storyGalleryRoute.Params { storyTitle ->
+                                navigation.storyGalleryRoute.Params { storyId ->
                                     Gallery(
-                                        storyTitle = storyTitle,
+                                        storyId = storyId,
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToImage = { index ->
                                             navigation.storyGalleryImageRoute.navigate(
-                                                storyTitle,
+                                                storyId,
                                                 index.toString()
                                             )
                                         }
@@ -160,10 +160,10 @@ fun AppComposable() {
                             screen(
                                 route = navigation.storyGalleryImageRoute.route,
                             ) {
-                                navigation.storyGalleryImageRoute.Params { storyTitle, storyIndexAsString ->
+                                navigation.storyGalleryImageRoute.Params { storyId, storyIndexAsString ->
                                     val imageIndex = storyIndexAsString.toInt()
                                     GalleryImage(
-                                        storyTitle = storyTitle,
+                                        storyId = storyId,
                                         imageIndex = imageIndex,
                                         onNavigateBack = { navigation.navigateBack() }
                                     )
@@ -197,8 +197,8 @@ fun AppComposable() {
                                     StoriesOfTag(
                                         tagName = tagTitle,
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -209,8 +209,8 @@ fun AppComposable() {
                                 navigation.allStoriesRoute.Params {
                                     AllStories(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -222,8 +222,8 @@ fun AppComposable() {
                                     AllStoriesByAuthor(
                                         authorRealName = authorRealName,
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -234,8 +234,8 @@ fun AppComposable() {
                                 navigation.shortMostVotedStoriesRoute.Params {
                                     ShortStories(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -246,8 +246,8 @@ fun AppComposable() {
                                 navigation.longMostVotedStoriesRoute.Params {
                                     LongStories(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -258,8 +258,8 @@ fun AppComposable() {
                                 navigation.newStoriesRoute.Params {
                                     NewStories(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -270,8 +270,8 @@ fun AppComposable() {
                                 navigation.historyRoute.Params {
                                     History(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -282,8 +282,8 @@ fun AppComposable() {
                                 navigation.searchRoute.Params {
                                     Search(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         },
                                         onNavigateToTag = { tagTitle ->
                                             navigation.storiesOfTagRoute.navigate(tagTitle)
@@ -300,8 +300,8 @@ fun AppComposable() {
                                 navigation.favoriteStoriesRoute.Params {
                                     FavoriteStories(
                                         onNavigateBack = { navigation.navigateBack() },
-                                        onNavigateToStory = { storyTitle ->
-                                            navigation.storyRoute.navigate(storyTitle)
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
                                         }
                                     )
                                 }

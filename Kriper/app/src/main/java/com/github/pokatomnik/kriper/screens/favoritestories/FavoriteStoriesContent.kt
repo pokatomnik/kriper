@@ -23,7 +23,7 @@ import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 @Composable
 fun FavoriteStoriesContent(
     swipeRefreshKey: Int,
-    onNavigateToStory: (storyTitle: String) -> Unit
+    onNavigateToStoryById: (storyId: String) -> Unit
 ) {
     IndexServiceReadiness { indexService ->
         val favoriteStoriesDAO = rememberKriperDatabase().favoriteStoriesDAO()
@@ -32,10 +32,10 @@ fun FavoriteStoriesContent(
 
         LaunchedEffect(swipeRefreshKey) {
             pagesMetaList.value = favoriteStoriesDAO
-                .getAllFavoriteTitles()
-                .fold(mutableListOf()) { acc, currentTitle ->
+                .getAllFavoriteIds()
+                .fold(mutableListOf()) { acc, currentId ->
                     acc.apply {
-                        indexService.content.getPageMetaByName(currentTitle)?.let { add(it) }
+                        indexService.content.getPageMetaByStoryId(currentId)?.let { add(it) }
                     }
                 }
         }
@@ -63,7 +63,7 @@ fun FavoriteStoriesContent(
                     PageMetaLazyList(
                         pageMeta = pagesMeta,
                         canAddAndRemoveFavorite = true,
-                        onPageMetaClick = { onNavigateToStory(it.title) }
+                        onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }
             }
