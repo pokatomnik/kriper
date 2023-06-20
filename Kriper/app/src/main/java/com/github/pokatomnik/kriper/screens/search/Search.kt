@@ -52,6 +52,7 @@ fun Search(
     onNavigateToTag: (tagTitle: String) -> Unit,
     onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val searchStringState = rememberPreferences().searchPreferences.let {
         remember {
             mutableStateOf(
@@ -66,6 +67,7 @@ fun Search(
             }
         }
     }
+
     val searchingState = remember { mutableStateOf(false) }
     val searchResultsState = remember { mutableStateOf<SearchResults?>(null) }
     val pagerState = rememberPagerState(PAGES_INDEX)
@@ -84,8 +86,6 @@ fun Search(
         focusRequester.freeFocus()
         softwareKeyboardController?.hide()
     }
-
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         requestFocus()
@@ -110,6 +110,10 @@ fun Search(
                     searchResults.getTabIndexToScrollTo()
                 )
             }
+        }
+
+        LaunchedEffect(Unit) {
+            doSearch()
         }
 
         PageContainer(

@@ -135,7 +135,7 @@ class Content(
 
                 val tagGroupsFound = mutableMapOf<String, TagGroup>()
                 val tagContentItemsFound = mutableMapOf<String, TagContents>()
-                val pageMetaFound = mutableListOf<PageMeta>()
+                val pageMetaFound = mutableMapOf<String, PageMeta>()
 
                 for (currentTagGroupName in groupNames) {
                     val currentTagGroup = getTagGroupByName(currentTagGroupName)
@@ -161,7 +161,7 @@ class Content(
                                 matchSearchStr(it, searchStringLower)
                             } ?: false
                             if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
-                                currentPageMeta?.let { pageMetaFound.add(it) }
+                                currentPageMeta?.let { pageMetaFound.put(it.storyId, it) }
                             }
                         }
                     }
@@ -177,7 +177,7 @@ class Content(
                         b.tagName.valuableChars().lowercase()
                     )
                 }
-                val pageMeta = pageMetaFound.sortedWith { a, b ->
+                val pageMeta = pageMetaFound.values.sortedWith { a, b ->
                     a.title.valuableChars().lowercase().compareTo(
                         b.title.valuableChars().lowercase()
                     )
