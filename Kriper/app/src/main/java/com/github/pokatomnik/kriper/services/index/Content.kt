@@ -137,6 +137,7 @@ class Content(
                 val tagContentItemsFound = mutableMapOf<String, TagContents>()
                 val pageMetaFound = mutableMapOf<String, PageMeta>()
 
+                // Go through tags and tag groups, checking all names
                 for (currentTagGroupName in groupNames) {
                     val currentTagGroup = getTagGroupByName(currentTagGroupName)
                     if (matchSearchStr(currentTagGroupName, searchStringLower)) {
@@ -148,22 +149,22 @@ class Content(
                         if (matchSearchStr(currentTagName, searchStringLower)) {
                             tagContentItemsFound[currentTagName] = currentTag
                         }
+                    }
+                }
 
-                        for (currentStoryId in currentTag.storyIds) {
-                            val currentPageMeta = currentTag.getPageByStoryId(currentStoryId)
-                            val titleMatch = currentPageMeta?.let {
-                                matchSearchStr(it.title, searchStringLower)
-                            } ?: false
-                            val authorNicknameMatch = currentPageMeta?.let {
-                                matchSearchStr(it.authorNickname, searchStringLower)
-                            } ?: false
-                            val authorRealNameMatch = currentPageMeta?.authorRealName?.let {
-                                matchSearchStr(it, searchStringLower)
-                            } ?: false
-                            if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
-                                currentPageMeta?.let { pageMetaFound.put(it.storyId, it) }
-                            }
-                        }
+                // Go through all page meta, check story titles, author names
+                for (currentPageMeta in index.pageMeta.values) {
+                    val titleMatch = matchSearchStr(currentPageMeta.title, searchStringLower)
+                    val authorNicknameMatch = matchSearchStr(
+                        currentPageMeta.authorNickname,
+                        searchStringLower
+                    )
+                    val authorRealNameMatch = currentPageMeta.authorRealName?.let {
+                        matchSearchStr(it, searchStringLower)
+                    } ?: false
+
+                    if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
+                        pageMetaFound[currentPageMeta.storyId] = currentPageMeta
                     }
                 }
 
