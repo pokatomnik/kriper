@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.screens.search
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,10 +16,21 @@ import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 
 @Composable
 fun TagsSearchResults(
+    isSearching: Boolean,
     tagContentItems: Collection<TagContents>?,
     onNavigateToTag: (tagTitle: String) -> Unit
 ) {
-    if (tagContentItems == null) {
+    if (isSearching) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+    } else if (tagContentItems == null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()

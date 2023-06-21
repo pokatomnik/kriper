@@ -92,13 +92,28 @@ fun Search(
     }
 
     IndexServiceReadiness { indexService ->
-        val doSearch = fun() {
+        val autoSearchIfStringIsNotEmpty = fun() {
+            val strToSearch = searchStringState.value.text.trim()
+            if (strToSearch.isEmpty()) return
+            searchingState.value = true
+            coroutineScope.launch {
+                val searchResults = indexService.content.search(strToSearch)
+                searchResultsState.value = searchResults
+                searchingState.value = false
+                pagerState.animateScrollToPage(
+                    searchResults.getTabIndexToScrollTo()
+                )
+            }
+        }
+
+        val requestSearch = fun() {
             if (searchingState.value) return
             val strToSearch = searchStringState.value.text.trim()
             if (strToSearch.length < REQUIRED_CHARS_NUMBER_TO_SEARCH) {
                 toast("Введите больше 4 букв")
                 return
             }
+            searchingState.value = true
             coroutineScope.launch {
                 val searchResults = indexService.content.search(strToSearch)
                 searchResultsState.value = searchResults
@@ -113,7 +128,7 @@ fun Search(
         }
 
         LaunchedEffect(Unit) {
-            doSearch()
+            autoSearchIfStringIsNotEmpty()
         }
 
         PageContainer(
@@ -129,12 +144,12 @@ fun Search(
                 TopBarSearchInput(
                     textFieldValue = searchStringState.value,
                     onTextFieldValueChange = { searchStringState.value = it },
-                    onSearchButtonPress = doSearch,
+                    onSearchButtonPress = requestSearch,
                     focusRequester = focusRequester
                 )
             },
             trailingButton = {
-                IconButton(onClick = doSearch) {
+                IconButton(onClick = requestSearch) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Искать"
@@ -177,18 +192,21 @@ fun Search(
             ) {
                 if (it == PAGES_INDEX) {
                     PagesSearchResults(
+                        isSearching = searchingState.value,
                         pageMeta = searchResultsState.value?.pageMeta,
                         onNavigateToStoryById = onNavigateToStoryById
                     )
                 }
                 if (it == TAGS_INDEX) {
                     TagsSearchResults(
+                        isSearching = searchingState.value,
                         tagContentItems = searchResultsState.value?.tagContentItems,
                         onNavigateToTag = onNavigateToTag
                     )
                 }
                 if (it == TAG_GROUPS_INDEX) {
                     TagGroupSearchResults(
+                        isSearching = searchingState.value,
                         tagGroups = searchResultsState.value?.tagGroups,
                         onNavigateToTagGroup = onNavigateToTagGroup
                     )

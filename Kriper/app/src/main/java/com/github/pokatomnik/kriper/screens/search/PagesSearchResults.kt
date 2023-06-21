@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,10 +16,21 @@ import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 
 @Composable
 fun PagesSearchResults(
+    isSearching: Boolean,
     pageMeta: Collection<PageMeta>?,
     onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
-    if (pageMeta == null) {
+    if (isSearching) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SMALL_PADDING.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+    } else if (pageMeta == null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
