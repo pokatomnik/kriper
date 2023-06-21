@@ -51,6 +51,7 @@ fun TopBarSearchInput(
                 onSearch = { onSearchButtonPress() }
             ),
             maxLines = 1,
+            singleLine = true,
             cursorBrush = SolidColor(searchTextColor),
             textStyle = TextStyle(color = searchTextColor),
             decorationBox = {
