@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "favorite_stories",
     indices = [
-        Index(value = ["title"], unique = true)
+        Index(value = ["id"], unique = true)
     ]
 )
 data class FavoriteStory(
-    @PrimaryKey @ColumnInfo(name = "title") val title: String,
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
 )

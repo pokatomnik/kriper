@@ -41,14 +41,15 @@ class Content(
 
     val selections = Selections(index)
 
-    fun getPageMetaByName(storyTitle: String): PageMeta? = index.pageMeta[storyTitle]
+    fun getPageMetaByStoryId(storyId: String): PageMeta? = index.pageMeta[storyId]
 
-    fun getRandomPageMeta() = selections
-        .allStoryTitles
-        .random(Random(System.currentTimeMillis()))
-        .let {
-            index.pageMeta[it]
+    fun getRandomPageMeta(): PageMeta? {
+        val pageMetaItems = index.pageMeta.values
+        if (pageMetaItems.isEmpty()) {
+            return null
         }
+        return index.pageMeta.values.random(Random(System.currentTimeMillis()))
+    }
 
     private val getTagImage = object : (String) -> Drawable? {
         private val allowedChars = "abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"
@@ -83,12 +84,12 @@ class Content(
             getDrawableByTagName = { getTagImage(it) }
         )
 
-    suspend fun getStoryMarkdown(storyTitle: String) =
+    suspend fun getStoryMarkDownByStoryId(storyId: String) =
         withContext(Dispatchers.IO + SupervisorJob()) {
             try {
-                val pageMeta = index.pageMeta[storyTitle]
-                    ?: throw IOException("No content for page meta with title $storyTitle")
-                contentReaderService.getTextContent("content/${pageMeta.contentId}.md")
+                val pageMeta = index.pageMeta[storyId]
+                    ?: throw IOException("No content for page meta with id $storyId")
+                contentReaderService.getTextContent("content/${pageMeta.storyId}.md")
             } catch (e: IOException) {
                 ""
             }
@@ -136,6 +137,7 @@ class Content(
                 val tagContentItemsFound = mutableMapOf<String, TagContents>()
                 val pageMetaFound = mutableMapOf<String, PageMeta>()
 
+                // Go through tags and tag groups, checking all names
                 for (currentTagGroupName in groupNames) {
                     val currentTagGroup = getTagGroupByName(currentTagGroupName)
                     if (matchSearchStr(currentTagGroupName, searchStringLower)) {
@@ -147,22 +149,22 @@ class Content(
                         if (matchSearchStr(currentTagName, searchStringLower)) {
                             tagContentItemsFound[currentTagName] = currentTag
                         }
+                    }
+                }
 
-                        for (currentPageName in currentTag.pageNames) {
-                            val currentPageMeta = currentTag.getPageByTitle(currentPageName)
-                            val titleMatch = matchSearchStr(currentPageName, searchStringLower)
-                            val authorNicknameMatch = currentPageMeta?.let {
-                                matchSearchStr(it.authorNickname, searchStringLower)
-                            } ?: false
-                            val authorRealNameMatch = currentPageMeta?.authorRealName?.let {
-                                matchSearchStr(it, searchStringLower)
-                            } ?: false
-                            if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
-                                currentPageMeta?.let {
-                                    pageMetaFound[currentPageName] = currentPageMeta
-                                }
-                            }
-                        }
+                // Go through all page meta, check story titles, author names
+                for (currentPageMeta in index.pageMeta.values) {
+                    val titleMatch = matchSearchStr(currentPageMeta.title, searchStringLower)
+                    val authorNicknameMatch = matchSearchStr(
+                        currentPageMeta.authorNickname,
+                        searchStringLower
+                    )
+                    val authorRealNameMatch = currentPageMeta.authorRealName?.let {
+                        matchSearchStr(it, searchStringLower)
+                    } ?: false
+
+                    if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
+                        pageMetaFound[currentPageMeta.storyId] = currentPageMeta
                     }
                 }
 

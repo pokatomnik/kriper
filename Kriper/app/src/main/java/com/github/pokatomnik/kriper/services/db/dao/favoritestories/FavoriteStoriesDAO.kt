@@ -11,8 +11,8 @@ abstract class FavoriteStoriesDAO {
     @Query("SELECT * FROM favorite_stories")
     protected abstract suspend fun getAllFavoriteStories(): List<FavoriteStory>
 
-    @Query("SELECT * FROM favorite_stories WHERE title = :storyTitle")
-    protected abstract suspend fun getFavoriteStoryByTitle(storyTitle: String): FavoriteStory?
+    @Query("SELECT * FROM favorite_stories WHERE id = :storyId")
+    protected abstract suspend fun getFavoriteStoryByTitle(storyId: String): FavoriteStory?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     protected abstract suspend fun addFavoriteStory(favoriteStory: FavoriteStory)
@@ -24,25 +24,25 @@ abstract class FavoriteStoriesDAO {
     abstract suspend fun clearAllFavoriteTitles()
 
     @Query("SELECT COUNT(*) FROM favorite_stories")
-    abstract suspend fun getTitlesQuantity(): Int
+    abstract suspend fun getFavoriteQuantity(): Int
 
-    suspend fun getAllFavoriteTitles(): List<String> {
-        return getAllFavoriteStories().map { it.title }.reversed()
+    suspend fun getAllFavoriteIds(): List<String> {
+        return getAllFavoriteStories().map { it.id }.reversed()
     }
 
-    suspend fun isFavorite(storyTitle: String): Boolean {
-        return getFavoriteStoryByTitle(storyTitle) != null
+    suspend fun isFavorite(storyId: String): Boolean {
+        return getFavoriteStoryByTitle(storyId) != null
     }
 
-    suspend fun addToFavorites(storyTitle: String) {
+    suspend fun addToFavorites(storyId: String) {
         addFavoriteStory(
-            FavoriteStory(title = storyTitle)
+            FavoriteStory(id = storyId)
         )
     }
 
-    suspend fun removeFromFavorites(storyTitle: String) {
+    suspend fun removeFromFavorites(storyId: String) {
         deleteFavoriteStory(
-            FavoriteStory(title = storyTitle)
+            FavoriteStory(storyId)
         )
     }
 }

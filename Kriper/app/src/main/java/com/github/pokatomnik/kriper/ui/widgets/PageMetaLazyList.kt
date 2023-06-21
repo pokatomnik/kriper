@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.services.db.rememberKriperDatabase
+import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.HorizontalSwipeableRow
 import com.github.pokatomnik.kriper.ui.components.LazyList
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
@@ -47,75 +48,87 @@ fun PageMetaLazyList(
     onPageMetaClick: (pageMeta: PageMeta) -> Unit,
 ) {
     val favoriteStoriesDAO = rememberKriperDatabase().favoriteStoriesDAO()
-    val favoriteTitlesState = remember { mutableStateOf<Set<String>>(setOf()) }
-
-    LaunchedEffect(Unit) {
-        favoriteTitlesState.value = favoriteStoriesDAO.getAllFavoriteTitles().toSet()
+    val favoritesMap = remember {
+        mutableStateOf<Map<String, PageMeta>>(mapOf())
     }
 
-    LazyList(list = pageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
-        val isFirst = 0 == index
+    IndexServiceReadiness { indexService ->
+        LaunchedEffect(Unit) {
+            favoritesMap.value = favoriteStoriesDAO
+                .getAllFavoriteIds()
+                .fold(mutableMapOf()) { acc, currentId ->
+                    acc.apply {
+                        indexService.content.getPageMetaByStoryId(currentId)?.let {
+                            this[currentId] = it
+                        }
+                    }
+                }
+        }
 
-        if (isFirst) {
+        LazyList(list = pageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
+            val isFirst = 0 == index
+
+            if (isFirst) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SMALL_PADDING.dp)
+                )
+            }
+            if (canAddAndRemoveFavorite) {
+                HorizontalSwipeableRow(
+                    leftSwipeableHandler = object : SwipeableActionParams {
+                        override val icon: ImageVector
+                            get() {
+                                return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                    Icons.Filled.Delete
+                                } else {
+                                    Icons.Filled.Favorite
+                                }
+                            }
+                        override val contentDescription: String
+                            get() {
+                                return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                    "Удалить из избранного"
+                                } else {
+                                    "Добавить в избранное"
+                                }
+                            }
+                        override suspend fun onSwipe(): suspend () -> Unit {
+                            return {
+                                if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                    favoriteStoriesDAO.removeFromFavorites(pageMetaItem.storyId)
+                                    favoritesMap.value = favoritesMap.value
+                                        .toMutableMap()
+                                        .apply { remove(pageMetaItem.storyId) }
+                                } else {
+                                    favoriteStoriesDAO.addToFavorites(pageMetaItem.storyId)
+                                    favoritesMap.value = favoritesMap.value
+                                        .toMutableMap()
+                                        .apply { put(pageMetaItem.storyId, pageMetaItem) }
+                                }
+                            }
+                        }
+                    }
+                ) {
+                    PageMetaUI(
+                        pageMeta = pageMetaItem,
+                        liked = favoritesMap.value.contains(pageMetaItem.storyId),
+                        onClick = onPageMetaClick
+                    )
+                }
+            } else {
+                PageMetaUI(
+                    pageMeta = pageMetaItem,
+                    liked = favoritesMap.value.contains(pageMetaItem.storyId),
+                    onClick = onPageMetaClick
+                )
+            }
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(SMALL_PADDING.dp)
             )
         }
-        if (canAddAndRemoveFavorite) {
-            HorizontalSwipeableRow(
-                leftSwipeableHandler = object : SwipeableActionParams {
-                    override val icon: ImageVector
-                        get() {
-                            return if (favoriteTitlesState.value.contains(pageMetaItem.title)) {
-                                Icons.Filled.Delete
-                            } else {
-                                Icons.Filled.Favorite
-                            }
-                        }
-                    override val contentDescription: String
-                        get() {
-                            return if (favoriteTitlesState.value.contains(pageMetaItem.title)) {
-                                "Удалить из избранного"
-                            } else {
-                                "Добавить в избранное"
-                            }
-                        }
-                    override suspend fun onSwipe(): suspend () -> Unit {
-                        return {
-                            if (favoriteTitlesState.value.contains(pageMetaItem.title)) {
-                                favoriteStoriesDAO.removeFromFavorites(pageMetaItem.title)
-                                favoriteTitlesState.value = favoriteTitlesState.value
-                                    .toMutableSet()
-                                    .apply { remove(pageMetaItem.title) }
-                            } else {
-                                favoriteStoriesDAO.addToFavorites(pageMetaItem.title)
-                                favoriteTitlesState.value = favoriteTitlesState.value
-                                    .toMutableSet()
-                                    .apply { add(pageMetaItem.title) }
-                            }
-                        }
-                    }
-                }
-            ) {
-                PageMetaUI(
-                    pageMeta = pageMetaItem,
-                    liked = favoriteTitlesState.value.contains(pageMetaItem.title),
-                    onClick = onPageMetaClick
-                )
-            }
-        } else {
-            PageMetaUI(
-                pageMeta = pageMetaItem,
-                liked = favoriteTitlesState.value.contains(pageMetaItem.title),
-                onClick = onPageMetaClick
-            )
-        }
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(SMALL_PADDING.dp)
-        )
     }
 }

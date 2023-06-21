@@ -14,15 +14,19 @@ class TagContents(
     private val getDrawableByTagName: (tagName: String) -> Drawable?
 ) {
     val shortIntro by lazy {
-        pageNames.joinToString(", ")
+        storyIds.joinToString(", ")
     }
 
     private val drawable by lazy { getDrawableByTagName(tagName) }
 
-    val pageNames: Collection<String>
-        get() = tag.pages.sortedWith { a, b -> a.compareTo(b) }
+    val storyIds: Collection<String>
+        get() = tag.storyIds.sortedWith { storyId1, storyId2 ->
+            val title1 = pageMetaMap[storyId1]?.title ?: ""
+            val title2 = pageMetaMap[storyId2]?.title ?: ""
+            title1.compareTo(title2)
+        }
 
-    fun getPageByTitle(pageTitle: String): PageMeta? = pageMetaMap[pageTitle]
+    fun getPageByStoryId(storyId: String): PageMeta? = pageMetaMap[storyId]
 
     @Composable
     fun image(): Painter {

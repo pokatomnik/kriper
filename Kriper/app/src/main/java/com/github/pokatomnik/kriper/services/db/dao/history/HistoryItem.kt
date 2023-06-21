@@ -8,11 +8,11 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "history",
     indices = [
-        Index(value = ["title"], unique = true)
+        Index(value = ["id"], unique = true)
     ]
 )
 data class HistoryItem(
-    @PrimaryKey @ColumnInfo(name = "title") val title: String,
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
     @ColumnInfo(name = "lastOpen") val lastOpen: Long,
     @ColumnInfo(name = "scrollPosition") val scrollPosition: Int,
 )

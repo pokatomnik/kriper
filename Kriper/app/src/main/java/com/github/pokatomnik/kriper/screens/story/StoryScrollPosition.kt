@@ -8,16 +8,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun InitialStoryScrollPosition(
-    pageTitle: String,
+    storyId: String,
     content: @Composable (scrollPosition: Int) -> Unit,
 ) {
     val historyDAO = rememberKriperDatabase().historyDAO()
     val (scrollPosition, setScrollPosition) = remember { mutableStateOf<Int?>(null) }
 
-    LaunchedEffect(pageTitle) {
+    LaunchedEffect(storyId) {
         setScrollPosition(null)
         launch {
-            val historyItem = historyDAO.getByTitle(pageTitle)
+            val historyItem = historyDAO.getById(storyId)
             setScrollPosition(historyItem?.scrollPosition ?: 0)
         }
     }
@@ -29,14 +29,14 @@ fun InitialStoryScrollPosition(
 
 @Composable
 fun StoryScrollPosition(
-    pageTitle: String,
+    storyId: String,
     content: @Composable (scrollState: ScrollState) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val historyDAO = rememberKriperDatabase().historyDAO()
     val scrollState = rememberScrollState()
 
-    InitialStoryScrollPosition(pageTitle = pageTitle) { scrollPosition ->
+    InitialStoryScrollPosition(storyId = storyId) { scrollPosition ->
         LaunchedEffect(scrollPosition) {
             scrollState.animateScrollTo(scrollPosition)
         }
@@ -45,7 +45,7 @@ fun StoryScrollPosition(
             DisposableEffect(Unit) {
                 onDispose {
                     coroutineScope.launch {
-                        historyDAO.setScrollPosition(pageTitle, scrollState.value)
+                        historyDAO.setScrollPosition(storyId, scrollState.value)
                     }
                 }
             }

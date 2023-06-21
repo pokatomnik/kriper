@@ -24,12 +24,12 @@ import com.google.accompanist.pager.rememberPagerState
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Gallery(
-    storyTitle: String,
+    storyId: String,
     onNavigateBack: () -> Unit,
     onNavigateToImage: (index: Int) -> Unit
 ) {
     IndexServiceReadiness { indexService ->
-        indexService.content.getPageMetaByName(storyTitle)?.images?.let { imageURLs ->
+        indexService.content.getPageMetaByStoryId(storyId)?.images?.let { imageURLs ->
             val state = rememberPagerState(0)
             PageContainer(
                 priorButton = {

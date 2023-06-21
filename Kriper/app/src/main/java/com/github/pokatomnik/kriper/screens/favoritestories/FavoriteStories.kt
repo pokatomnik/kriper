@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun FavoriteStories(
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit
+    onNavigateToStoryById: (storyId: String) -> Unit
 ) {
     val toast = makeToast(Toast.LENGTH_LONG)
     val coroutineScope = rememberCoroutineScope()
@@ -38,7 +38,7 @@ fun FavoriteStories(
     val showModalIfNeeded: () -> Unit = {
         coroutineScope.launch {
             val rowsTotal = withContext(Dispatchers.IO + SupervisorJob()) {
-                favoriteStoriesDAO.getTitlesQuantity()
+                favoriteStoriesDAO.getFavoriteQuantity()
             }
             if (rowsTotal == 0) {
                 toast("Нечего удалять")
@@ -124,7 +124,7 @@ fun FavoriteStories(
         ) {
             FavoriteStoriesContent(
                 swipeRefreshKey = contentKeyState.value,
-                onNavigateToStory = onNavigateToStory
+                onNavigateToStoryById = onNavigateToStoryById
             )
         }
     }

@@ -152,82 +152,68 @@ data class Navigation(
      * Must display selected story
      */
     val storyRoute = object : RouteSingleParameter {
-        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+        private val STORY_ID_KEY = "STORY_ID_KEY"
 
-        override fun navigate(storyTitle: String) {
-            val serializedStoryTitle = serializer.serialize(storyTitle)
-            navController.navigateAllowSame("/story/${serializedStoryTitle}")
+        override fun navigate(storyId: String) {
+            navController.navigateAllowSame("/story/${storyId}")
         }
 
         @Composable
         override fun Params(
-            content: @Composable (storyName: String) -> Unit
+            content: @Composable (storyId: String) -> Unit
         ) {
             val arguments = navController.currentBackStackEntryAsState().value?.arguments
-            val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
-                .let { rememberLastNonNull(it) }
-            if (storyName != null) content(
-                storyName
-            )
+            val storyId = rememberLastNonNull(arguments?.getString(STORY_ID_KEY))
+            storyId?.let { content(it) }
         }
 
         override val route: String
-            get() = "/story/{$STORY_TITLE_KEY}"
+            get() = "/story/{$STORY_ID_KEY}"
     }
 
     val storyGalleryRoute = object : RouteSingleParameter {
-        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+        private val STORY_ID_KEY = "STORY_ID_KEY"
 
-        override fun navigate(storyTitle: String) {
-            val serializedStoryTitle = serializer.serialize(storyTitle)
-            navController.navigate("/story/${serializedStoryTitle}/images")
+        override fun navigate(storyId: String) {
+            navController.navigate("/story/${storyId}/images")
         }
 
         @Composable
         override fun Params(
-            content: @Composable (storyName: String) -> Unit,
+            content: @Composable (storyId: String) -> Unit,
         ) {
             val arguments = navController.currentBackStackEntryAsState().value?.arguments
-            val storyName = arguments?.getString(STORY_TITLE_KEY)?.let(serializer::parse)
-                ?.let { rememberLastNonNull(it) }
-            if (storyName != null) content(
-                storyName
-            )
+            val storyId = rememberLastNonNull(arguments?.getString(STORY_ID_KEY))
+            storyId?.let { content(it) }
         }
 
         override val route: String
-            get() = "/story/{${STORY_TITLE_KEY}}/images"
+            get() = "/story/{${STORY_ID_KEY}}/images"
     }
 
     val storyGalleryImageRoute = object : RouteTwoParameters {
-        private val STORY_TITLE_KEY = "STORY_TITLE_KEY"
+        private val STORY_ID_KEY = "STORY_ID_KEY"
 
         private val STORY_IMAGE_INDEX_KEY = "STORY_IMAGE_INDEX_KEY"
 
-        override fun navigate(storyTitle: String, imageIndexAsString: String) {
-            val serializedStoryTitle = serializer.serialize(storyTitle)
-            val serializedStoryImageIndex = serializer.serialize(imageIndexAsString)
-            navController.navigate("/story/${serializedStoryTitle}/images/${serializedStoryImageIndex}")
+        override fun navigate(storyId: String, imageIndexAsString: String) {
+            navController.navigate("/story/${storyId}/images/${imageIndexAsString}")
         }
 
         @Composable
         override fun Params(
-            content: @Composable (storyName: String, imageIndex: String) -> Unit
+            content: @Composable (storyId: String, imageIndex: String) -> Unit
         ) {
             val arguments = navController.currentBackStackEntryAsState().value?.arguments
-            val storyName = arguments?.getString(STORY_TITLE_KEY)
-                ?.let(serializer::parse)
-                ?.let { rememberLastNonNull(it) }
-            val imageIndex = arguments?.getString(STORY_IMAGE_INDEX_KEY)
-                ?.let(serializer::parse)
-                ?.let { rememberLastNonNull(it) }
-            if (storyName != null && imageIndex != null) {
-                content(storyName, imageIndex)
+            val storyId = rememberLastNonNull(arguments?.getString(STORY_ID_KEY))
+            val imageIndex = rememberLastNonNull(arguments?.getString(STORY_IMAGE_INDEX_KEY))
+            if (storyId != null && imageIndex != null) {
+                content(storyId, imageIndex)
             }
         }
 
         override val route: String
-            get() = "/story/{${STORY_TITLE_KEY}}/images/{${STORY_IMAGE_INDEX_KEY}}"
+            get() = "/story/{${STORY_ID_KEY}}/images/{${STORY_IMAGE_INDEX_KEY}}"
     }
 
     /**

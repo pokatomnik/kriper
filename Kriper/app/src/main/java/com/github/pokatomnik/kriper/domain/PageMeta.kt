@@ -1,7 +1,10 @@
 package com.github.pokatomnik.kriper.domain
 
 data class PageMeta(
-    val contentId: String,
+    /**
+     * Identifier of the story
+     */
+    val storyId: String,
     val title: String,
     val authorNickname: String,
     val authorRealName: String?,

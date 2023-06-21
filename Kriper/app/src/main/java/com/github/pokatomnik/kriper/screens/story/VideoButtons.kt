@@ -18,13 +18,13 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun VideoButtons(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
     onNavigateToVideo: (videoURL: String) -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
-        val videos = indexService.content.getPageMetaByName(pageTitle)?.videos
+        val videos = indexService.content.getPageMetaByStoryId(storyId)?.videos
         if (!videos.isNullOrEmpty()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.fillMaxWidth()) {

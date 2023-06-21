@@ -36,7 +36,7 @@ data class TagGroup(
             pageMetaMap = pageMetaMap,
             tag = Tag(
                 tagName = "",
-                pages = mutableSetOf()
+                storyIds = mutableSetOf()
             ),
             getDrawableByTagName = getDrawableByTagName,
         )

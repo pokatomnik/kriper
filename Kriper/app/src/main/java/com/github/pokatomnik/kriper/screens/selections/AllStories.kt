@@ -22,15 +22,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 private fun makeParametrizedSelection(
     selectionTitle: String,
-    getSelection: (Selections) -> Collection<String>,
+    getSelection: (Selections) -> Collection<PageMeta>,
 ): @Composable (
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) -> Unit {
     val component: @Composable (
         onNavigateBack: () -> Unit,
-        onNavigateToStory: (storyTitle: String) -> Unit,
-    ) -> Unit = @Composable { onNavigateBack, onNavigateToStory ->
+        onNavigateToStoryById: (storyId: String) -> Unit,
+    ) -> Unit = @Composable { onNavigateBack, onNavigateToStoryById ->
         val coroutineScope = rememberCoroutineScope()
 
         IndexServiceReadiness { indexService ->
@@ -40,13 +40,9 @@ private fun makeParametrizedSelection(
                 coroutineScope.launch { drawerState.close() }
                 coroutineScope.launch { lazyListState.animateScrollToItem(0) }
             }
-            val allPageMeta = remember(sortingState.value) {
+            val sortedPageMeta = remember(sortingState.value) {
                 getSelection(indexService.content.selections)
-                    .fold(mutableListOf<PageMeta>()) { acc, currentPageTitle ->
-                        acc.apply {
-                            indexService.content.getPageMetaByName(currentPageTitle)?.let { add(it) }
-                        }
-                    }.sortedWith { a, b -> sortingState.value.compare(a, b) }
+                    .sortedWith { a, b -> sortingState.value.compare(a, b) }
             }
 
             BottomSheet(
@@ -83,9 +79,9 @@ private fun makeParametrizedSelection(
                                 .padding(horizontal = SMALL_PADDING.dp)
                         ) {
                             PageMetaLazyList(
-                                pageMeta = allPageMeta,
+                                pageMeta = sortedPageMeta,
                                 lazyListState = lazyListState,
-                                onPageMetaClick = { onNavigateToStory(it.title) }
+                                onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                             )
                         }
                     }

@@ -45,7 +45,7 @@ fun AllTags(
                     val tagContents = allTagsGroup.getTagContentsByName(tagTitle)
                     val isFirst = 0 == index
 
-                    val storiesInTag = tagContents.pageNames.size
+                    val storiesInTag = tagContents.storyIds.size
                     val shortIntro = tagContents.shortIntro
 
                     val storiesPlural = storiesInTag.getPluralNoun(

@@ -30,7 +30,7 @@ fun HistoryItems(
             val computedPageMeta = withContext(Dispatchers.Default + SupervisorJob()) {
                 historyItems.fold(mutableListOf<PageMeta>()) { acc, current ->
                     acc.apply {
-                        indexService.content.getPageMetaByName(current.title)?.let { pageMeta ->
+                        indexService.content.getPageMetaByStoryId(current.id)?.let { pageMeta ->
                             add(pageMeta)
                         }
                     }

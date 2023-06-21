@@ -18,18 +18,18 @@ import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
 @Composable
 fun ShareStoryControls(
-    storyTitle: String,
+    storyId: String
 ) {
     IndexServiceReadiness { indexService ->
         val context = LocalContext.current
         val handleShareClick: () -> Unit = {
-            indexService.content.getPageMetaByName(storyTitle)?.let { pageMeta ->
+            indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
                 val shareIntent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_SUBJECT, "История с Kriper.net")
                     putExtra(
                         Intent.EXTRA_TEXT,
-                        "$storyTitle\n\n${pageMeta.webpageURL}"
+                        "${pageMeta.title}\n\n${pageMeta.webpageURL}"
                     )
                 }
                 context.startActivity(Intent.createChooser(shareIntent, "Где поделиться"))

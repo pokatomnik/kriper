@@ -23,11 +23,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AllStoriesByAuthorInternal(
+private fun AllStoriesByAuthorInternal(
     authorRealName: String,
     stories: Collection<PageMeta>,
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -77,7 +77,7 @@ fun AllStoriesByAuthorInternal(
                     PageMetaLazyList(
                         pageMeta = pageMeta,
                         lazyListState = lazyListState,
-                        onPageMetaClick = { onNavigateToStory(it.title) }
+                        onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }
             }
@@ -90,7 +90,7 @@ fun AllStoriesByAuthorInternal(
 fun AllStoriesByAuthor(
     authorRealName: String,
     onNavigateBack: () -> Unit,
-    onNavigateToStory: (storyTitle: String) -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     IndexServiceReadiness { indexService ->
         val storiesByAuthorState = remember { mutableStateOf(listOf<PageMeta>()) }
@@ -107,7 +107,7 @@ fun AllStoriesByAuthor(
             authorRealName = authorRealName,
             stories = storiesByAuthorState.value,
             onNavigateBack = onNavigateBack,
-            onNavigateToStory = onNavigateToStory
+            onNavigateToStoryById = onNavigateToStoryById
         )
     }
 }

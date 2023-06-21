@@ -4,7 +4,7 @@ import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.UncheckedDate
 import com.google.gson.JsonElement
 
-fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
+private fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
     val dateCreatedObject = pageMetaElement.asJsonObject["dateCreated"].asJsonObject
     val dateCreated = UncheckedDate(
         year = dateCreatedObject["year"].asInt,
@@ -33,7 +33,7 @@ fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
         }
 
     val pageMeta = PageMeta(
-        contentId = pageMetaElement.asJsonObject["contentId"].asString,
+        storyId = pageMetaElement.asJsonObject["storyId"].asString,
         title = pageMetaElement.asJsonObject["title"].asString,
         authorNickname = pageMetaElement.asJsonObject["authorNickname"].asString,
         authorRealName = try {
@@ -62,8 +62,8 @@ fun getPageMetaList(jsonElement: JsonElement): Map<String, PageMeta> {
     val pageMetaList = mutableMapOf<String, PageMeta>()
 
     val pageMetaJSONObject = jsonElement.asJsonObject["pageMeta"].asJsonObject
-    for ((pageTitle, pageMetaElement) in pageMetaJSONObject.entrySet()) {
-        pageMetaList[pageTitle] = getPageMetaItem(pageMetaElement)
+    for ((storyId, pageMetaElement) in pageMetaJSONObject.entrySet()) {
+        pageMetaList[storyId] = getPageMetaItem(pageMetaElement)
     }
 
     return pageMetaList

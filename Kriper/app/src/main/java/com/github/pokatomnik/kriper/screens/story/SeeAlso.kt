@@ -13,18 +13,20 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
+import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun SeeAlso(
-    pageTitle: String,
+    storyId: String,
     colorsInfo: ColorsInfo,
-    onStoryClick: (storyTitle: String) -> Unit,
+    onNavigateToSearch: () -> Unit,
     displayAfter: @Composable () -> Unit,
 ) {
+    val searchPreferences = rememberPreferences().searchPreferences
     IndexServiceReadiness { indexService ->
-        val seeAlsoTitles = indexService.content.getPageMetaByName(pageTitle)?.seeAlso
+        val seeAlsoTitles = indexService.content.getPageMetaByStoryId(storyId)?.seeAlso
         if (!seeAlsoTitles.isNullOrEmpty()) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -41,7 +43,8 @@ fun SeeAlso(
                     seeAlsoTitles.forEach { seeAlsoTitle ->
                         TextButton(
                             onClick = {
-                                onStoryClick(seeAlsoTitle)
+                                searchPreferences.searchValue = seeAlsoTitle
+                                onNavigateToSearch()
                             }
                         ) {
                             Text(
