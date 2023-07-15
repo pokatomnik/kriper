@@ -25,13 +25,31 @@ abstract class HistoryDAO {
         lastOpen: Long
     )
 
+    @Query("UPDATE history SET read = :read WHERE id = :storyId")
+    abstract suspend fun setRead(storyId: String, read: Boolean)
+
+    @Query("SELECT * FROM history WHERE read = 1")
+    protected abstract suspend fun getAllRead(): List<HistoryItem>
+
+    @Query("SELECT * from history WHERE id = :id AND read = 1")
+    protected abstract suspend fun getReadById(id: String): HistoryItem?
+
+    open suspend fun isRead(id: String): Boolean {
+        return getReadById(id) != null
+    }
+
+    open suspend fun getAllReadStoriesIdSet(): Set<String> {
+        return getAllRead().map { it.id }.toSet()
+    }
+
     @Transaction
     open suspend fun setScrollPosition(storyId: String, scrollPosition: Int) {
         val currentTimeMilliseconds = Calendar.getInstance().time.time
         val historyItem = HistoryItem(
             id = storyId,
             lastOpen = currentTimeMilliseconds,
-            scrollPosition = scrollPosition
+            scrollPosition = scrollPosition,
+            read = 0
         )
         val result = insert(historyItem)
 
