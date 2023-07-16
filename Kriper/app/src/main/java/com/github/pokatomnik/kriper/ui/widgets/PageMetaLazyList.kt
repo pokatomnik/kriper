@@ -18,10 +18,15 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.services.db.rememberKriperDatabase
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
+import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.HorizontalSwipeableRow
 import com.github.pokatomnik.kriper.ui.components.LazyList
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.components.SwipeableActionParams
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 private fun PageMetaUI(
@@ -45,27 +50,62 @@ fun PageMetaLazyList(
     pageMeta: List<PageMeta>,
     lazyListState: LazyListState = rememberLazyListState(),
     canAddAndRemoveFavorite: Boolean = false,
+    canHideReadStories: Boolean,
     onPageMetaClick: (pageMeta: PageMeta) -> Unit,
 ) {
-    val favoriteStoriesDAO = rememberKriperDatabase().favoriteStoriesDAO()
+    val kriperDatabase = rememberKriperDatabase()
+    val favoriteStoriesDAO = kriperDatabase.favoriteStoriesDAO()
+    val historyDAO = kriperDatabase.historyDAO()
+
+    val (hideReadStoriesPreferred) = rememberPreferences()
+        .globalPreferences
+        .hideReadStories
+        .collectAsState()
+
     val favoritesMap = remember {
         mutableStateOf<Map<String, PageMeta>>(mapOf())
+    }
+    val readStoriesIds = remember {
+        mutableStateOf<Set<String>>(setOf())
+    }
+
+    val actualPageMeta = remember(
+        pageMeta,
+        readStoriesIds.value,
+        canHideReadStories,
+        hideReadStoriesPreferred
+    ) {
+        if (canHideReadStories && hideReadStoriesPreferred) {
+            pageMeta
+                .filter { currentPageMeta ->
+                    !readStoriesIds.value.contains(currentPageMeta.storyId)
+                }
+        } else pageMeta
     }
 
     IndexServiceReadiness { indexService ->
         LaunchedEffect(Unit) {
-            favoritesMap.value = favoriteStoriesDAO
-                .getAllFavoriteIds()
-                .fold(mutableMapOf()) { acc, currentId ->
-                    acc.apply {
-                        indexService.content.getPageMetaByStoryId(currentId)?.let {
-                            this[currentId] = it
+            launch {
+                withContext(Dispatchers.IO + SupervisorJob()) {
+                    favoritesMap.value = favoriteStoriesDAO
+                        .getAllFavoriteIds()
+                        .fold(mutableMapOf()) { acc, currentId ->
+                            acc.apply {
+                                indexService.content.getPageMetaByStoryId(currentId)?.let {
+                                    this[currentId] = it
+                                }
+                            }
                         }
-                    }
                 }
+            }
+            launch {
+                withContext(Dispatchers.IO + SupervisorJob()) {
+                    readStoriesIds.value = historyDAO.getAllReadStoriesIdSet()
+                }
+            }
         }
 
-        LazyList(list = pageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
+        LazyList(list = actualPageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
             val isFirst = 0 == index
 
             if (isFirst) {
@@ -94,6 +134,7 @@ fun PageMetaLazyList(
                                     "Добавить в избранное"
                                 }
                             }
+
                         override suspend fun onSwipe(): suspend () -> Unit {
                             return {
                                 if (favoritesMap.value.contains(pageMetaItem.storyId)) {

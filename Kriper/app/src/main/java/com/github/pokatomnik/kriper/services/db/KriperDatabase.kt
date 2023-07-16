@@ -2,12 +2,8 @@ package com.github.pokatomnik.kriper.services.db
 
 import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.Delete
-import androidx.room.DeleteColumn
-import androidx.room.DeleteTable
 import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.github.pokatomnik.kriper.services.db.dao.favoritestories.FavoriteStoriesDAO
@@ -17,7 +13,7 @@ import com.github.pokatomnik.kriper.services.db.dao.history.HistoryItem
 
 @Database(
     entities = [HistoryItem::class, FavoriteStory::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),

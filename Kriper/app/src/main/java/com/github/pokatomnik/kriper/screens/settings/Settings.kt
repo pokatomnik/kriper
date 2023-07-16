@@ -51,6 +51,13 @@ fun Settings(
                     .fillMaxWidth()
                     .height(SMALL_PADDING.dp)
             )
+            HideReadStoriesSection()
+            SectionDivider()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp)
+            )
             FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()

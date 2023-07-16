@@ -77,6 +77,7 @@ private fun AllStoriesByAuthorInternal(
                     PageMetaLazyList(
                         pageMeta = pageMeta,
                         lazyListState = lazyListState,
+                        canHideReadStories = true,
                         onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }

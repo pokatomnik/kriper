@@ -223,6 +223,16 @@ fun Story(
                                     SourceButton(
                                         storyId = storyId,
                                         colorsInfo = colorPresetState.value,
+                                    ) {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(LARGE_PADDING.dp)
+                                        )
+                                    }
+                                    ReadButton(
+                                        storyId = storyId,
+                                        colorsInfo = colorPresetState.value,
                                     ) {}
                                 }
                             }

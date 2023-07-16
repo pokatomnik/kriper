@@ -13,7 +13,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SelectableRow(
+fun SelectableRowRadio(
     selected: Boolean,
     onClick: () -> Unit,
     content: @Composable () -> Unit,

@@ -55,6 +55,7 @@ fun History(
                 ) {
                     PageMetaLazyList(
                         pageMeta = pageMeta,
+                        canHideReadStories = false,
                         onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }

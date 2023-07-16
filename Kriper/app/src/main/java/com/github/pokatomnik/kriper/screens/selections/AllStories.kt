@@ -81,6 +81,7 @@ private fun makeParametrizedSelection(
                             PageMetaLazyList(
                                 pageMeta = sortedPageMeta,
                                 lazyListState = lazyListState,
+                                canHideReadStories = true,
                                 onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                             )
                         }

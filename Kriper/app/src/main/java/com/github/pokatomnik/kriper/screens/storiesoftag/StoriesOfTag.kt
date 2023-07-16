@@ -90,6 +90,7 @@ fun StoriesOfTag(
                     ) {
                         PageMetaLazyList(
                             pageMeta = requiredPageMeta,
+                            canHideReadStories = true,
                             onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                         )
                     }
