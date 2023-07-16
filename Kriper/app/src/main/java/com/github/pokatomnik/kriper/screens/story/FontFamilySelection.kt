@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.preferences.page.FontInfo
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
-import com.github.pokatomnik.kriper.ui.components.SelectableRow
+import com.github.pokatomnik.kriper.ui.components.SelectableRowRadio
 
 @Composable
 fun FontFamilySelection(
@@ -39,7 +39,7 @@ fun FontFamilySelection(
             )
         }
         availableFontInfos.forEach { (fontInfoId, fontInfo) ->
-            SelectableRow(
+            SelectableRowRadio(
                 selected = fontInfoId == fontInfoState.value.id,
                 onClick = { fontInfoState.value = fontInfo }
             ) {

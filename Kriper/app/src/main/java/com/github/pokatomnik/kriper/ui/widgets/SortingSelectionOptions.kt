@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.services.preferences.sorting.PageMetaSorter
-import com.github.pokatomnik.kriper.ui.components.SelectableRow
+import com.github.pokatomnik.kriper.ui.components.SelectableRowRadio
 
 @Composable
 fun sortingStateWithUI(
@@ -19,7 +19,7 @@ fun sortingStateWithUI(
 
     val renderOptions = @Composable {
         pageMetaSorting.availableSortersByID.forEach { (_, currentSorter) ->
-            SelectableRow(
+            SelectableRowRadio(
                 selected = sorter.id == currentSorter.id,
                 onClick = {
                     setSorter(currentSorter)

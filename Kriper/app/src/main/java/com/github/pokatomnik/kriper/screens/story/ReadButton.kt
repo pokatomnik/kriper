@@ -71,7 +71,7 @@ fun ReadButton(
         ) {
             TextButton(onClick = handleReadClick) {
                 Text(
-                    text = if (readState) "ПОМЕТИТЬ КАК ПРОЧИТАННУЮ" else "ПОМЕТИТЬ КАК НЕПРОЧИТАННУЮ",
+                    text = if (readState) "ПОМЕТИТЬ КАК НЕПРОЧИТАННУЮ" else "ПОМЕТИТЬ КАК ПРОЧИТАННУЮ",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.alpha(ALPHA_GHOST),

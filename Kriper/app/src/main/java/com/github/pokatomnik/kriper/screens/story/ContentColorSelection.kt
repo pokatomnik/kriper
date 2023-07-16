@@ -17,7 +17,7 @@ import com.github.pokatomnik.kriper.services.preferences.page.ColorsInfo
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
-import com.github.pokatomnik.kriper.ui.components.SelectableRow
+import com.github.pokatomnik.kriper.ui.components.SelectableRowRadio
 
 @Composable
 fun ContentColorSelection(
@@ -40,7 +40,7 @@ fun ContentColorSelection(
             )
         }
         availableColorPresets.forEach { (colorPresetId, colorPreset) ->
-            SelectableRow(
+            SelectableRowRadio(
                 selected = colorPresetId == colorPresetState.value.id,
                 onClick = { colorPresetState.value = colorPreset }
             ) {

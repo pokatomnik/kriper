@@ -63,6 +63,7 @@ fun FavoriteStoriesContent(
                     PageMetaLazyList(
                         pageMeta = pagesMeta,
                         canAddAndRemoveFavorite = true,
+                        canHideReadStories = false,
                         onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }

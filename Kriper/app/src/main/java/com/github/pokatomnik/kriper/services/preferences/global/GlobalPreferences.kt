@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.services.preferences.global
 
 import android.content.SharedPreferences
+import com.github.pokatomnik.kriper.services.preferences.PreferencesBooleanValue
 import com.github.pokatomnik.kriper.services.preferences.PreferencesStringValue
 
 class GlobalPreferences(private val sharedPreferences: SharedPreferences) {
@@ -28,6 +29,17 @@ class GlobalPreferences(private val sharedPreferences: SharedPreferences) {
         }
         override fun read(defaultValue: String): String {
             return sharedPreferences.getString(ONE_TIME_RUNNERS_KEY, defaultValue) ?: defaultValue
+        }
+    })
+
+    val hideReadStories = HideReadStories(object : PreferencesBooleanValue {
+        private val HIDE_READ_STORIES = "HIDE_READ_STORIES"
+        override fun write(value: Boolean) {
+            sharedPreferences.edit().putBoolean(HIDE_READ_STORIES, value).apply()
+        }
+
+        override fun read(defaultValue: Boolean): Boolean {
+            return sharedPreferences.getBoolean(HIDE_READ_STORIES, defaultValue)
         }
     })
 }

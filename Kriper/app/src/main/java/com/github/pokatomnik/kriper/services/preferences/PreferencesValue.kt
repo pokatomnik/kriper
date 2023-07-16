@@ -9,3 +9,8 @@ interface PreferencesStringValue {
     fun write(value: String)
     fun read(defaultValue: String): String
 }
+
+interface PreferencesBooleanValue {
+    fun write(value: Boolean)
+    fun read(defaultValue: Boolean): Boolean
+}
