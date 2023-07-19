@@ -9,7 +9,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.allstoriesbyauthor.AllStoriesByAuthor
-import com.github.pokatomnik.kriper.screens.selections.AllStories
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
 import com.github.pokatomnik.kriper.screens.gallery.Gallery
@@ -17,9 +16,7 @@ import com.github.pokatomnik.kriper.screens.galleryimage.GalleryImage
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.search.Search
-import com.github.pokatomnik.kriper.screens.selections.LongStories
-import com.github.pokatomnik.kriper.screens.selections.NewStories
-import com.github.pokatomnik.kriper.screens.selections.ShortStories
+import com.github.pokatomnik.kriper.screens.selections.*
 import com.github.pokatomnik.kriper.screens.settings.Settings
 import com.github.pokatomnik.kriper.screens.storiesoftag.StoriesOfTag
 import com.github.pokatomnik.kriper.screens.story.Story
@@ -69,6 +66,7 @@ fun AppComposable() {
                                         onNavigateToShortStories = { navigation.shortMostVotedStoriesRoute.navigate() },
                                         onNavigateToLongStories = { navigation.longMostVotedStoriesRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
+                                        onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
                                         onNavigateToRandom = onNavigateToRandom
@@ -257,6 +255,19 @@ fun AppComposable() {
                             ) {
                                 navigation.newStoriesRoute.Params {
                                     NewStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.readStoriesRoute.route
+                            ) {
+                                navigation.readStoriesRoute.Params {
+                                    ReadStories(
+                                        selectionTitle = "Прочитанные",
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStoryById = { storyId ->
                                             navigation.storyRoute.navigate(storyId)

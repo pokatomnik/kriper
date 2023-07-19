@@ -110,6 +110,7 @@ fun PageMetaLazyList(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
+                    // TODO make this customizable
                     text = "Кажется тут ничего нет.\nВозможно Вы уже все прочитали:)",
                     textAlign = TextAlign.Center
                 )
