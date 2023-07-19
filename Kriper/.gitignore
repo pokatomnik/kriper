@@ -21,3 +21,8 @@ local.properties
 /kotlin-profile/*
 /native/*
 /wrapper/*
+/gradle/caches/
+/gradle/daemon/
+/gradle/kotlin-profile/
+/gradle/native/
+/gradle/wrapper/dists/
