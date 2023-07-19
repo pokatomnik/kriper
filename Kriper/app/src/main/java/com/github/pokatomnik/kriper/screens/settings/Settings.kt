@@ -98,6 +98,11 @@ fun Settings(
                     .height(SMALL_PADDING.dp)
             )
             BuildInfoSection()
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(LARGE_PADDING.dp)
+            )
         }
     }
 }
