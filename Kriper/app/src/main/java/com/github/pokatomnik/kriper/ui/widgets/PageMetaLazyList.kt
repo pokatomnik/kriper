@@ -1,10 +1,9 @@
 package com.github.pokatomnik.kriper.ui.widgets
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
@@ -12,17 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.services.db.rememberKriperDatabase
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.preferences.rememberPreferences
-import com.github.pokatomnik.kriper.ui.components.HorizontalSwipeableRow
-import com.github.pokatomnik.kriper.ui.components.LazyList
-import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
-import com.github.pokatomnik.kriper.ui.components.SwipeableActionParams
+import com.github.pokatomnik.kriper.ui.components.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -105,71 +103,84 @@ fun PageMetaLazyList(
             }
         }
 
-        LazyList(list = actualPageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
-            val isFirst = 0 == index
-
-            if (isFirst) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(SMALL_PADDING.dp)
+        if (actualPageMeta.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(horizontal = LARGE_PADDING.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Кажется тут ничего нет.\nВозможно Вы уже все прочитали:)",
+                    textAlign = TextAlign.Center
                 )
             }
-            if (canAddAndRemoveFavorite) {
-                HorizontalSwipeableRow(
-                    leftSwipeableHandler = object : SwipeableActionParams {
-                        override val icon: ImageVector
-                            get() {
-                                return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
-                                    Icons.Filled.Delete
-                                } else {
-                                    Icons.Filled.Favorite
-                                }
-                            }
-                        override val contentDescription: String
-                            get() {
-                                return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
-                                    "Удалить из избранного"
-                                } else {
-                                    "Добавить в избранное"
-                                }
-                            }
+        } else {
+            LazyList(list = actualPageMeta, lazyListState = lazyListState) { index, pageMetaItem ->
+                val isFirst = 0 == index
 
-                        override suspend fun onSwipe(): suspend () -> Unit {
-                            return {
-                                if (favoritesMap.value.contains(pageMetaItem.storyId)) {
-                                    favoriteStoriesDAO.removeFromFavorites(pageMetaItem.storyId)
-                                    favoritesMap.value = favoritesMap.value
-                                        .toMutableMap()
-                                        .apply { remove(pageMetaItem.storyId) }
-                                } else {
-                                    favoriteStoriesDAO.addToFavorites(pageMetaItem.storyId)
-                                    favoritesMap.value = favoritesMap.value
-                                        .toMutableMap()
-                                        .apply { put(pageMetaItem.storyId, pageMetaItem) }
+                if (isFirst) {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(SMALL_PADDING.dp)
+                    )
+                }
+                if (canAddAndRemoveFavorite) {
+                    HorizontalSwipeableRow(
+                        leftSwipeableHandler = object : SwipeableActionParams {
+                            override val icon: ImageVector
+                                get() {
+                                    return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                        Icons.Filled.Delete
+                                    } else {
+                                        Icons.Filled.Favorite
+                                    }
+                                }
+                            override val contentDescription: String
+                                get() {
+                                    return if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                        "Удалить из избранного"
+                                    } else {
+                                        "Добавить в избранное"
+                                    }
+                                }
+
+                            override suspend fun onSwipe(): suspend () -> Unit {
+                                return {
+                                    if (favoritesMap.value.contains(pageMetaItem.storyId)) {
+                                        favoriteStoriesDAO.removeFromFavorites(pageMetaItem.storyId)
+                                        favoritesMap.value = favoritesMap.value
+                                            .toMutableMap()
+                                            .apply { remove(pageMetaItem.storyId) }
+                                    } else {
+                                        favoriteStoriesDAO.addToFavorites(pageMetaItem.storyId)
+                                        favoritesMap.value = favoritesMap.value
+                                            .toMutableMap()
+                                            .apply { put(pageMetaItem.storyId, pageMetaItem) }
+                                    }
                                 }
                             }
                         }
+                    ) {
+                        PageMetaUI(
+                            pageMeta = pageMetaItem,
+                            liked = favoritesMap.value.contains(pageMetaItem.storyId),
+                            onClick = onPageMetaClick
+                        )
                     }
-                ) {
+                } else {
                     PageMetaUI(
                         pageMeta = pageMetaItem,
                         liked = favoritesMap.value.contains(pageMetaItem.storyId),
                         onClick = onPageMetaClick
                     )
                 }
-            } else {
-                PageMetaUI(
-                    pageMeta = pageMetaItem,
-                    liked = favoritesMap.value.contains(pageMetaItem.storyId),
-                    onClick = onPageMetaClick
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SMALL_PADDING.dp)
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(SMALL_PADDING.dp)
-            )
         }
     }
 }
