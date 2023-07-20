@@ -51,6 +51,7 @@ fun Home(
     onNavigateToShortStories: () -> Unit,
     onNavigateToLongStories: () -> Unit,
     onNavigateToNewStories: () -> Unit,
+    onNavigateToReadStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
     onNavigateToRandom: () -> Any,
@@ -309,6 +310,19 @@ fun Home(
                             }
                         ),
                         onClick = onNavigateToFavoriteStories
+                    )
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    IconicCardSmall(
+                        icon = Icons.Filled.Task,
+                        title = "Прочитанные",
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_read_stories_dark
+                            } else {
+                                R.drawable.pattern_read_stories_light
+                            }
+                        ),
+                        onClick = onNavigateToReadStories
                     )
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
                 }

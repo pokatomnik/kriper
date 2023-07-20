@@ -58,7 +58,6 @@ fun PagesSearchResults(
         ) {
             PageMetaLazyList(
                 pageMeta = pageMeta.toList(),
-                canHideReadStories = false,
                 onPageMetaClick = { onNavigateToStoryById(it.storyId) }
             )
         }

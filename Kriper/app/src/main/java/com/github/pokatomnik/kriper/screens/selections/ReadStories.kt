@@ -1,4 +1,4 @@
-package com.github.pokatomnik.kriper.screens.allstoriesbyauthor
+package com.github.pokatomnik.kriper.screens.selections
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
+import com.github.pokatomnik.kriper.services.db.rememberKriperDatabase
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.PageContainer
@@ -20,13 +21,55 @@ import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.widgets.HideStoriesType
 import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+@Composable
+fun ReadStories(
+    selectionTitle: String,
+    onNavigateBack: () -> Unit,
+    onNavigateToStoryById: (storyId: String) -> Unit,
+) {
+    val historyDAO = rememberKriperDatabase().historyDAO()
+    val readStoryIdsState = remember { mutableStateOf<Set<String>?>(null) }
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO + SupervisorJob()) {
+            val readStoriesIds = historyDAO.getAllReadStoriesIdSet()
+            readStoryIdsState.value = readStoriesIds
+        }
+    }
+
+    IndexServiceReadiness { indexService ->
+        val pageMeta: List<PageMeta>? = remember (readStoryIdsState.value) {
+            readStoryIdsState.value?.let { readStoriesIds ->
+                readStoriesIds.fold(mutableListOf()) { acc, currentStoryId ->
+                    acc.apply {
+                        indexService.content.getPageMetaByStoryId(currentStoryId)?.let {
+                            add(it)
+                        }
+                    }
+                }
+            }
+        }
+        if (pageMeta != null) {
+            ReadStoriesInternal(
+                selectionTitle = selectionTitle,
+                pageMeta = pageMeta,
+                onNavigateBack = onNavigateBack,
+                onNavigateToStoryById = onNavigateToStoryById
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun AllStoriesByAuthorInternal(
-    authorRealName: String,
-    stories: Collection<PageMeta>,
+private fun ReadStoriesInternal(
+    selectionTitle: String,
+    pageMeta: List<PageMeta>,
     onNavigateBack: () -> Unit,
     onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
@@ -38,8 +81,8 @@ private fun AllStoriesByAuthorInternal(
         coroutineScope.launch { drawerState.close() }
         coroutineScope.launch { lazyListState.animateScrollToItem(0) }
     }
-    val pageMeta = remember(stories, sortingState.value) {
-        stories.sortedWith { a, b -> sortingState.value.compare(a, b) }
+    val sortedPageMeta = remember(sortingState.value, pageMeta) {
+        pageMeta.sortedWith { a, b -> sortingState.value.compare(a, b) }
     }
 
     BottomSheet(
@@ -55,13 +98,13 @@ private fun AllStoriesByAuthorInternal(
                     }
                 },
                 header = {
-                    PageTitle(title = authorRealName)
+                    PageTitle(title = selectionTitle)
                 },
                 trailingButton = {
                     IconButton(
                         onClick = {
                             coroutineScope.launch { drawerState.open() }
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.FilterList,
@@ -76,9 +119,9 @@ private fun AllStoriesByAuthorInternal(
                         .padding(horizontal = SMALL_PADDING.dp)
                 ) {
                     PageMetaLazyList(
-                        pageMeta = pageMeta,
+                        pageMeta = sortedPageMeta,
                         lazyListState = lazyListState,
-                        hideStoriesType = HideStoriesType.META_LIST,
+                        hideStoriesType = HideStoriesType.READ_STORIES,
                         onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }
@@ -86,30 +129,4 @@ private fun AllStoriesByAuthorInternal(
         },
         drawerContent = { renderSortingOptions() }
     )
-}
-
-@Composable
-fun AllStoriesByAuthor(
-    authorRealName: String,
-    onNavigateBack: () -> Unit,
-    onNavigateToStoryById: (storyId: String) -> Unit,
-) {
-    IndexServiceReadiness { indexService ->
-        val storiesByAuthorState = remember { mutableStateOf(listOf<PageMeta>()) }
-
-        LaunchedEffect(authorRealName) {
-            launch {
-                storiesByAuthorState.value = indexService.content
-                    .getAllStoriesByAuthor(authorRealName)
-                    .toList()
-            }
-        }
-        
-        AllStoriesByAuthorInternal(
-            authorRealName = authorRealName,
-            stories = storiesByAuthorState.value,
-            onNavigateBack = onNavigateBack,
-            onNavigateToStoryById = onNavigateToStoryById
-        )
-    }
 }

@@ -407,6 +407,28 @@ data class Navigation(
             get() = routePath
     }
 
+    val readStoriesRoute = object : RouteNoParameters {
+        private  val routePath = "/selections/read"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
     /**
      * Route for displaying application settings
      */
