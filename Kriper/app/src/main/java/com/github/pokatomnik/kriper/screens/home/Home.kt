@@ -260,22 +260,6 @@ fun Home(
                     Spacer(
                         modifier = Modifier.width(SMALL_PADDING.dp)
                     )
-                    IconicCardSmall(
-                        icon = Icons.Filled.Task,
-                        title = "Прочитанные",
-                        // TODO replace this background with a new one
-                        backgroundTile = ImageBitmap.imageResource(
-                            if (isLocalAppDarkThemeEnabled()) {
-                                R.drawable.pattern_new_stories_dark
-                            } else {
-                                R.drawable.pattern_new_stories_light
-                            }
-                        ),
-                        onClick = onNavigateToReadStories
-                    )
-                    Spacer(
-                        modifier = Modifier.width(SMALL_PADDING.dp)
-                    )
                 }
             }
             HomeHorizontalSpacerLarge()
@@ -326,6 +310,19 @@ fun Home(
                             }
                         ),
                         onClick = onNavigateToFavoriteStories
+                    )
+                    Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+                    IconicCardSmall(
+                        icon = Icons.Filled.Task,
+                        title = "Прочитанные",
+                        backgroundTile = ImageBitmap.imageResource(
+                            if (isLocalAppDarkThemeEnabled()) {
+                                R.drawable.pattern_read_stories_dark
+                            } else {
+                                R.drawable.pattern_read_stories_light
+                            }
+                        ),
+                        onClick = onNavigateToReadStories
                     )
                     Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
                 }
