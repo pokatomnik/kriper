@@ -43,12 +43,17 @@ private fun PageMetaUI(
     )
 }
 
+enum class HideStoriesType {
+    META_LIST,
+    READ_STORIES
+}
+
 @Composable
 fun PageMetaLazyList(
     pageMeta: List<PageMeta>,
     lazyListState: LazyListState = rememberLazyListState(),
     canAddAndRemoveFavorite: Boolean = false,
-    canHideReadStories: Boolean,
+    hideStoriesType: HideStoriesType? = null,
     onPageMetaClick: (pageMeta: PageMeta) -> Unit,
 ) {
     val kriperDatabase = rememberKriperDatabase()
@@ -70,10 +75,10 @@ fun PageMetaLazyList(
     val actualPageMeta = remember(
         pageMeta,
         readStoriesIds.value,
-        canHideReadStories,
+        hideStoriesType,
         hideReadStoriesPreferred
     ) {
-        if (canHideReadStories && hideReadStoriesPreferred) {
+        if (hideStoriesType == HideStoriesType.META_LIST && hideReadStoriesPreferred) {
             pageMeta
                 .filter { currentPageMeta ->
                     !readStoriesIds.value.contains(currentPageMeta.storyId)
@@ -110,8 +115,11 @@ fun PageMetaLazyList(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    // TODO make this customizable
-                    text = "Кажется тут ничего нет.\nВозможно Вы уже все прочитали:)",
+                    text = when (hideStoriesType) {
+                        HideStoriesType.READ_STORIES -> "Прочитанных пока нет"
+                        HideStoriesType.META_LIST -> "Кажется тут ничего нет.\nВозможно Вы уже все прочитали:)"
+                        null -> "Здесь ничего нет"
+                    },
                     textAlign = TextAlign.Center
                 )
             }

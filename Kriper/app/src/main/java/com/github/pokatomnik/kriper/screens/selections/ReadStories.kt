@@ -18,6 +18,7 @@ import com.github.pokatomnik.kriper.ui.components.BottomSheet
 import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
 import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.widgets.HideStoriesType
 import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
 import kotlinx.coroutines.Dispatchers
@@ -120,7 +121,7 @@ private fun ReadStoriesInternal(
                     PageMetaLazyList(
                         pageMeta = sortedPageMeta,
                         lazyListState = lazyListState,
-                        canHideReadStories = false,
+                        hideStoriesType = HideStoriesType.READ_STORIES,
                         onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                     )
                 }

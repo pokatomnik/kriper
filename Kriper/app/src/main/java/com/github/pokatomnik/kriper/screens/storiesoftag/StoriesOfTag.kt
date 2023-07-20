@@ -15,6 +15,7 @@ import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.widgets.HideStoriesType
 import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
 import kotlinx.coroutines.launch
@@ -90,7 +91,7 @@ fun StoriesOfTag(
                     ) {
                         PageMetaLazyList(
                             pageMeta = requiredPageMeta,
-                            canHideReadStories = true,
+                            hideStoriesType = HideStoriesType.META_LIST,
                             onPageMetaClick = { onNavigateToStoryById(it.storyId) }
                         )
                     }
