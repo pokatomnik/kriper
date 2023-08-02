@@ -72,4 +72,9 @@ export interface IPageMeta {
    * Videos on the page, yourube urls
    */
   readonly videos: ReadonlyArray<string>;
+
+  /**
+   * Is "golden" story
+   */
+  readonly gold: boolean;
 }

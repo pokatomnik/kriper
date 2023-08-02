@@ -19,6 +19,7 @@ import { SeeAlsoParser } from "./see-also-parser/SeeAlsoParser.ts";
 import { ImagesParser } from "./images-parser/ImagesParser.ts";
 import { VideosParser } from "./videos-parser/VideosParser.ts";
 import { ContentSaver } from "../storage/ContentSaver.ts";
+import { GoldParser } from "./gold-parser/GoldParser.ts";
 
 export class PageMetaParser implements IParser<IPageMeta> {
   public constructor(
@@ -37,6 +38,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly seeAlsoParser: IParser<ReadonlyArray<string>>,
     private readonly imagesParser: IParser<ReadonlyArray<string>>,
     private readonly videosParser: IParser<ReadonlyArray<string>>,
+    private readonly goldParser: IParser<boolean>,
     private readonly asyncStorage: IAsyncStorage<string, string>
   ) {}
 
@@ -57,6 +59,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       seeAlso,
       images,
       videos,
+      gold,
     ] = await Promise.all([
       this.storyIdentifierParser.parse(rawHTML),
       this.titleParser.parse(rawHTML),
@@ -73,11 +76,12 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.seeAlsoParser.parse(rawHTML),
       this.imagesParser.parse(rawHTML),
       this.videosParser.parse(rawHTML),
+      this.goldParser.parse(rawHTML),
     ]);
 
     await this.asyncStorage.set(storyId, content);
 
-    return Promise.resolve({
+    return Promise.resolve<IPageMeta>({
       storyId,
       title,
       authorNickname,
@@ -92,6 +96,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       seeAlso: seeAlso,
       images,
       videos,
+      gold,
     });
   }
 }
@@ -112,5 +117,6 @@ provide(PageMetaParser, [
   SeeAlsoParser,
   ImagesParser,
   VideosParser,
+  GoldParser,
   ContentSaver,
 ]);
