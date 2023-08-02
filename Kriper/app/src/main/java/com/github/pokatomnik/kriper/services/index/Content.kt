@@ -125,8 +125,16 @@ class Content(
      * Search is case insensitive.
      */
     val search = object : suspend (String) -> SearchResults {
+        private val replacements = mapOf('ё' to 'е')
+
+        private fun String.applyReplacements(): String {
+            return replacements.entries.fold(this) { acc, (from, to) ->
+                return acc.replace(from, to)
+            }
+        }
+
         private fun matchSearchStr(searchItem: String, sample: String): Boolean {
-            return searchItem.lowercase().contains(sample)
+            return searchItem.applyReplacements().lowercase().contains(sample.applyReplacements())
         }
 
         override suspend fun invoke(rawSearchString: String): SearchResults {
