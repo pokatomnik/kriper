@@ -16,6 +16,7 @@ fun Home(
     onNavigateToShortStories: () -> Unit,
     onNavigateToLongStories: () -> Unit,
     onNavigateToNewStories: () -> Unit,
+    onNavigateToGoldStories: () -> Unit,
     onNavigateToReadStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
@@ -34,7 +35,8 @@ fun Home(
                 onNavigateToAllStories = onNavigateToAllStories,
                 onNavigateToNewStories = onNavigateToNewStories,
                 onNavigateToShortStories = onNavigateToShortStories,
-                onNavigateToLongStories = onNavigateToLongStories
+                onNavigateToLongStories = onNavigateToLongStories,
+                onNavigateToGoldStories = onNavigateToGoldStories,
             )
             HomeHorizontalSpacerLarge()
             StatisticsBlock()

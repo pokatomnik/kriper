@@ -53,6 +53,7 @@ private fun getPageMetaItem(pageMetaElement: JsonElement): PageMeta {
         seeAlso = seeAlso,
         images = images,
         videos = videos,
+        gold = pageMetaElement.asJsonObject["gold"].asBoolean
     )
 
     return pageMeta

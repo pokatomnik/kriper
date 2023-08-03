@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoStories
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FiberNew
 import androidx.compose.material.icons.filled.HistoryEdu
 import androidx.compose.material.icons.filled.ReceiptLong
@@ -33,6 +34,7 @@ fun SelectionsBlock(
     onNavigateToNewStories: () -> Unit,
     onNavigateToShortStories: () -> Unit,
     onNavigateToLongStories: () -> Unit,
+    onNavigateToGoldStories: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -70,6 +72,21 @@ fun SelectionsBlock(
                     }
                 ),
                 onClick = onNavigateToNewStories,
+            )
+            Spacer(
+                modifier = Modifier.width(SMALL_PADDING.dp)
+            )
+            IconicCardSmall(
+                icon = Icons.Filled.EmojiEvents,
+                title = "Золотой фонд",
+                backgroundTile = ImageBitmap.imageResource(
+                    if (isLocalAppDarkThemeEnabled()) {
+                        R.drawable.pattern_gold_dark
+                    } else {
+                        R.drawable.pattern_gold_light
+                    }
+                ),
+                onClick = onNavigateToGoldStories
             )
             Spacer(
                 modifier = Modifier.width(SMALL_PADDING.dp)

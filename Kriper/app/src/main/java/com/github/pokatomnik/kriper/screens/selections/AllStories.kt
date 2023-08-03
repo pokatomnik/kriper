@@ -103,3 +103,5 @@ val ShortStories = makeParametrizedSelection("Короткие истоии") { 
 val LongStories = makeParametrizedSelection("Длинные истории") { it.longAndMostUpVoted }
 
 val NewStories = makeParametrizedSelection("Новые истории") { it.new }
+
+val GoldStories = makeParametrizedSelection("Золотой фонд") { it.gold }
