@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 @Composable
 fun StatisticsProgressBar(
@@ -72,7 +73,7 @@ fun animatePositiveInt(to: Long, durationMillis: Int): Long {
         currentValueState.value = 0
         launch {
             for (step in 0 until steps) {
-                currentValueState.value += to / steps
+                currentValueState.value += max(to / steps, 1)
                 delay(stepDuration)
             }
             currentValueState.value = to
