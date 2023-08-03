@@ -33,6 +33,12 @@ data class Selections(private val index: Index) {
             .sortedWith { a, b -> a.title.compareTo(b.title) }
     }
 
+    val gold: Collection<PageMeta> by lazy {
+        index.pageMeta.values
+            .filter { it.gold }
+            .sortedWith { a, b -> a.title.compareTo(b.title) }
+    }
+
     val new: Collection<PageMeta> by lazy {
         index.pageMeta.values
             .filter {

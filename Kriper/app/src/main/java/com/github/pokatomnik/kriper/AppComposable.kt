@@ -65,6 +65,7 @@ fun AppComposable() {
                                         onNavigateToAllStories = { navigation.allStoriesRoute.navigate() },
                                         onNavigateToShortStories = { navigation.shortMostVotedStoriesRoute.navigate() },
                                         onNavigateToLongStories = { navigation.longMostVotedStoriesRoute.navigate() },
+                                        onNavigateToGoldStories = { navigation.goldStoriesRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
                                         onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
@@ -255,6 +256,18 @@ fun AppComposable() {
                             ) {
                                 navigation.newStoriesRoute.Params {
                                     NewStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.goldStoriesRoute.route
+                            ) {
+                                navigation.goldStoriesRoute.Params {
+                                    GoldStories(
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStoryById = { storyId ->
                                             navigation.storyRoute.navigate(storyId)

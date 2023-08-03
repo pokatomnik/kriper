@@ -17,7 +17,8 @@ data class PageMeta(
     val tags: Set<String>,
     val seeAlso: Set<String>,
     val images: Set<String>,
-    val videos: Set<String>
+    val videos: Set<String>,
+    val gold: Boolean,
 ) {
     val authorship: String
         get() = authorRealName ?: authorNickname
