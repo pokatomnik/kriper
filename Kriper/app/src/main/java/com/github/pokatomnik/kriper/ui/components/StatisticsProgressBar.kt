@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun StatisticsProgressBar(
@@ -65,7 +66,7 @@ fun StatisticsProgressBar(
 }
 
 @Composable
-fun animatePositiveInt(to: Long, durationMillis: Int): Long {
+private fun animatePositiveInt(to: Long, durationMillis: Int): Long {
     val stepDuration = 50L
     val steps = durationMillis / stepDuration
     val currentValueState = remember { mutableStateOf(0L) }
@@ -73,7 +74,7 @@ fun animatePositiveInt(to: Long, durationMillis: Int): Long {
         currentValueState.value = 0
         launch {
             for (step in 0 until steps) {
-                currentValueState.value += max(to / steps, 1)
+                currentValueState.value = min(to, currentValueState.value + max(to / steps, 1))
                 delay(stepDuration)
             }
             currentValueState.value = to
@@ -83,7 +84,7 @@ fun animatePositiveInt(to: Long, durationMillis: Int): Long {
 }
 
 @Composable
-fun rememberProgressBarAnimation(to: Float, animationMillis: Int): Animatable<Float, AnimationVector1D> {
+private fun rememberProgressBarAnimation(to: Float, animationMillis: Int): Animatable<Float, AnimationVector1D> {
     val animatedProgress = remember { Animatable(0f) }
 
     LaunchedEffect(to) {
