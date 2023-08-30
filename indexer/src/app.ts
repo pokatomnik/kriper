@@ -7,15 +7,18 @@ import type { IIndex } from "./domain/IIndex.ts";
 import type { IAsyncStorage } from "./services/lib/IAsyncStorage.ts";
 import type { ILogger } from "./services/lib/ILogger.ts";
 import { provide } from "provide";
+import { TopClient } from "./services/top-client/TopClient.ts";
 import { TagsClient } from "./services/tags-client/TagsClient.ts";
 import { PagnationClient } from "./services/pagination-client/PaginationClient.ts";
 import { PageListClient } from "./services/pages-list-client/PagesListClient.ts";
 import { PageMetaClient } from "./services/pagemeta-client/PageMetaClient.ts";
 import { IndexSaver } from "./services/storage/IndexSaver.ts";
 import { ConsoleLogger } from "./services/logger/ConsoleLogger.ts";
+import { ITop } from "./domain/ITop.ts";
 
 export class App {
   public constructor(
+    private readonly topClient: IClient<ITop, []>,
     private readonly tagsClient: IClient<ITagsGroupMap, []>,
     private readonly paginationClient: IClient<IPagination, []>,
     private readonly pageListClient: IClient<
@@ -29,6 +32,21 @@ export class App {
     private readonly indexSaver: IAsyncStorage<string, IIndex>,
     private readonly logger: ILogger
   ) {}
+
+  private async getTop(): Promise<ITop> {
+    let top: ITop;
+    this.logger.info("Startted fetching tops...");
+    try {
+      top = await this.topClient.get();
+      this.logger.info("Finished fetching top.");
+    } catch (e) {
+      const error =
+        e instanceof Error ? e : new Error("Unknown top fethcing error");
+      this.logger.error(error.message);
+      Deno.exit(1);
+    }
+    return top;
+  }
 
   private async getTagsGroupMap(): Promise<ITagsGroupMap> {
     let tagsMap: ITagsGroupMap;
@@ -108,6 +126,7 @@ export class App {
   }
 
   public async start() {
+    const top = await this.getTop();
     const tagsGroupMap = await this.getTagsGroupMap();
     const pagination = await this.getPagination();
     const pagesToFetch = await this.getPagesToFetch(pagination);
@@ -134,6 +153,7 @@ export class App {
     const index: IIndex = {
       tagsMap: tagsGroupMap,
       pageMeta: pageMetaIndex,
+      top: top,
       dateCreatedISO: new Date().toISOString(),
     };
 
@@ -144,6 +164,7 @@ export class App {
 }
 
 provide(App, [
+  TopClient,
   TagsClient,
   PagnationClient,
   PageListClient,
