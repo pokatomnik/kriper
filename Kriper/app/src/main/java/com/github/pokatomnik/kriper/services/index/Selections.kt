@@ -52,4 +52,37 @@ data class Selections(private val index: Index) {
             }
             .sortedWith { a, b -> a.title.compareTo(b.title) }
     }
+
+    val weekTop: Collection<PageMeta> by lazy {
+        index.top.weekTop.fold(mutableListOf()) { acc, currentStoryId ->
+            acc.apply {
+                index.pageMeta[currentStoryId]?.let(::add)
+            }
+        }
+    }
+
+    val monthTop: Collection<PageMeta> by lazy {
+        index.top.monthTop.fold(mutableListOf()) { acc, currentStoryId ->
+            acc.apply {
+                index.pageMeta[currentStoryId]?.let(::add)
+            }
+
+        }
+    }
+
+    val yearTop: Collection<PageMeta> by lazy {
+        index.top.yearTop.fold(mutableListOf()) { acc, currentStoryId ->
+            acc.apply {
+                index.pageMeta[currentStoryId]?.let(::add)
+            }
+        }
+    }
+
+    val allTheTimeTop: Collection<PageMeta> by lazy {
+        index.top.allTheTimeTop.fold(mutableListOf()) { acc, currentStoryId ->
+            acc.apply {
+                index.pageMeta[currentStoryId]?.let(::add)
+            }
+        }
+    }
 }

@@ -17,6 +17,10 @@ fun Home(
     onNavigateToLongStories: () -> Unit,
     onNavigateToNewStories: () -> Unit,
     onNavigateToGoldStories: () -> Unit,
+    onNavigateToWeekTop: () -> Unit,
+    onNavigateToMonthTop: () -> Unit,
+    onNavigateToYearTop: () -> Unit,
+    onNavigateToAllTheTimeTop: () -> Unit,
     onNavigateToReadStories: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
@@ -37,6 +41,13 @@ fun Home(
                 onNavigateToShortStories = onNavigateToShortStories,
                 onNavigateToLongStories = onNavigateToLongStories,
                 onNavigateToGoldStories = onNavigateToGoldStories,
+            )
+            HomeHorizontalSpacerLarge()
+            TopBlock(
+                onNavigateToWeekTop = onNavigateToWeekTop,
+                onNavigateToMonthTop = onNavigateToMonthTop ,
+                onNavigateToYearTop = onNavigateToYearTop,
+                onNavigateToAllTheTimeTop = onNavigateToAllTheTimeTop,
             )
             HomeHorizontalSpacerLarge()
             StatisticsBlock()

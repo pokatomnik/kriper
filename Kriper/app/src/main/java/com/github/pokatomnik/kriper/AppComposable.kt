@@ -66,6 +66,10 @@ fun AppComposable() {
                                         onNavigateToShortStories = { navigation.shortMostVotedStoriesRoute.navigate() },
                                         onNavigateToLongStories = { navigation.longMostVotedStoriesRoute.navigate() },
                                         onNavigateToGoldStories = { navigation.goldStoriesRoute.navigate() },
+                                        onNavigateToWeekTop = { navigation.weekTopRoute.navigate() },
+                                        onNavigateToMonthTop = { navigation.monthTopRoute.navigate() },
+                                        onNavigateToYearTop = { navigation.yearTopRoute.navigate() },
+                                        onNavigateToAllTheTimeTop = { navigation.allTheTimeTopRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
                                         onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
@@ -268,6 +272,54 @@ fun AppComposable() {
                             ) {
                                 navigation.goldStoriesRoute.Params {
                                     GoldStories(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.weekTopRoute.route
+                            ) {
+                                navigation.weekTopRoute.Params {
+                                    WeekTop(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.monthTopRoute.route
+                            ) {
+                                navigation.monthTopRoute.Params {
+                                    MonthTop(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.yearTopRoute.route
+                            ) {
+                                navigation.yearTopRoute.Params {
+                                    YearTop(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.allTheTimeTopRoute.route
+                            ) {
+                                navigation.allTheTimeTopRoute.Params {
+                                    AllTheTimeTop(
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStoryById = { storyId ->
                                             navigation.storyRoute.navigate(storyId)

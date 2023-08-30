@@ -105,3 +105,11 @@ val LongStories = makeParametrizedSelection("Длинные истории") { i
 val NewStories = makeParametrizedSelection("Новые истории") { it.new }
 
 val GoldStories = makeParametrizedSelection("Золотой фонд") { it.gold }
+
+val WeekTop = makeParametrizedSelection("Топ за неделю") { it.weekTop }
+
+val MonthTop = makeParametrizedSelection("Топ за месяц") { it.monthTop }
+
+val YearTop = makeParametrizedSelection("Топ за год") { it.yearTop }
+
+val AllTheTimeTop = makeParametrizedSelection("Топ за все время") { it.allTheTimeTop }
