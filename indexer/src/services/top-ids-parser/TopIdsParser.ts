@@ -28,10 +28,6 @@ export class TopIdsParser implements IParser<ReadonlySet<string>> {
       return id ? acc.add(id) : acc;
     }, new Set<string>());
 
-    if (items.size === 0) {
-      throw new Error("Something is wrong: top list is empty");
-    }
-
     return Promise.resolve(items);
   }
 }

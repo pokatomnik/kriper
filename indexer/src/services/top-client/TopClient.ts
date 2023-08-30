@@ -7,6 +7,8 @@ import { TopTypeResolver } from "../top-type-resolver/TopTypeResolver.ts";
 import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
 import { TopIdsParser } from "../top-ids-parser/TopIdsParser.ts";
 import { provide } from "provide";
+import { shuffle } from "./Shuffle.ts";
+import { ValidationResult } from "./ValidationResult.ts";
 
 type Mutable<Type> = {
   -readonly [Key in keyof Type]: Type[Key];
@@ -44,6 +46,29 @@ export class TopClient implements IClient<ITop, []> {
       const topIds = await this.topIdsParser.parse(topsHTML);
       result[topId] = Array.from(topIds);
     }
+
+    const { result: shuffleResult, validation: shuffleValidation } = shuffle([
+      result.weekTop,
+      result.monthTop,
+      result.yearTop,
+      result.allTheTimeTop,
+    ]);
+
+    if (shuffleValidation === ValidationResult.INVALID) {
+      throw new Error("Invalid tops");
+    }
+
+    if (shuffleValidation === ValidationResult.EMPTY) {
+      throw new Error("Empty tops");
+    }
+
+    const [weekTop = [], monthTop = [], yearTop = [], allTheTimeTop = []] =
+      shuffleResult;
+
+    result.weekTop = Array.from(weekTop);
+    result.monthTop = Array.from(monthTop);
+    result.yearTop = Array.from(yearTop);
+    result.allTheTimeTop = Array.from(allTheTimeTop);
 
     return result;
   }

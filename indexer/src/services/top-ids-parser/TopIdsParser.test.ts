@@ -17,19 +17,3 @@ Deno.test(
     Testing.assertEquals(parsedIds, new Set(["12389", "12383"]));
   }
 );
-
-Deno.test(
-  {
-    name: "Test TopIdsParser - has no elements",
-    permissions: { read: true, write: true },
-  },
-  async () => {
-    const rawHTML = await new FileReader(import.meta).getFileContents(
-      "./TopIdsParser1.source.html"
-    );
-
-    Testing.assertRejects(async () => {
-      return await new TopIdsParser(new DOMParser()).parse(rawHTML);
-    });
-  }
-);
