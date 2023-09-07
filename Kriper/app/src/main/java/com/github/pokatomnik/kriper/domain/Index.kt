@@ -27,6 +27,11 @@ class Index(
     val tagsMap: Map<String, Map<String, Tag>>,
 
     /**
+     * Dictionary of top story identifiers
+     */
+    val top: Top,
+
+    /**
      * When the dump created
      */
     val dateCreatedISO: Instant,

@@ -7,7 +7,8 @@ type ErrorDetector = (response: Response) => Promise<boolean>;
 
 export class HTMLClient implements IHTMLClient {
   private readonly errorDetectors: ReadonlyArray<ErrorDetector> = [
-    (response) => Promise.resolve(!response.ok),
+    // Disable, the HTTP code tells nothing about real response quality
+    // (response) => Promise.resolve(!response.ok),
     async (response) =>
       (await response.text()).toLocaleLowerCase().includes("mysql"),
   ];
