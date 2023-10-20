@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Task
@@ -31,6 +32,7 @@ fun PersonalBlock(
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
     onNavigateToReadStories: () -> Unit,
+    onNavigateToBookmarks: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
@@ -79,6 +81,19 @@ fun PersonalBlock(
                     }
                 ),
                 onClick = onNavigateToFavoriteStories
+            )
+            Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
+            IconicCardSmall(
+                icon = Icons.Filled.Bookmarks,
+                title = "Закладки",
+                backgroundTile = ImageBitmap.imageResource(
+                    if (isLocalAppDarkThemeEnabled()) {
+                        R.drawable.pattern_bookmarks_dark
+                    } else {
+                        R.drawable.pattern_bookmarks_light
+                    }
+                ),
+                onClick = onNavigateToBookmarks
             )
             Spacer(modifier = Modifier.width(SMALL_PADDING.dp))
             IconicCardSmall(

@@ -22,6 +22,7 @@ fun Home(
     onNavigateToYearTop: () -> Unit,
     onNavigateToAllTheTimeTop: () -> Unit,
     onNavigateToReadStories: () -> Unit,
+    onNavigateToBookmarks: () -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
     onNavigateToRandom: () -> Any,
@@ -55,7 +56,8 @@ fun Home(
             PersonalBlock(
                 onNavigateToHistory = onNavigateToHistory,
                 onNavigateToFavoriteStories = onNavigateToFavoriteStories,
-                onNavigateToReadStories = onNavigateToReadStories
+                onNavigateToReadStories = onNavigateToReadStories,
+                onNavigateToBookmarks = onNavigateToBookmarks
             )
             HomeHorizontalSpacerLarge()
             HierarchyBlock(

@@ -171,6 +171,29 @@ data class Navigation(
             get() = "/story/{$STORY_ID_KEY}"
     }
 
+    val storyWithScrollRoute = object : RouteTwoParameters {
+        private val STORY_ID_KEY = "STORY_ID_KEY"
+
+        private val SCROLL_POSITION_KEY = "SCROLL_POSITION_KEY"
+
+        override fun navigate(storyId: String, scrollPosition: String) {
+            navController.navigateAllowSame("/story/$storyId/$scrollPosition")
+        }
+
+        @Composable
+        override fun Params(
+            content: @Composable (storyId: String, scrollPosition: String) -> Unit
+        ) {
+            val arguments = navController.currentBackStackEntryAsState().value?.arguments
+            val storyId = rememberLastNonNull(arguments?.getString(STORY_ID_KEY))
+            val scrollPosition = rememberLastNonNull(arguments?.getString(SCROLL_POSITION_KEY))
+            if (storyId != null && scrollPosition != null) { content(storyId, scrollPosition) }
+        }
+
+        override val route: String
+            get() = "/story/{$STORY_ID_KEY}/{$SCROLL_POSITION_KEY}"
+    }
+
     val storyGalleryRoute = object : RouteSingleParameter {
         private val STORY_ID_KEY = "STORY_ID_KEY"
 
@@ -628,6 +651,80 @@ data class Navigation(
 
         override val route: String
             get() = routePath
+    }
+
+    val addBookmarkRoute = object : RouteTwoParameters {
+        private val STORY_ID_KEY = "STORY_ID_KEY"
+
+        private val SCROLL_POSITION_KEY = "SCROLL_POSITION_KEY"
+
+        override fun navigate(storyId: String, scrollPosition: String) {
+            val serializedStoryId = serializer.serialize(storyId)
+            val serializedScrollPosition = serializer.serialize(scrollPosition)
+            navController.navigateDistinct("/bookmarks/add/$serializedStoryId/$serializedScrollPosition")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (serializedStoryId: String, serializedScrollPosition: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val storyId = arguments?.getString(STORY_ID_KEY)?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
+            val scrollPosition = arguments?.getString(SCROLL_POSITION_KEY)?.let(serializer::parse)
+                .let { rememberLastNonNull(it) }
+            if (storyId != null && scrollPosition != null) content(storyId, scrollPosition)
+        }
+
+        override val route: String
+            get() = "/bookmarks/add/{$STORY_ID_KEY}/{$SCROLL_POSITION_KEY}"
+    }
+
+    val listAllBookmarksRoute = object : RouteNoParameters {
+        private val routePath = "/bookmarks/list"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val listStoryBookmarksRoute = object : RouteSingleParameter {
+        private val STORY_ID_KEY = "STORY_ID_KEY"
+
+        override fun navigate(storyId: String) {
+            val serializedStoryId = serializer.serialize(storyId)
+            navController.navigateDistinct("/bookmarks/list/${serializedStoryId}")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (parameter0: String) -> Unit) {
+            navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+                ?.getString(STORY_ID_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+                ?.let { content(it) }
+        }
+
+        override val route: String
+            get() = "/bookmarks/list/{$STORY_ID_KEY}"
     }
 }
 
