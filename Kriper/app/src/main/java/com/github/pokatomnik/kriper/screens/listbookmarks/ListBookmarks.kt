@@ -79,6 +79,8 @@ fun ListBookmarks(
         }
     }
 
+    DisplayHelpSideEffect()
+
     IndexServiceReadiness { indexService ->
         val pageMeta = storyId?.let { indexService.content.getPageMetaByStoryId(storyId) }
 
