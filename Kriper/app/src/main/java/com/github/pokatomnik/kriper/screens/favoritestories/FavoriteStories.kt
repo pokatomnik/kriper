@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.screens.favoritestories
 
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -61,6 +62,11 @@ fun FavoriteStories(
 
     if (removeConfirmationDisplayedState.value) {
         AlertDialog(
+            modifier = Modifier.border(
+                width = 2.dp,
+                color = MaterialTheme.colors.primary,
+                shape = MaterialTheme.shapes.small
+            ),
             onDismissRequest = hideModal,
             title = { Text("Удалить всё?") },
             text = {
