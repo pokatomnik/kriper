@@ -6,14 +6,16 @@ import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.github.pokatomnik.kriper.services.db.dao.bookmarks.Bookmark
+import com.github.pokatomnik.kriper.services.db.dao.bookmarks.BookmarksDAO
 import com.github.pokatomnik.kriper.services.db.dao.favoritestories.FavoriteStoriesDAO
 import com.github.pokatomnik.kriper.services.db.dao.favoritestories.FavoriteStory
 import com.github.pokatomnik.kriper.services.db.dao.history.HistoryDAO
 import com.github.pokatomnik.kriper.services.db.dao.history.HistoryItem
 
 @Database(
-    entities = [HistoryItem::class, FavoriteStory::class],
-    version = 4,
+    entities = [HistoryItem::class, FavoriteStory::class, Bookmark::class],
+    version = 5,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -21,13 +23,17 @@ import com.github.pokatomnik.kriper.services.db.dao.history.HistoryItem
             from = 2,
             to = 3,
             spec = KriperDatabase.MigrationFrom2To3::class
-        )
+        ),
+        AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 4, to = 5)
     ]
 )
 abstract class KriperDatabase : RoomDatabase() {
     abstract fun historyDAO(): HistoryDAO
 
     abstract fun favoriteStoriesDAO(): FavoriteStoriesDAO
+
+    abstract fun bookmarksDAO(): BookmarksDAO
 
     @RenameColumn(
         tableName = "history",

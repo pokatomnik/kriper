@@ -23,6 +23,7 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -49,6 +50,7 @@ import kotlin.math.roundToInt
 @Composable
 fun Story(
     storyId: String,
+    bookmarkScrollPosition: Int?,
     onNavigateToTag: (tag: String) -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToGallery: () -> Unit,
@@ -56,6 +58,8 @@ fun Story(
     onNavigateToPrevious: () -> Boolean,
     onNavigateToVideo: (videoURL: String) -> Unit,
     onNavigateToAuthor: (authorRealName: String) -> Unit,
+    onNavigateToAddBookmark: (scrollPosition: Int) -> Unit,
+    onNavigateToAllBookmarksOfStory: () -> Unit,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
@@ -81,46 +85,51 @@ fun Story(
             }
         }
     }
-    BottomSheet(
-        drawerState = bottomDrawerState,
-        content = {
-            PageContainer {
-                val offsetX = remember { Animatable(0f) }
-                val maxDrag = 200f
+    StoryScrollPosition(storyId = storyId) { scrollState ->
+        LaunchedEffect(Unit) {
+            if (bookmarkScrollPosition != null) {
+                scrollState.animateScrollTo(bookmarkScrollPosition)
+            }
+        }
+        BottomSheet(
+            drawerState = bottomDrawerState,
+            content = {
+                PageContainer {
+                    val offsetX = remember { Animatable(0f) }
+                    val maxDrag = 200f
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .offset { IntOffset(offsetX.value.roundToInt(), 0) }
-                        .draggable(
-                            orientation = Orientation.Horizontal,
-                            state = rememberDraggableState {
-                                coroutineScope.launch {
-                                    offsetX.snapTo(
-                                        targetValue = (offsetX.value + it / 2)
-                                            .coerceIn(-maxDrag..maxDrag)
-                                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+                            .draggable(
+                                orientation = Orientation.Horizontal,
+                                state = rememberDraggableState {
+                                    coroutineScope.launch {
+                                        offsetX.snapTo(
+                                            targetValue = (offsetX.value + it / 2)
+                                                .coerceIn(-maxDrag..maxDrag)
+                                        )
+                                    }
+                                },
+                                onDragStopped = {
+                                    val offsetXValue = -offsetX.value
+                                    val absoluteOffset = abs(offsetXValue)
+                                    val smallDrag = absoluteOffset < maxDrag - (maxDrag / 4)
+                                    if (smallDrag) {
+                                        offsetX.animateTo(0f)
+                                        return@draggable
+                                    }
+                                    val navigate =
+                                        if (offsetXValue < 0) onNavigateToPrevious else onNavigateToRandom
+                                    val navigated = navigate()
+                                    if (!navigated) {
+                                        offsetX.animateTo(0f)
+                                    }
                                 }
-                            },
-                            onDragStopped = {
-                                val offsetXValue = -offsetX.value
-                                val absoluteOffset = abs(offsetXValue)
-                                val smallDrag = absoluteOffset < maxDrag - (maxDrag / 4)
-                                if (smallDrag) {
-                                    offsetX.animateTo(0f)
-                                    return@draggable
-                                }
-                                val navigate =
-                                    if (offsetXValue < 0) onNavigateToPrevious else onNavigateToRandom
-                                val navigated = navigate()
-                                if (!navigated) {
-                                    offsetX.animateTo(0f)
-                                }
-                            }
-                        )
-                ) {
-                    ContentSurface(colorPresetState = colorPresetState) {
-                        StoryScrollPosition(storyId) { scrollState ->
+                            )
+                    ) {
+                        ContentSurface(colorPresetState = colorPresetState) {
                             ScrollPositionIndication(
                                 scrollState = scrollState,
                                 colorsInfo = colorPresetState.value
@@ -239,35 +248,46 @@ fun Story(
                         }
                     }
                 }
-            }
-            favoriteState.state.value?.let {
-                LikeBox(
-                    liked = it,
-                    color = colorPresetState.value.contentColor ?: contentColorFor(
-                        MaterialTheme.colors.surface
+                favoriteState.state.value?.let {
+                    LikeBox(
+                        liked = it,
+                        color = colorPresetState.value.contentColor ?: contentColorFor(
+                            MaterialTheme.colors.surface
+                        )
                     )
+                }
+            },
+            drawerContent = {
+                AddBookmarkButtonRow(
+                    onAddBookmarkPress = { onNavigateToAddBookmark(scrollState.value) },
+                    onListBookmarksPress = onNavigateToAllBookmarksOfStory
                 )
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp))
+
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SMALL_PADDING.dp))
+                ShareStoryControls(storyId = storyId)
+                FontSizeSelection(
+                    onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
+                    onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
+                    onIncreaseFontSizePress = { setFontSize(fontSize + 1) }
+                )
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SMALL_PADDING.dp)
+                )
+                FontFamilySelection(fontInfoState = fontInfoState)
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SMALL_PADDING.dp)
+                )
+                ContentColorSelection(colorPresetState = colorPresetState)
             }
-        },
-        drawerContent = {
-            ShareStoryControls(storyId = storyId)
-            FontSizeSelection(
-                onResetFontSizePress = { setFontSize(FontSize.defaultFontSize) },
-                onDecreaseFontSizePress = { setFontSize(fontSize - 1) },
-                onIncreaseFontSizePress = { setFontSize(fontSize + 1) }
-            )
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(SMALL_PADDING.dp)
-            )
-            FontFamilySelection(fontInfoState = fontInfoState)
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(SMALL_PADDING.dp)
-            )
-            ContentColorSelection(colorPresetState = colorPresetState)
-        }
-    )
+        )
+    }
 }

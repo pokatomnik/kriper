@@ -1,11 +1,13 @@
 package com.github.pokatomnik.kriper.screens.settings
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -28,6 +30,11 @@ fun LegalWarningButton() {
     }
     if (dialogOpen.value) {
         AlertDialog(
+            modifier = Modifier.border(
+                width = 2.dp,
+                color = MaterialTheme.colors.primary,
+                shape = MaterialTheme.shapes.small
+            ),
             onDismissRequest = hideDialog,
             title = { Text("О приложении") },
             text = {

@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.ext.Subscriber
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
+import com.github.pokatomnik.kriper.screens.addbookmark.AddBookmark
 import com.github.pokatomnik.kriper.screens.allstoriesbyauthor.AllStoriesByAuthor
 import com.github.pokatomnik.kriper.screens.alltags.AllTags
 import com.github.pokatomnik.kriper.screens.favoritestories.FavoriteStories
@@ -18,6 +19,7 @@ import com.github.pokatomnik.kriper.screens.gallery.Gallery
 import com.github.pokatomnik.kriper.screens.galleryimage.GalleryImage
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
+import com.github.pokatomnik.kriper.screens.listbookmarks.ListBookmarks
 import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.selections.*
 import com.github.pokatomnik.kriper.screens.settings.Settings
@@ -92,7 +94,8 @@ fun AppComposable(
                                         onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
-                                        onNavigateToRandom = onNavigateToRandom
+                                        onNavigateToRandom = onNavigateToRandom,
+                                        onNavigateToBookmarks = { navigation.listAllBookmarksRoute.navigate() }
                                     )
                                 }
                             }
@@ -144,6 +147,7 @@ fun AppComposable(
                                 navigation.storyRoute.Params { storyId ->
                                     Story(
                                         storyId = storyId,
+                                        bookmarkScrollPosition = null,
                                         onNavigateToTag = { tag ->
                                             navigation.storiesOfTagRoute.navigate(tag)
                                         },
@@ -158,6 +162,50 @@ fun AppComposable(
                                         },
                                         onNavigateToAuthor = { authorRealName ->
                                             navigation.allStoriesRouteByAuthor.navigate(authorRealName)
+                                        },
+                                        onNavigateToAddBookmark = { scrollPosition ->
+                                            navigation.addBookmarkRoute.navigate(
+                                                storyId,
+                                                scrollPosition.toString()
+                                            )
+                                        },
+                                        onNavigateToAllBookmarksOfStory = {
+                                            navigation.listStoryBookmarksRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.storyWithScrollRoute.route,
+                                keepScreenOn = true
+                            ) {
+                                navigation.storyWithScrollRoute.Params { storyId, scrollPosition ->
+                                    Story(
+                                        storyId = storyId,
+                                        bookmarkScrollPosition = scrollPosition.toInt(),
+                                        onNavigateToTag = { tag ->
+                                            navigation.storiesOfTagRoute.navigate(tag)
+                                        },
+                                        onNavigateToPrevious = { navigation.navigateBack() },
+                                        onNavigateToRandom = onNavigateToRandom,
+                                        onNavigateToSearch = { navigation.searchRoute.navigate() },
+                                        onNavigateToGallery = {
+                                            navigation.storyGalleryRoute.navigate(storyId)
+                                        },
+                                        onNavigateToVideo = { videoURL ->
+                                            navigation.videoRoute.navigate(videoURL)
+                                        },
+                                        onNavigateToAuthor = { authorRealName ->
+                                            navigation.allStoriesRouteByAuthor.navigate(authorRealName)
+                                        },
+                                        onNavigateToAddBookmark = { newScrollPosition ->
+                                            navigation.addBookmarkRoute.navigate(
+                                                storyId,
+                                                newScrollPosition.toString()
+                                            )
+                                        },
+                                        onNavigateToAllBookmarksOfStory = {
+                                            navigation.listStoryBookmarksRoute.navigate(storyId)
                                         }
                                     )
                                 }
@@ -405,6 +453,49 @@ fun AppComposable(
                             ) {
                                 navigation.videoRoute.Params { videoURL ->
                                     Video(videoURL = videoURL)
+                                }
+                            }
+                            screen(
+                                route = navigation.addBookmarkRoute.route,
+                            ) {
+                                navigation.addBookmarkRoute.Params { storyId, scrollPosition ->
+                                    AddBookmark(
+                                        storyId = storyId,
+                                        scrollPosition = scrollPosition.toInt(),
+                                        onNavigateBack = { navigation.navigateBack() }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.listStoryBookmarksRoute.route,
+                            ) {
+                                navigation.listStoryBookmarksRoute.Params { storyId ->
+                                    ListBookmarks(
+                                        storyId = storyId,
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryWithScrollPosition = { newStoryId, scrollPosition ->
+                                            navigation.storyWithScrollRoute.navigate(
+                                                newStoryId,
+                                                scrollPosition.toString()
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.listAllBookmarksRoute.route,
+                            ) {
+                                navigation.listAllBookmarksRoute.Params {
+                                    ListBookmarks(
+                                        storyId = null,
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryWithScrollPosition = { storyId, scrollPosition ->
+                                            navigation.storyWithScrollRoute.navigate(
+                                                storyId,
+                                                scrollPosition.toString()
+                                            )
+                                        }
+                                    )
                                 }
                             }
                         }
