@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.domain.PageMeta
+import com.github.pokatomnik.kriper.ext.uppercaseFirst
+import com.github.pokatomnik.kriper.services.KRIPER_DOMAIN
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
@@ -26,10 +29,10 @@ fun ShareStoryControls(
             indexService.content.getPageMetaByStoryId(storyId)?.let { pageMeta ->
                 val shareIntent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, "История с Kriper.net")
+                    putExtra(Intent.EXTRA_SUBJECT, "История с ${KRIPER_DOMAIN.uppercaseFirst()}")
                     putExtra(
                         Intent.EXTRA_TEXT,
-                        "${pageMeta.title}\n\n${pageMeta.webpageURL}"
+                        "${pageMeta.title}\n\n${pageMeta.getShareURL()}"
                     )
                 }
                 context.startActivity(Intent.createChooser(shareIntent, "Где поделиться"))
@@ -63,4 +66,8 @@ fun ShareStoryControls(
             }
         }
     }
+}
+
+private fun PageMeta.getShareURL(): String {
+    return "https://$KRIPER_DOMAIN/index.php?newsid=${this.storyId}"
 }

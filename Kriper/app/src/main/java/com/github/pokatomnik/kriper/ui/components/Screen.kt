@@ -3,7 +3,6 @@ package com.github.pokatomnik.kriper.ui.components
 import android.app.Activity
 import android.view.WindowManager
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +35,7 @@ internal fun NavGraphBuilder.screen(
                     }
                 }
             }
+
             content(navBackStackEntry)
         },
     )

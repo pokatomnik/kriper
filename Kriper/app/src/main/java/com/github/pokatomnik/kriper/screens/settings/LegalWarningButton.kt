@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.github.pokatomnik.kriper.services.KRIPER_DOMAIN
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
 
 @Composable
@@ -31,13 +32,13 @@ fun LegalWarningButton() {
             title = { Text("О приложении") },
             text = {
                 Text(
-                    text = "Kriper - приложение с открытым исходным кодом для чтения историй с сайта https://kriper.net. " +
+                    text = "Kriper - приложение с открытым исходным кодом для чтения историй с сайта https://$KRIPER_DOMAIN. " +
                             "Авторство всех историй, имеющихся в данном приложении принадлежит только " +
                             "их создателям. Все совпадения с реальными личностями, местами, верованиями и " +
-                            "исповеданиями случайны. Ни вебсайт https://kriper.net, ни данное приложение " +
+                            "исповеданиями случайны. Ни вебсайт https://$KRIPER_DOMAIN, ни данное приложение " +
                             "не несет ответственности за возможный ущерб, нанесенный любым образом, " +
                             "будь то материальный или моральный. Приложение не отображает иного контента, " +
-                            "кроме того который есть в публичном доступе на сайте https://kriper.net.",
+                            "кроме того который есть в публичном доступе на сайте https://$KRIPER_DOMAIN.",
                     textAlign = TextAlign.Justify
                 )
             },

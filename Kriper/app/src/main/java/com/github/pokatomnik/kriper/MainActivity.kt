@@ -1,8 +1,11 @@
 package com.github.pokatomnik.kriper
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.github.pokatomnik.kriper.ext.PubSub
 import com.github.pokatomnik.kriper.services.copyrightblock.CopyrightBlock
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.theme.KriperTheme
@@ -15,16 +18,40 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var block: CopyrightBlock
 
+    private var storyIdHolder: StoryIdHolder? = null
+
+    private val storyIdPubSub = PubSub<String?>()
+
+    private fun Uri?.getStoryId(): String? {
+        return this?.getQueryParameter("newsid")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val storyIdHolder = storyIdHolder ?: StoryIdHolder(
+            storyId = intent.data.getStoryId()
+        ).apply { storyIdHolder = this }
+
         block.tryInit()
         setContent {
             KriperTheme {
                 IndexServiceReadiness(
-                    done = { AppComposable() },
+                    done = {
+                        AppComposable(
+                            storyIdHolder = storyIdHolder,
+                            storyIdSubscriber = storyIdPubSub,
+                        )
+                    },
                     wip = { SplashScreen() }
                 )
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        storyIdPubSub.publish(intent?.data.getStoryId())
     }
 }
