@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import com.github.pokatomnik.kriper.ext.Subscriber
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
 import com.github.pokatomnik.kriper.screens.addbookmark.AddBookmark
 import com.github.pokatomnik.kriper.screens.allstoriesbyauthor.AllStoriesByAuthor
@@ -33,10 +36,25 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppComposable() {
+fun AppComposable(
+    storyIdHolder: StoryIdHolder,
+    storyIdSubscriber: Subscriber<String?>
+) {
     IndexServiceReadiness { indexService ->
         val navigation = rememberNavigation()
         val scaffoldState = rememberScaffoldState()
+
+        storyIdHolder.once { storyId ->
+            navigation.storyRoute.navigate(storyId)
+        }
+
+        DisposableEffect(storyIdSubscriber) {
+            val subscription = storyIdSubscriber.subscribe { storyId ->
+                storyId?.let { navigation.storyRoute.navigate(it) }
+            }
+            onDispose { subscription.unsubscribe() }
+        }
+
         CompositionLocalProvider(LocalScaffoldState provides scaffoldState) {
             Scaffold(
                 scaffoldState = scaffoldState,
@@ -74,10 +92,10 @@ fun AppComposable() {
                                         onNavigateToAllTheTimeTop = { navigation.allTheTimeTopRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
                                         onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
-                                        onNavigateToBookmarks = { navigation.listAllBookmarksRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
-                                        onNavigateToRandom = onNavigateToRandom
+                                        onNavigateToRandom = onNavigateToRandom,
+                                        onNavigateToBookmarks = { navigation.listAllBookmarksRoute.navigate() }
                                     )
                                 }
                             }
@@ -485,6 +503,18 @@ fun AppComposable() {
                 },
                 bottomBar = { KriperBottomNavigation(navigation = navigation) }
             )
+        }
+    }
+}
+
+data class StoryIdHolder(val storyId: String?) {
+    private var called = false
+    @Composable
+    fun once(fn: (storyId: String) -> Unit) {
+        if (called || storyId == null) return
+        LaunchedEffect(Unit) {
+            fn(storyId)
+            called = true
         }
     }
 }

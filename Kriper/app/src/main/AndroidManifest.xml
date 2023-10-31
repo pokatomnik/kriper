@@ -18,11 +18,78 @@
             android:name=".MainActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout"
+            android:allowEmbedded="false"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.Kriper">
+
+            <!-- Main application -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Handle story by id, https -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="kriper.net" android:pathPrefix="/index.php" android:scheme="https" />
+            </intent-filter>
+
+            <!-- Handle story by id, http -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="kriper.net" android:pathPrefix="/index.php" android:scheme="http" />
+            </intent-filter>
+
+            <!-- Handle story by id, https, with www prefix -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.kriper.net" android:pathPrefix="/index.php" android:scheme="https" />
+            </intent-filter>
+
+            <!-- Handle story by id, http, with www prefix -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.kriper.net" android:pathPrefix="/index.php" android:scheme="http" />
+            </intent-filter>
+
+            <!-- Handle story by title, https -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="kriper.net" android:pathPrefix="/creepystory" android:scheme="https" />
+            </intent-filter>
+
+            <!-- Handle story by title, http -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="kriper.net" android:pathPrefix="/creepystory" android:scheme="http" />
+            </intent-filter>
+
+            <!-- Handle story by title, https, with www prefix -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.kriper.net" android:pathPrefix="/creepystory" android:scheme="https" />
+            </intent-filter>
+
+            <!-- Handle story by title, http, with www prefix -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.kriper.net" android:pathPrefix="/creepystory" android:scheme="http" />
             </intent-filter>
 
             <meta-data

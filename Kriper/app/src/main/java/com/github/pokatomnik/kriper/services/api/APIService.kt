@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper.services.api
 
+import com.github.pokatomnik.kriper.services.KRIPER_DOMAIN
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +16,7 @@ class APIService {
 
     private val retrofit: Retrofit = Retrofit
         .Builder()
-        .baseUrl("https://kriper.net/")
+        .baseUrl("https://$KRIPER_DOMAIN/")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
