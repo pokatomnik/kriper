@@ -1,5 +1,6 @@
 package com.github.pokatomnik.kriper
 
+import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.github.pokatomnik.kriper.ext.Subscriber
 import com.github.pokatomnik.kriper.navigation.rememberNavigation
@@ -33,24 +35,37 @@ import com.github.pokatomnik.kriper.ui.components.screen
 import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppComposable(
-    storyIdHolder: StoryIdHolder,
-    storyIdSubscriber: Subscriber<String?>
+    deeplinkHolder: DeeplinkHolder,
+    deeplinkSubscriber: Subscriber<Uri?>
 ) {
     IndexServiceReadiness { indexService ->
+        val scope = rememberCoroutineScope()
         val navigation = rememberNavigation()
         val scaffoldState = rememberScaffoldState()
 
-        storyIdHolder.once { storyId ->
-            navigation.storyRoute.navigate(storyId)
+        val tryOpenStory: (uri: Uri) -> Unit = { uri ->
+            val storyId = uri.getStoryId()
+            if (storyId == null) scope.launch {
+                indexService.content.findStoryByPathMatch(uri)?.let { pageMeta ->
+                    navigation.storyRoute.navigate(pageMeta.storyId)
+                }
+            } else {
+                navigation.storyRoute.navigate(storyId)
+            }
         }
 
-        DisposableEffect(storyIdSubscriber) {
-            val subscription = storyIdSubscriber.subscribe { storyId ->
-                storyId?.let { navigation.storyRoute.navigate(it) }
+        deeplinkHolder.Once { uri ->
+            tryOpenStory(uri)
+        }
+
+        DisposableEffect(deeplinkSubscriber) {
+            val subscription = deeplinkSubscriber.subscribe { uri ->
+                uri?.let { tryOpenStory(uri) }
             }
             onDispose { subscription.unsubscribe() }
         }
@@ -507,14 +522,18 @@ fun AppComposable(
     }
 }
 
-data class StoryIdHolder(val storyId: String?) {
+data class DeeplinkHolder(val initialDeeplink: Uri?) {
     private var called = false
     @Composable
-    fun once(fn: (storyId: String) -> Unit) {
-        if (called || storyId == null) return
+    fun Once(fn: (deeplink: Uri) -> Unit) {
+        if (called || initialDeeplink == null) return
         LaunchedEffect(Unit) {
-            fn(storyId)
+            fn(initialDeeplink)
             called = true
         }
     }
+}
+
+private fun Uri.getStoryId(): String? {
+    return this.getQueryParameter("newsid")
 }

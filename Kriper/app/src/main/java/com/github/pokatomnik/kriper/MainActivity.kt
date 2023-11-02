@@ -18,20 +18,16 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var block: CopyrightBlock
 
-    private var storyIdHolder: StoryIdHolder? = null
+    private var deeplinkHolder: DeeplinkHolder? = null
 
-    private val storyIdPubSub = PubSub<String?>()
-
-    private fun Uri?.getStoryId(): String? {
-        return this?.getQueryParameter("newsid")
-    }
+    private val deeplinkPubSub = PubSub<Uri?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val storyIdHolder = storyIdHolder ?: StoryIdHolder(
-            storyId = intent.data.getStoryId()
-        ).apply { storyIdHolder = this }
+        val storyIdHolder = deeplinkHolder ?: DeeplinkHolder(
+            initialDeeplink = intent.data
+        ).apply { deeplinkHolder = this }
 
         block.tryInit()
         setContent {
@@ -39,8 +35,8 @@ class MainActivity : ComponentActivity() {
                 IndexServiceReadiness(
                     done = {
                         AppComposable(
-                            storyIdHolder = storyIdHolder,
-                            storyIdSubscriber = storyIdPubSub,
+                            deeplinkHolder = storyIdHolder,
+                            deeplinkSubscriber = deeplinkPubSub,
                         )
                     },
                     wip = { SplashScreen() }
@@ -52,6 +48,6 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
-        storyIdPubSub.publish(intent?.data.getStoryId())
+        deeplinkPubSub.publish(intent?.data)
     }
 }
