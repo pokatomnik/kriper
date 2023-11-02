@@ -1,6 +1,7 @@
 package com.github.pokatomnik.kriper.services.index
 
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.domain.Tag
@@ -94,6 +95,13 @@ class Content(
                 ""
             }
         }
+
+    suspend fun findStoryByPathMatch(uri: Uri) = withContext(Dispatchers.Main + SupervisorJob()) {
+        index.pageMeta.values.find { currentPageMeta ->
+            val currentURI = Uri.parse(currentPageMeta.webpageURL)
+            currentURI.path == uri.path
+        }
+    }
 
     /**
      * It seems there are too many authors to precompute all author-to-stories
