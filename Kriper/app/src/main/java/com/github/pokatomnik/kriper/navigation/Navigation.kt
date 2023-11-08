@@ -177,7 +177,7 @@ data class Navigation(
         private val SCROLL_POSITION_KEY = "SCROLL_POSITION_KEY"
 
         override fun navigate(storyId: String, scrollPosition: String) {
-            navController.navigateAllowSame("/story/$storyId/$scrollPosition")
+            navController.navigateAllowSame("/story/$storyId/scroll/$scrollPosition")
         }
 
         @Composable
@@ -191,7 +191,7 @@ data class Navigation(
         }
 
         override val route: String
-            get() = "/story/{$STORY_ID_KEY}/{$SCROLL_POSITION_KEY}"
+            get() = "/story/{$STORY_ID_KEY}/scroll/{$SCROLL_POSITION_KEY}"
     }
 
     val storyGalleryRoute = object : RouteSingleParameter {
