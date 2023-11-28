@@ -132,7 +132,11 @@ class Content(
      * Only "valuable" chars are used for searching: cyrillic and latin alphabet and numbers.
      * Search is case insensitive.
      */
-    val search = object : suspend (String) -> SearchResults {
+    val search = object : suspend (String, Boolean) -> SearchResults {
+        private val quickSearchResults = mutableMapOf<String, SearchResults>()
+
+        private val fullTextSearchResults = mutableMapOf<String, SearchResults>()
+
         private val replacements = mapOf('ё' to 'е')
 
         private fun String.applyReplacements(): String {
@@ -141,13 +145,23 @@ class Content(
             }
         }
 
-        private fun matchSearchStr(searchItem: String, sample: String): Boolean {
-            return searchItem.applyReplacements().lowercase().contains(sample.applyReplacements())
+        private fun matchSearchStr(
+            textContent: String,
+            sample: String,
+            applyReplacements: Boolean
+        ): Boolean {
+            val actualContent = if (applyReplacements) textContent.applyReplacements() else textContent
+            val actualSample = if (applyReplacements) sample.applyReplacements() else sample
+            return actualContent.lowercase().contains(actualSample)
         }
 
-        override suspend fun invoke(rawSearchString: String): SearchResults {
-            return withContext(Dispatchers.Default + SupervisorJob()) {
+        override suspend fun invoke(rawSearchString: String, searchInContent: Boolean): SearchResults {
+            return withContext(Dispatchers.IO + SupervisorJob()) {
                 val searchStringLower = rawSearchString.trim().lowercase()
+
+                val selectedMemoizedResultsMap = if (searchInContent) fullTextSearchResults else quickSearchResults
+                val resultsFound = selectedMemoizedResultsMap[searchStringLower]
+                if (resultsFound != null) return@withContext resultsFound
 
                 val tagGroupsFound = mutableMapOf<String, TagGroup>()
                 val tagContentItemsFound = mutableMapOf<String, TagContents>()
@@ -156,13 +170,13 @@ class Content(
                 // Go through tags and tag groups, checking all names
                 for (currentTagGroupName in groupNames) {
                     val currentTagGroup = getTagGroupByName(currentTagGroupName)
-                    if (matchSearchStr(currentTagGroupName, searchStringLower)) {
+                    if (matchSearchStr(currentTagGroupName, searchStringLower, applyReplacements = true)) {
                         tagGroupsFound[currentTagGroupName] = currentTagGroup
                     }
 
                     for (currentTagName in currentTagGroup.tagNames) {
                         val currentTag = currentTagGroup.getTagContentsByName(currentTagName)
-                        if (matchSearchStr(currentTagName, searchStringLower)) {
+                        if (matchSearchStr(currentTagName, searchStringLower, applyReplacements = true)) {
                             tagContentItemsFound[currentTagName] = currentTag
                         }
                     }
@@ -170,16 +184,33 @@ class Content(
 
                 // Go through all page meta, check story titles, author names
                 for (currentPageMeta in index.pageMeta.values) {
-                    val titleMatch = matchSearchStr(currentPageMeta.title, searchStringLower)
+                    val titleMatch = matchSearchStr(currentPageMeta.title, searchStringLower, applyReplacements = true)
                     val authorNicknameMatch = matchSearchStr(
-                        currentPageMeta.authorNickname,
-                        searchStringLower
+                        textContent = currentPageMeta.authorNickname,
+                        sample = searchStringLower,
+                        applyReplacements = true
                     )
                     val authorRealNameMatch = currentPageMeta.authorRealName?.let {
-                        matchSearchStr(it, searchStringLower)
+                        matchSearchStr(
+                            textContent = it,
+                            sample = searchStringLower,
+                            applyReplacements = true,
+                        )
                     } ?: false
 
                     if (titleMatch || authorNicknameMatch || authorRealNameMatch) {
+                        pageMetaFound[currentPageMeta.storyId] = currentPageMeta
+                        continue
+                    }
+                    if (!searchInContent) continue
+
+                    val currentContent = getStoryMarkDownByStoryId(currentPageMeta.storyId)
+                    val contentMatch = matchSearchStr(
+                        textContent = currentContent,
+                        sample = searchStringLower,
+                        applyReplacements = false
+                    )
+                    if (contentMatch) {
                         pageMetaFound[currentPageMeta.storyId] = currentPageMeta
                     }
                 }
@@ -200,11 +231,15 @@ class Content(
                     )
                 }
 
-                SearchResults(
+                val searchResults = SearchResults(
                     tagGroups = tagGroups,
                     tagContentItems = tagContentItems,
                     pageMeta = pageMeta
                 )
+
+                selectedMemoizedResultsMap[searchStringLower] = searchResults
+
+                return@withContext searchResults
             }
         }
 
