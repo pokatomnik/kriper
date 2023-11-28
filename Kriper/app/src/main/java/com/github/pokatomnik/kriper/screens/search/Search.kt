@@ -53,7 +53,9 @@ fun Search(
     onNavigateToStoryById: (storyId: String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val searchStringState = rememberPreferences().searchPreferences.let {
+    val searchPreferences = rememberPreferences().searchPreferences
+    val (fullTextSearch) = searchPreferences.fullTextSearch.collectPreferFullTextSearchAsState()
+    val searchStringState = searchPreferences.let {
         remember {
             mutableStateOf(
                 TextFieldValue(
@@ -97,7 +99,7 @@ fun Search(
             if (strToSearch.isEmpty()) return
             searchingState.value = true
             coroutineScope.launch {
-                val searchResults = indexService.content.search(strToSearch)
+                val searchResults = indexService.content.search(strToSearch, fullTextSearch)
                 searchResultsState.value = searchResults
                 searchingState.value = false
                 pagerState.animateScrollToPage(
@@ -115,7 +117,7 @@ fun Search(
             }
             searchingState.value = true
             coroutineScope.launch {
-                val searchResults = indexService.content.search(strToSearch)
+                val searchResults = indexService.content.search(strToSearch, fullTextSearch)
                 searchResultsState.value = searchResults
                 searchingState.value = false
 

@@ -24,5 +24,7 @@ class Preferences(private val context: Context) {
         getPreferencesByName("SORTING_PREFERENCES")
     )
 
-    val searchPreferences = SearchPreferences()
+    val searchPreferences = SearchPreferences(
+        getPreferencesByName("SEARCH_PREFERENCES")
+    )
 }

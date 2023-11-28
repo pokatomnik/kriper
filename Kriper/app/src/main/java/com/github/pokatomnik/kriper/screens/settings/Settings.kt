@@ -53,6 +53,8 @@ fun Settings(
             )
             HideReadStoriesSection()
             SectionDivider()
+            SearchPreferencesSection()
+            SectionDivider()
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
