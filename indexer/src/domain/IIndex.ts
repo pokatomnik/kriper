@@ -6,5 +6,6 @@ export interface IIndex {
   readonly pageMeta: { [storyId: string]: IPageMeta };
   readonly tagsMap: ITagsGroupMap;
   readonly top: ITop;
+  readonly ny2024: ReadonlyArray<string>;
   readonly dateCreatedISO: string;
 }

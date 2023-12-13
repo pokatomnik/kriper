@@ -15,6 +15,7 @@ import { PageMetaClient } from "./services/pagemeta-client/PageMetaClient.ts";
 import { IndexSaver } from "./services/storage/IndexSaver.ts";
 import { ConsoleLogger } from "./services/logger/ConsoleLogger.ts";
 import { ITop } from "./domain/ITop.ts";
+import { NY2024StoriesClient } from "./services/ny2024-stories-client/NY2024StoriesClient.ts";
 
 export class App {
   public constructor(
@@ -29,9 +30,27 @@ export class App {
       ReadonlyArray<IPageMeta>,
       [ReadonlyArray<IFetchPageParams>]
     >,
+    private readonly ny2024StoriesClient: IClient<ReadonlyArray<string>, []>,
     private readonly indexSaver: IAsyncStorage<string, IIndex>,
     private readonly logger: ILogger
   ) {}
+
+  private async getNY2024Stories(): Promise<ReadonlyArray<string>> {
+    let ny2024Stories: ReadonlyArray<string> = [];
+    this.logger.info("Start fetching NY2024 story ids...");
+    try {
+      ny2024Stories = await this.ny2024StoriesClient.get();
+    } catch (e) {
+      const defaultError = new Error("Failed to fetch New Year 2024 stories");
+      const error = e instanceof Error ? e : defaultError;
+      this.logger.error(error.message);
+      Deno.exit(1);
+    }
+    this.logger.info(
+      `Finished fetching NY2024 story ids. Ids found: ${ny2024Stories.length}`
+    );
+    return ny2024Stories;
+  }
 
   private async getTop(): Promise<ITop> {
     let top: ITop;
@@ -126,6 +145,7 @@ export class App {
   }
 
   public async start() {
+    const ny2024StoryIds = await this.getNY2024Stories();
     const top = await this.getTop();
     const tagsGroupMap = await this.getTagsGroupMap();
     const pagination = await this.getPagination();
@@ -154,6 +174,7 @@ export class App {
       tagsMap: tagsGroupMap,
       pageMeta: pageMetaIndex,
       top: top,
+      ny2024: ny2024StoryIds,
       dateCreatedISO: new Date().toISOString(),
     };
 
@@ -169,6 +190,7 @@ provide(App, [
   PagnationClient,
   PageListClient,
   PageMetaClient,
+  NY2024StoriesClient,
   IndexSaver,
   ConsoleLogger,
 ]);
