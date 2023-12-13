@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FiberNew
 import androidx.compose.material.icons.filled.HistoryEdu
+import androidx.compose.material.icons.filled.Park
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import com.github.pokatomnik.kriper.ui.theme.isLocalAppDarkThemeEnabled
 
 @Composable
 fun SelectionsBlock(
+    onNavigateToNY2024Stories: () -> Unit,
     onNavigateToAllStories: () -> Unit,
     onNavigateToNewStories: () -> Unit,
     onNavigateToShortStories: () -> Unit,
@@ -58,6 +60,21 @@ fun SelectionsBlock(
                 .fillMaxWidth()
                 .horizontalScroll(rememberScrollState())
         ) {
+            Spacer(
+                modifier = Modifier.width(SMALL_PADDING.dp)
+            )
+            IconicCardSmall(
+                icon = Icons.Filled.Park,
+                title = "Новый год",
+                backgroundTile = ImageBitmap.imageResource(
+                    if (isLocalAppDarkThemeEnabled()) {
+                        R.drawable.pattern_ny2024_dark
+                    } else {
+                        R.drawable.pattern_ny2024_light
+                    }
+                ),
+                onClick = onNavigateToNY2024Stories
+            )
             Spacer(
                 modifier = Modifier.width(SMALL_PADDING.dp)
             )

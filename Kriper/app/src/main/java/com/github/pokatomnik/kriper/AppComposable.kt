@@ -106,6 +106,7 @@ fun AppComposable(
                                         onNavigateToYearTop = { navigation.yearTopRoute.navigate() },
                                         onNavigateToAllTheTimeTop = { navigation.allTheTimeTopRoute.navigate() },
                                         onNavigateToNewStories = { navigation.newStoriesRoute.navigate() },
+                                        onNavigateToNY2024Stories = { navigation.ny2024StoriesRoute.navigate() },
                                         onNavigateToReadStories = { navigation.readStoriesRoute.navigate() },
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
@@ -401,6 +402,18 @@ fun AppComposable(
                             ) {
                                 navigation.allTheTimeTopRoute.Params {
                                     AllTheTimeTop(
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { storyId ->
+                                            navigation.storyRoute.navigate(storyId)
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.ny2024StoriesRoute.route
+                            ) {
+                                navigation.ny2024StoriesRoute.Params {
+                                    NY2024Stories(
                                         onNavigateBack = { navigation.navigateBack() },
                                         onNavigateToStoryById = { storyId ->
                                             navigation.storyRoute.navigate(storyId)

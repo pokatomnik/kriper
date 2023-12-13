@@ -21,6 +21,7 @@ fun Home(
     onNavigateToMonthTop: () -> Unit,
     onNavigateToYearTop: () -> Unit,
     onNavigateToAllTheTimeTop: () -> Unit,
+    onNavigateToNY2024Stories: () -> Unit,
     onNavigateToReadStories: () -> Unit,
     onNavigateToBookmarks: () -> Unit,
     onNavigateToHistory: () -> Unit,
@@ -37,6 +38,7 @@ fun Home(
             HeaderBlock()
             HomeHorizontalSpacerSmall()
             SelectionsBlock(
+                onNavigateToNY2024Stories = onNavigateToNY2024Stories,
                 onNavigateToAllStories = onNavigateToAllStories,
                 onNavigateToNewStories = onNavigateToNewStories,
                 onNavigateToShortStories = onNavigateToShortStories,

@@ -3,6 +3,7 @@ package com.github.pokatomnik.kriper.services.index
 import com.github.pokatomnik.kriper.domain.Index
 import com.github.pokatomnik.kriper.domain.Top
 import com.github.pokatomnik.kriper.services.index.builders.getDateCreatedISO
+import com.github.pokatomnik.kriper.services.index.builders.getNY2024
 import com.github.pokatomnik.kriper.services.index.builders.getPageMetaList
 import com.github.pokatomnik.kriper.services.index.builders.getTagsMap
 import com.github.pokatomnik.kriper.services.index.builders.getTop
@@ -17,11 +18,13 @@ internal fun parseFromString(source: String): Index {
         val tagGroupsMap = getTagsMap(jsonElement)
         val dateCreatedISO = getDateCreatedISO(jsonElement)
         val top = getTop(jsonElement)
+        val ny2024 = getNY2024(jsonElement)
 
         Index(
             pageMeta = pageMeta,
             tagsMap = tagGroupsMap,
             top = top,
+            ny2024 = ny2024,
             dateCreatedISO = dateCreatedISO,
         )
     } catch (e: Exception) {
@@ -34,6 +37,7 @@ internal fun parseFromString(source: String): Index {
                 yearTop = setOf(),
                 allTheTimeTop = setOf(),
             ),
+            ny2024 = setOf(),
             dateCreatedISO = Instant.now(),
         )
     }

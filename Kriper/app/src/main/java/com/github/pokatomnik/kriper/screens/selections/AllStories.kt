@@ -113,3 +113,5 @@ val MonthTop = makeParametrizedSelection("Топ за месяц") { it.monthTop
 val YearTop = makeParametrizedSelection("Топ за год") { it.yearTop }
 
 val AllTheTimeTop = makeParametrizedSelection("Топ за все время") { it.allTheTimeTop }
+
+val NY2024Stories = makeParametrizedSelection("Новый год") { it.ny2024Stories }

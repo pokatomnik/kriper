@@ -32,6 +32,12 @@ class Index(
     val top: Top,
 
     /**
+     * New Year 2024 story ids. New year stories.
+     * TODO: remove after holidays
+     */
+    val ny2024: Set<String>,
+
+    /**
      * When the dump created
      */
     val dateCreatedISO: Instant,

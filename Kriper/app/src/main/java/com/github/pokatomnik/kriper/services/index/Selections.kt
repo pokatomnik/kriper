@@ -85,4 +85,12 @@ data class Selections(private val index: Index) {
             }
         }
     }
+
+    val ny2024Stories: Collection<PageMeta> by lazy {
+        index.ny2024.fold(mutableListOf()) { acc, currentStoryId ->
+            acc.apply {
+                index.pageMeta[currentStoryId]?.let(::add)
+            }
+        }
+    }
 }
