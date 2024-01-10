@@ -85,4 +85,32 @@ data class Selections(private val index: Index) {
             }
         }
     }
+
+    /**
+     * year - month - pagemeta list
+     */
+    val yearToMonths: Map<Int, Map<Int, Collection<PageMeta>>> by lazy {
+        val result: MutableMap<Int, MutableMap<Int, MutableCollection<PageMeta>>> = mutableMapOf()
+
+        index.pageMeta.values.forEach { pageMeta ->
+            val year = pageMeta.dateCreated.year
+            val month = pageMeta.dateCreated.month
+
+            val currentMonths = result[year] ?: mutableMapOf()
+
+            val currentPageMetaList = currentMonths[month] ?: mutableListOf()
+
+            currentPageMetaList.add(pageMeta)
+
+            if (currentMonths[month] == null) {
+                currentMonths[month] = currentPageMetaList
+            }
+
+            if (result[year] == null) {
+                result[year] = currentMonths
+            }
+        }
+
+        result
+    }
 }

@@ -26,6 +26,7 @@ fun Home(
     onNavigateToHistory: () -> Unit,
     onNavigateToFavoriteStories: () -> Unit,
     onNavigateToRandom: () -> Any,
+    onNavigateToYear: (year: Int) -> Unit,
 ) {
     PageContainer {
         Column(
@@ -51,6 +52,16 @@ fun Home(
                 onNavigateToAllTheTimeTop = onNavigateToAllTheTimeTop,
             )
             HomeHorizontalSpacerLarge()
+            YearsBlock(
+                onNavigateToYear = onNavigateToYear
+            )
+            HomeHorizontalSpacerLarge()
+            HierarchyBlock(
+                onNavigateToTagGroups = onNavigateToTagGroups,
+                onNavigateToAllTags = onNavigateToAllTags,
+                onNavigateToRandom = onNavigateToRandom
+            )
+            HomeHorizontalSpacerLarge()
             StatisticsBlock()
             HomeHorizontalSpacerLarge()
             PersonalBlock(
@@ -58,12 +69,6 @@ fun Home(
                 onNavigateToFavoriteStories = onNavigateToFavoriteStories,
                 onNavigateToReadStories = onNavigateToReadStories,
                 onNavigateToBookmarks = onNavigateToBookmarks
-            )
-            HomeHorizontalSpacerLarge()
-            HierarchyBlock(
-                onNavigateToTagGroups = onNavigateToTagGroups,
-                onNavigateToAllTags = onNavigateToAllTags,
-                onNavigateToRandom = onNavigateToRandom
             )
             HomeHorizontalSpacerLarge()
         }
