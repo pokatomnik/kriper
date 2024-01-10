@@ -21,7 +21,7 @@ import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
-private fun makeParametrizedSelection(
+fun makeParametrizedSelection(
     selectionTitle: String,
     getSelection: (Selections) -> Collection<PageMeta>,
 ): @Composable (

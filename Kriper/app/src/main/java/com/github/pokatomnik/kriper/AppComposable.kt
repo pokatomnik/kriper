@@ -22,6 +22,7 @@ import com.github.pokatomnik.kriper.screens.galleryimage.GalleryImage
 import com.github.pokatomnik.kriper.screens.history.History
 import com.github.pokatomnik.kriper.screens.home.Home
 import com.github.pokatomnik.kriper.screens.listbookmarks.ListBookmarks
+import com.github.pokatomnik.kriper.screens.months.Months
 import com.github.pokatomnik.kriper.screens.search.Search
 import com.github.pokatomnik.kriper.screens.selections.*
 import com.github.pokatomnik.kriper.screens.settings.Settings
@@ -110,7 +111,8 @@ fun AppComposable(
                                         onNavigateToHistory = { navigation.historyRoute.navigate() },
                                         onNavigateToFavoriteStories = { navigation.favoriteStoriesRoute.navigate() },
                                         onNavigateToRandom = onNavigateToRandom,
-                                        onNavigateToBookmarks = { navigation.listAllBookmarksRoute.navigate() }
+                                        onNavigateToBookmarks = { navigation.listAllBookmarksRoute.navigate() },
+                                        onNavigateToYear = { year -> navigation.yearRoute.navigate(year.toString()) }
                                     )
                                 }
                             }
@@ -510,6 +512,31 @@ fun AppComposable(
                                                 scrollPosition.toString()
                                             )
                                         }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.yearRoute.route
+                            ) {
+                                navigation.yearRoute.Params { yearString ->
+                                    Months(
+                                        year = yearString.toInt(),
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoriesOfMonth = { month ->
+                                            navigation.yearAndMonthRoute.navigate(yearString, month.toString())
+                                        }
+                                    )
+                                }
+                            }
+                            screen(
+                                route = navigation.yearAndMonthRoute.route
+                            ) {
+                                navigation.yearAndMonthRoute.Params { yearString, monthString ->
+                                    StoriesByYearAndMonth(
+                                        year = yearString.toInt(),
+                                        month = monthString.toInt(),
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToStoryById = { navigation.storyRoute.navigate(it) }
                                     )
                                 }
                             }

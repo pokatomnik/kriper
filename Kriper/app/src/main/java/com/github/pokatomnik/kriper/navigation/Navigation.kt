@@ -562,6 +562,63 @@ data class Navigation(
             get() = routePath
     }
 
+    val yearRoute = object : RouteSingleParameter {
+        private val YEAR_KEY = "YEAR_KEY"
+
+        override fun navigate(year: String) {
+            val serializedYear = serializer.serialize(year)
+            navController.navigateDistinct("/selections/period/$serializedYear")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (serializedYear: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val year = arguments
+                ?.getString(YEAR_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            year?.let { content(it) }
+        }
+
+        override val route: String
+            get() = "/selections/period/{$YEAR_KEY}"
+    }
+
+    val yearAndMonthRoute = object : RouteTwoParameters {
+        private val YEAR_KEY = "YEAR_KEY"
+
+        private val MONTH_KEY = "MONTH_KEY"
+
+        override fun navigate(year: String, month: String) {
+            val serializedYear = serializer.serialize(year)
+            val serializedMonth = serializer.serialize(month)
+            navController.navigateDistinct("/selections/period/$serializedYear/$serializedMonth")
+        }
+
+        @Composable
+        override fun Params(content: @Composable (serializedYear: String, serializedMonth: String) -> Unit) {
+            val arguments = navController
+                .currentBackStackEntryAsState()
+                .value
+                ?.arguments
+            val year = arguments
+                ?.getString(YEAR_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            val month = arguments
+                ?.getString(MONTH_KEY)
+                ?.let(serializer::parse)
+                ?.let { rememberLastNonNull(it) }
+            if (year != null && month != null) { content(year, month) }
+        }
+
+        override val route: String
+            get() = "/selections/period/{$YEAR_KEY}/{$MONTH_KEY}"
+    }
+
     /**
      * Route for displaying application settings
      */
