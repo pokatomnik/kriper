@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 
@@ -22,7 +23,10 @@ fun StoryTitle(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                style = MaterialTheme.typography.h3,
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.h4.copy(
+                    hyphens = Hyphens.Auto,
+                ),
                 textAlign = TextAlign.Center,
                 text = pageMetaTitle
             )
