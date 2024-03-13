@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  push:
+    branches: ["dungeon-master"]
+  pull_request:
+    branches: ["dungeon-master"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+
+      - name: Run All tests
+        run: cd indexer && deno task test
