@@ -1,4 +1,4 @@
-name: Dump on Github
+name: Dump selfhosted
 
 on:
   workflow_dispatch:
