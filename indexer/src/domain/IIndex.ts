@@ -1,6 +1,6 @@
-import { IPageMeta } from "./IPageMeta.ts";
-import type { ITagsGroupMap } from "./ITagGroupsMap.ts";
-import type { ITop } from "./ITop.ts";
+import type { IPageMeta } from "domain/IPageMeta.ts";
+import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
+import type { ITop } from "domain/ITop.ts";
 
 export interface IIndex {
   readonly pageMeta: { [storyId: string]: IPageMeta };

@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class AuthorRealNameParser implements IParser<string | null> {
   private static readonly AUTHOR_REALNAME_WRAPPER_SELECTOR =
     "div.card-body.mt-2 a";
@@ -42,5 +43,3 @@ export class AuthorRealNameParser implements IParser<string | null> {
     return Promise.resolve(realName);
   }
 }
-
-provide(AuthorRealNameParser, [DOMParser]);

@@ -1,10 +1,11 @@
-import type { IParser } from "../lib/IParser.ts";
-import type { ITagsGroupMap } from "../../domain/ITagGroupsMap.ts";
-import type { ITag } from "../../domain/ITag.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
-import { provide } from "provide";
+import type { IParser } from "services/lib/IParser.ts";
+import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
+import type { ITag } from "domain/ITag.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { Provide } from "microdi";
 import { Element } from "denodom";
 
+@Provide(DOMParser)
 export class TagsParser implements IParser<ITagsGroupMap> {
   private static readonly CONTENT_SELECTOR = "div.fullstory-width";
 
@@ -78,5 +79,3 @@ export class TagsParser implements IParser<ITagsGroupMap> {
     return Promise.resolve(tagsGroupMap);
   }
 }
-
-provide(TagsParser, [DOMParser]);

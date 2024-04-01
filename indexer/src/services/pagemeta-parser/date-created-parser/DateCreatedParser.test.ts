@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
-import { DateCreatedParser } from "./DateCreatedParser.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { DateCreatedParser } from "services/pagemeta-parser/date-created-parser/DateCreatedParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 import { assertEquals } from "testing";
 
 Deno.test(

@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../lib/TestTools.ts";
-import { PaginationParser } from "./PaginationParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { PaginationParser } from "services/pagination-parser/PaginationParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
 Deno.test(
   {

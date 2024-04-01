@@ -1,6 +1,6 @@
-import { FileReader } from "../../../lib/TestTools.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { GoldParser } from "./GoldParser.ts";
+import { FileReader } from "lib/TestTools.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { GoldParser } from "services/pagemeta-parser/gold-parser/GoldParser.ts";
 import { assertEquals } from "testing";
 
 Deno.test(

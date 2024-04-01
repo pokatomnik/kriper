@@ -1,8 +1,9 @@
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { IURLConfiguration } from "../configuration/IURLConfiguration.ts";
-import { URLConfiguration } from "../configuration/URLConfiguration.ts";
-import { provide } from "provide";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { IURLConfiguration } from "services/configuration/IURLConfiguration.ts";
+import { URLConfiguration } from "services/configuration/URLConfiguration.ts";
+import { Provide } from "microdi";
 
+@Provide(URLConfiguration)
 export class TagsResolver implements IURLResolver<[]> {
   public constructor(private readonly urlConfiguration: IURLConfiguration) {}
 
@@ -10,5 +11,3 @@ export class TagsResolver implements IURLResolver<[]> {
     return `${this.urlConfiguration.originURL}/tags.html`;
   }
 }
-
-provide(TagsResolver, [URLConfiguration]);

@@ -1,4 +1,4 @@
-import { TopTypeResolver } from "./TopTypeResolver.ts";
+import { TopTypeResolver } from "services/top-type-resolver/TopTypeResolver.ts";
 import { assertEquals } from "testing";
 
 Deno.test("Test TopTypeResolver - week top", () => {

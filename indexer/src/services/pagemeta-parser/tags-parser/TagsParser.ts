@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class TagsParser implements IParser<ReadonlyArray<string>> {
   private static readonly TAGS_WRAPPER_SELECTOR = "span.fullstorytags";
 
@@ -34,5 +35,3 @@ export class TagsParser implements IParser<ReadonlyArray<string>> {
     return Promise.resolve(tags);
   }
 }
-
-provide(TagsParser, [DOMParser]);

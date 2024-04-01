@@ -1,13 +1,14 @@
-import type { IClient } from "../lib/IClient.ts";
-import type { ITagsGroupMap } from "../../domain/ITagGroupsMap.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { IHTMLClient } from "../network/IHTMLClient.ts";
-import type { IParser } from "../lib/IParser.ts";
-import { TagsResolver } from "../tags-resolver/TagsResolver.ts";
-import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
-import { TagsParser } from "../tags-parser/TagsParser.ts";
-import { provide } from "provide";
+import type { IClient } from "services/lib/IClient.ts";
+import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { TagsResolver } from "services/tags-resolver/TagsResolver.ts";
+import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
+import { TagsParser } from "services/tags-parser/TagsParser.ts";
+import { Provide } from "microdi";
 
+@Provide(TagsResolver, RetrierHTMLClient, TagsParser)
 export class TagsClient implements IClient<ITagsGroupMap, []> {
   public constructor(
     private readonly tagsResolver: IURLResolver<[]>,
@@ -23,5 +24,3 @@ export class TagsClient implements IClient<ITagsGroupMap, []> {
     return tagGroups;
   }
 }
-
-provide(TagsClient, [TagsResolver, RetrierHTMLClient, TagsParser]);

@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class VideosParser implements IParser<ReadonlyArray<string>> {
   private static readonly CONTENT_CONTAINER_SELECTOR = "div.card-body.mt-2";
 
@@ -40,5 +41,3 @@ export class VideosParser implements IParser<ReadonlyArray<string>> {
     return Promise.resolve(Array.from(videosSource));
   }
 }
-
-provide(VideosParser, [DOMParser]);

@@ -1,13 +1,14 @@
-import type { IClient } from "../lib/IClient.ts";
-import type { IPagination } from "../lib/IPagination.ts";
-import type { IParser } from "../lib/IParser.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { IHTMLClient } from "../network/IHTMLClient.ts";
-import { provide } from "provide";
-import { PaginationResolver } from "../pagination-resolver/PaginationResolver.ts";
-import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
-import { PaginationParser } from "../pagination-parser/PaginationParser.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { IPagination } from "services/lib/IPagination.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import { Provide } from "microdi";
+import { PaginationResolver } from "services/pagination-resolver/PaginationResolver.ts";
+import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
+import { PaginationParser } from "services/pagination-parser/PaginationParser.ts";
 
+@Provide(PaginationResolver, RetrierHTMLClient, PaginationParser)
 export class PagnationClient implements IClient<IPagination, []> {
   public constructor(
     private readonly resolver: IURLResolver<[number]>,
@@ -23,9 +24,3 @@ export class PagnationClient implements IClient<IPagination, []> {
     return Promise.resolve(pagination);
   }
 }
-
-provide(PagnationClient, [
-  PaginationResolver,
-  RetrierHTMLClient,
-  PaginationParser,
-]);

@@ -1,5 +1,5 @@
-import { isEmpty } from "./IterableUtils.ts";
-import { ValidationResult } from "./ValidationResult.ts";
+import { isEmpty } from "services/top-client/IterableUtils.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
 
 /**
  * Checks if list of arrays has no empty array in the middle or at the end

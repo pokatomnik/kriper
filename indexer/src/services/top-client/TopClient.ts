@@ -1,19 +1,20 @@
-import type { IClient } from "../lib/IClient.ts";
-import type { ITop } from "../../domain/ITop.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { IHTMLClient } from "../network/IHTMLClient.ts";
-import type { IParser } from "../lib/IParser.ts";
-import { TopTypeResolver } from "../top-type-resolver/TopTypeResolver.ts";
-import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
-import { TopIdsParser } from "../top-ids-parser/TopIdsParser.ts";
-import { provide } from "provide";
-import { shuffle } from "./Shuffle.ts";
-import { ValidationResult } from "./ValidationResult.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { ITop } from "domain/ITop.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { TopTypeResolver } from "services/top-type-resolver/TopTypeResolver.ts";
+import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
+import { TopIdsParser } from "services/top-ids-parser/TopIdsParser.ts";
+import { Provide } from "microdi";
+import { shuffle } from "services/top-client/Shuffle.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
 
 type Mutable<Type> = {
   -readonly [Key in keyof Type]: Type[Key];
 };
 
+@Provide(TopTypeResolver, RetrierHTMLClient, TopIdsParser)
 export class TopClient implements IClient<ITop, []> {
   public constructor(
     private readonly topTypeResolver: IURLResolver<[keyof ITop]>,
@@ -73,5 +74,3 @@ export class TopClient implements IClient<ITop, []> {
     return result;
   }
 }
-
-provide(TopClient, [TopTypeResolver, RetrierHTMLClient, TopIdsParser]);

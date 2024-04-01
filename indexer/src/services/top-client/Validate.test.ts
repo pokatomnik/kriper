@@ -1,6 +1,6 @@
 import * as Testing from "testing";
-import { isValid } from "./Validate.ts";
-import { ValidationResult } from "./ValidationResult.ts";
+import { isValid } from "services/top-client/Validate.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
 
 Deno.test("Test empty array", () => {
   const result = isValid([]);

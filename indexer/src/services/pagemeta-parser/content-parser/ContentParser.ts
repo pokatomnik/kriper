@@ -1,8 +1,9 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { HTMLProcessor } from "./HTMLProcessor.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { HTMLProcessor } from "services/pagemeta-parser/content-parser/HTMLProcessor.ts";
 
+@Provide(DOMParser, HTMLProcessor)
 export class ContentParser implements IParser<string> {
   private static readonly CONTENT_CONTAINER_SELECTOR =
     "div.card-body.mt-2 > div";
@@ -41,5 +42,3 @@ export class ContentParser implements IParser<string> {
     return Promise.resolve(content);
   }
 }
-
-provide(ContentParser, [DOMParser, HTMLProcessor]);

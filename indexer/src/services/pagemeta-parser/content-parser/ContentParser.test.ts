@@ -1,7 +1,7 @@
-import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
-import { ContentParser } from "./ContentParser.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { HTMLProcessor } from "./HTMLProcessor.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { ContentParser } from "services/pagemeta-parser/content-parser/ContentParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { HTMLProcessor } from "services/pagemeta-parser/content-parser/HTMLProcessor.ts";
 
 Deno.test(
   {

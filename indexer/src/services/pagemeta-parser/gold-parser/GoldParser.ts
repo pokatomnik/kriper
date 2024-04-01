@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class GoldParser implements IParser<boolean> {
   private static readonly GOLD_MARK_SELECTOR = "span.icon_goldf";
 
@@ -16,5 +17,3 @@ export class GoldParser implements IParser<boolean> {
     return Promise.resolve(Boolean(goldElement));
   }
 }
-
-provide(GoldParser, [DOMParser]);

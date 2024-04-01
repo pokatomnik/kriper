@@ -1,4 +1,4 @@
-import { getURL } from "./URLParser.ts";
+import { getURL } from "services/pagemeta-parser/source-parser/URLParser.ts";
 import { assertEquals } from "testing";
 
 Deno.test("getURL - test correct URL", () => {

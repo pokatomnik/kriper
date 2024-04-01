@@ -1,8 +1,9 @@
-import type { IParser } from "../lib/IParser.ts";
-import type { IPagination } from "../lib/IPagination.ts";
-import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import type { IPagination } from "services/lib/IPagination.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class PaginationParser implements IParser<IPagination> {
   private static readonly PAGNINATION_WRAPPER_SELECTOR = "div.pages";
 
@@ -58,5 +59,3 @@ export class PaginationParser implements IParser<IPagination> {
     });
   }
 }
-
-provide(PaginationParser, [DOMParser]);

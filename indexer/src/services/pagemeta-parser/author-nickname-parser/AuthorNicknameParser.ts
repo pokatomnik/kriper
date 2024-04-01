@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class AuthorNicknameParser implements IParser<string> {
   private static readonly AUTHOR_NICKNAME_WRAPPER_SELECTOR = "i.fa-user ~ a";
 
@@ -29,5 +30,3 @@ export class AuthorNicknameParser implements IParser<string> {
     return Promise.resolve(nickname);
   }
 }
-
-provide(AuthorNicknameParser, [DOMParser]);

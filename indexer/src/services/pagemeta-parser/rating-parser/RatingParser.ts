@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class RatingParser implements IParser<number> {
   private static readonly RATING_BUTTONS_WRAPPER =
     "div.bd-highlight.like span.align-bottom span";
@@ -30,5 +31,3 @@ export class RatingParser implements IParser<number> {
     return Promise.resolve(rating);
   }
 }
-
-provide(RatingParser, [DOMParser]);

@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class NumberOfViewsParser implements IParser<number> {
   private static readonly NUMBER_OF_VIEWS_ELEMENT_SELECTOR =
     "div.card-body.mt-2 > div + div";
@@ -33,5 +34,3 @@ export class NumberOfViewsParser implements IParser<number> {
     return Promise.resolve(Number.parseInt(numberOfViewsStr, 10));
   }
 }
-
-provide(NumberOfViewsParser, [DOMParser]);

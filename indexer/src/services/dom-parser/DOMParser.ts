@@ -4,8 +4,9 @@ import {
   HTMLDocument,
   Node,
 } from "denodom";
-import { provide } from "provide";
+import { Provide } from "microdi";
 
+@Provide()
 export class DOMParser extends DenoDOMParser {
   public querySelectAllElements(
     element: Element | HTMLDocument,
@@ -28,5 +29,3 @@ export class DOMParser extends DenoDOMParser {
     callback(node as Element);
   }
 }
-
-provide(DOMParser, []);

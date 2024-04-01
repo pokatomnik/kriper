@@ -1,4 +1,4 @@
-import type { ITag } from "./ITag.ts";
+import type { ITag } from "domain/ITag.ts";
 
 export interface ITagsGroupMap {
   [groupName: string]: { [tagTitle: string]: ITag };
