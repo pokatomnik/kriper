@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class SeeAlsoParser implements IParser<ReadonlyArray<string>> {
   // TODO Bad selector, try better one
   private static readonly SEEALSO_LINKS_SELECTOR = "div.card-body > li > a";
@@ -28,5 +29,3 @@ export class SeeAlsoParser implements IParser<ReadonlyArray<string>> {
     return Promise.resolve(Array.from(seeAlsoNames));
   }
 }
-
-provide(SeeAlsoParser, [DOMParser]);

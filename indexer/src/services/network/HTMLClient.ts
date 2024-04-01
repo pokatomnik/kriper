@@ -1,10 +1,11 @@
-import type { IHTMLClient } from "./IHTMLClient.ts";
-import type { INetworkConfiguration } from "../configuration/INetworkConfiguration.ts";
-import { provide } from "provide";
-import { NetworkConfiguration } from "../configuration/NetworkConfiguration.ts";
+import { Provide } from "microdi";
+import { NetworkConfiguration } from "services/configuration/NetworkConfiguration.ts";
+import type { INetworkConfiguration } from "services/configuration/INetworkConfiguration.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
 
 type ErrorDetector = (response: Response) => Promise<boolean>;
 
+@Provide(NetworkConfiguration)
 export class HTMLClient implements IHTMLClient {
   private readonly errorDetectors: ReadonlyArray<ErrorDetector> = [
     // Disable, the HTTP code tells nothing about real response quality
@@ -36,5 +37,3 @@ export class HTMLClient implements IHTMLClient {
     return textResponse;
   }
 }
-
-provide(HTMLClient, [NetworkConfiguration]);

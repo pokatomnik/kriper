@@ -1,4 +1,4 @@
-import { ValidationResult } from "./ValidationResult.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
 
 export interface ShuffleResult<T> {
   readonly result: ReadonlyArray<Iterable<T>>;

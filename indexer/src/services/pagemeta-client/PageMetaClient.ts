@@ -1,14 +1,15 @@
-import type { IClient } from "../lib/IClient.ts";
-import type { IFetchPageParams } from "../lib/IFetchPageParams.ts";
-import type { IParser } from "../lib/IParser.ts";
-import type { IHTMLClient } from "../network/IHTMLClient.ts";
-import type { IPageMeta } from "../../domain/IPageMeta.ts";
-import type { ILogger } from "../lib/ILogger.ts";
-import { provide } from "provide";
-import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
-import { PageMetaParser } from "../pagemeta-parser/PageMetaParser.ts";
-import { ConsoleLogger } from "../logger/ConsoleLogger.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import type { IPageMeta } from "domain/IPageMeta.ts";
+import type { ILogger } from "services/lib/ILogger.ts";
+import { Provide } from "microdi";
+import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
+import { PageMetaParser } from "services/pagemeta-parser/PageMetaParser.ts";
+import { ConsoleLogger } from "services/logger/ConsoleLogger.ts";
 
+@Provide(RetrierHTMLClient, PageMetaParser, ConsoleLogger)
 export class PageMetaClient
   implements
     IClient<ReadonlyArray<IPageMeta>, [ReadonlyArray<IFetchPageParams>]>
@@ -62,5 +63,3 @@ export class PageMetaClient
     return pageMetaList;
   }
 }
-
-provide(PageMetaClient, [RetrierHTMLClient, PageMetaParser, ConsoleLogger]);

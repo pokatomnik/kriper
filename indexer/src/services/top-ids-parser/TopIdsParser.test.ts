@@ -1,6 +1,6 @@
-import { FileReader } from "../../lib/TestTools.ts";
-import { TopIdsParser } from "./TopIdsParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { FileReader } from "lib/TestTools.ts";
+import { TopIdsParser } from "services/top-ids-parser/TopIdsParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 import * as Testing from "testing";
 
 Deno.test(

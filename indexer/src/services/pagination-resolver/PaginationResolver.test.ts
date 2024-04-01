@@ -1,4 +1,4 @@
-import { PaginationResolver } from "./PaginationResolver.ts";
+import { PaginationResolver } from "services/pagination-resolver/PaginationResolver.ts";
 import { assertEquals, assertThrows } from "testing";
 
 Deno.test("Test PaginationResolver - first page", () => {

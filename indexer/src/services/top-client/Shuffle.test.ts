@@ -1,6 +1,6 @@
-import { shuffle } from "./Shuffle.ts";
+import { shuffle } from "services/top-client/Shuffle.ts";
 import * as Testing from "testing";
-import { ValidationResult } from "./ValidationResult.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
 
 Deno.test("Test Shuffle - empty list", () => {
   const { result, validation } = shuffle([]);

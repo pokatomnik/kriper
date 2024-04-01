@@ -1,8 +1,9 @@
-import type { IParser } from "../lib/IParser.ts";
-import type { IFetchPageParams } from "../lib/IFetchPageParams.ts";
-import { provide } from "provide";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class OnPageParser implements IParser<Array<IFetchPageParams>> {
   private static readonly PAGE_TITLE_ANCHORS_SELECTOR = "h2.card-title";
 
@@ -34,5 +35,3 @@ export class OnPageParser implements IParser<Array<IFetchPageParams>> {
     return Promise.resolve(Array.from(pageLinks.values()));
   }
 }
-
-provide(OnPageParser, [DOMParser]);

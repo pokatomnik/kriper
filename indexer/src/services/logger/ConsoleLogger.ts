@@ -1,5 +1,5 @@
-import type { ILogger } from "../lib/ILogger.ts";
-import { provide } from "provide";
+import type { ILogger } from "services/lib/ILogger.ts";
+import { Provide } from "microdi";
 
 enum LogType {
   INFO = "INFO",
@@ -7,6 +7,7 @@ enum LogType {
   ERROR = "ERROR",
 }
 
+@Provide()
 export class ConsoleLogger implements ILogger {
   private formatMessage(message: string, logType: LogType): string {
     return `[${new Date().toISOString()}] [${logType}] ${message}`;
@@ -27,5 +28,3 @@ export class ConsoleLogger implements ILogger {
     console.log(formatted, LogType.ERROR);
   }
 }
-
-provide(ConsoleLogger, []);

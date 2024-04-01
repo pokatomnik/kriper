@@ -1,7 +1,8 @@
 import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class ReadingTimeMinutesParser implements IParser<number> {
   private static readonly READING_TIME_ELEMENT_SELECTOR =
     "span.text-muted span i.fa-clock";
@@ -37,5 +38,3 @@ export class ReadingTimeMinutesParser implements IParser<number> {
     return Promise.resolve(Number.parseFloat(numStr));
   }
 }
-
-provide(ReadingTimeMinutesParser, [DOMParser]);

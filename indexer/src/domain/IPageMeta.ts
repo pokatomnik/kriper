@@ -1,4 +1,4 @@
-import type { IUncheckedDate } from "./IUncheckedDate.ts";
+import type { IUncheckedDate } from "domain/IUncheckedDate.ts";
 
 export interface IPageMeta {
   /**

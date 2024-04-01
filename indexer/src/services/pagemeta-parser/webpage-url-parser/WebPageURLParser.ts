@@ -1,7 +1,8 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
+@Provide(DOMParser)
 export class WebPageURLParser implements IParser<string> {
   private static readonly WEBPAGE_URL_LINK_SELECTOR = 'link[rel="canonical"]';
 
@@ -28,5 +29,3 @@ export class WebPageURLParser implements IParser<string> {
     return Promise.resolve(webpageURL);
   }
 }
-
-provide(WebPageURLParser, [DOMParser]);

@@ -1,7 +1,8 @@
-import type { IParser } from "../lib/IParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
-import { provide } from "provide";
+import type { IParser } from "services/lib/IParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { Provide } from "microdi";
 
+@Provide(DOMParser)
 export class TopIdsParser implements IParser<ReadonlySet<string>> {
   private static readonly ITEM_CONTAINERS_SELECTOR =
     ".card.mb-3.mx-auto.card-hover.main-width ol > li";
@@ -31,5 +32,3 @@ export class TopIdsParser implements IParser<ReadonlySet<string>> {
     return Promise.resolve(items);
   }
 }
-
-provide(TopIdsParser, [DOMParser]);

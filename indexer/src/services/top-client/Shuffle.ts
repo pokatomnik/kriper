@@ -1,7 +1,7 @@
-import { isValid } from "./Validate.ts";
-import { ValidationResult } from "./ValidationResult.ts";
-import { len } from "./IterableUtils.ts";
-import { type ShuffleResult } from "./ShuffleResult.ts";
+import { isValid } from "services/top-client/Validate.ts";
+import { ValidationResult } from "services/top-client/ValidationResult.ts";
+import { len } from "services/top-client/IterableUtils.ts";
+import { type ShuffleResult } from "services/top-client/ShuffleResult.ts";
 
 export const shuffle = <T extends unknown>(
   arrays: ReadonlyArray<Iterable<T>>

@@ -1,8 +1,9 @@
-import type { IURLConfiguration } from "../configuration/IURLConfiguration.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import { URLConfiguration } from "../configuration/URLConfiguration.ts";
-import { provide } from "provide";
+import type { IURLConfiguration } from "services/configuration/IURLConfiguration.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import { URLConfiguration } from "services/configuration/URLConfiguration.ts";
+import { Provide } from "microdi";
 
+@Provide(URLConfiguration)
 export class PaginationResolver implements IURLResolver<[number]> {
   public constructor(private readonly urlConfiguration: IURLConfiguration) {}
 
@@ -20,5 +21,3 @@ export class PaginationResolver implements IURLResolver<[number]> {
     return `${origin}/creepystory/page/${pageNumber}/`;
   }
 }
-
-provide(PaginationResolver, [URLConfiguration]);

@@ -1,9 +1,10 @@
-import type { IAsyncStorage } from "../lib/IAsyncStorage.ts";
-import type { IPathConfiguration } from "../configuration/IPathConfiguration.ts";
-import type { IIndex } from "../../domain/IIndex.ts";
-import { provide } from "provide";
-import { PathConfiguration } from "../configuration/PathConfiguration.ts";
+import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
+import type { IPathConfiguration } from "services/configuration/IPathConfiguration.ts";
+import type { IIndex } from "domain/IIndex.ts";
+import { Provide } from "microdi";
+import { PathConfiguration } from "services/configuration/PathConfiguration.ts";
 
+@Provide(PathConfiguration)
 export class IndexSaver implements IAsyncStorage<string, IIndex> {
   public constructor(private readonly pathConfiguration: IPathConfiguration) {}
 
@@ -26,5 +27,3 @@ export class IndexSaver implements IAsyncStorage<string, IIndex> {
     return JSON.parse(jsonAsText);
   }
 }
-
-provide(IndexSaver, [PathConfiguration]);

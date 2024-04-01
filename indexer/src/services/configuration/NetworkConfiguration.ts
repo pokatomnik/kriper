@@ -1,6 +1,7 @@
-import type { INetworkConfiguration } from "./INetworkConfiguration.ts";
-import { provide } from "provide";
+import type { INetworkConfiguration } from "services/configuration/INetworkConfiguration.ts";
+import { Provide } from "microdi";
 
+@Provide()
 export class NetworkConfiguration implements INetworkConfiguration {
   public readonly maxNetworkAttempts = 100;
 
@@ -8,5 +9,3 @@ export class NetworkConfiguration implements INetworkConfiguration {
 
   public readonly delayAfterRequestMilliseconds = 0;
 }
-
-provide(NetworkConfiguration, []);

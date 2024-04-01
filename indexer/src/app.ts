@@ -1,21 +1,30 @@
-import type { ITagsGroupMap } from "./domain/ITagGroupsMap.ts";
-import type { IClient } from "./services/lib/IClient.ts";
-import type { IPagination } from "./services/lib/IPagination.ts";
-import type { IFetchPageParams } from "./services/lib/IFetchPageParams.ts";
-import type { IPageMeta } from "./domain/IPageMeta.ts";
-import type { IIndex } from "./domain/IIndex.ts";
-import type { IAsyncStorage } from "./services/lib/IAsyncStorage.ts";
-import type { ILogger } from "./services/lib/ILogger.ts";
-import { provide } from "provide";
-import { TopClient } from "./services/top-client/TopClient.ts";
-import { TagsClient } from "./services/tags-client/TagsClient.ts";
-import { PagnationClient } from "./services/pagination-client/PaginationClient.ts";
-import { PageListClient } from "./services/pages-list-client/PagesListClient.ts";
-import { PageMetaClient } from "./services/pagemeta-client/PageMetaClient.ts";
-import { IndexSaver } from "./services/storage/IndexSaver.ts";
-import { ConsoleLogger } from "./services/logger/ConsoleLogger.ts";
-import { ITop } from "./domain/ITop.ts";
+import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { IPagination } from "services/lib/IPagination.ts";
+import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
+import type { IPageMeta } from "domain/IPageMeta.ts";
+import type { IIndex } from "domain/IIndex.ts";
+import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
+import type { ILogger } from "services/lib/ILogger.ts";
+import { Provide } from "microdi";
+import { TopClient } from "services/top-client/TopClient.ts";
+import { TagsClient } from "services/tags-client/TagsClient.ts";
+import { PagnationClient } from "services/pagination-client/PaginationClient.ts";
+import { PageListClient } from "services/pages-list-client/PagesListClient.ts";
+import { PageMetaClient } from "services/pagemeta-client/PageMetaClient.ts";
+import { IndexSaver } from "services/storage/IndexSaver.ts";
+import { ConsoleLogger } from "services/logger/ConsoleLogger.ts";
+import { ITop } from "domain/ITop.ts";
 
+@Provide(
+  TopClient,
+  TagsClient,
+  PagnationClient,
+  PageListClient,
+  PageMetaClient,
+  IndexSaver,
+  ConsoleLogger
+)
 export class App {
   public constructor(
     private readonly topClient: IClient<ITop, []>,
@@ -162,13 +171,3 @@ export class App {
     this.logger.info("Process completed successfully");
   }
 }
-
-provide(App, [
-  TopClient,
-  TagsClient,
-  PagnationClient,
-  PageListClient,
-  PageMetaClient,
-  IndexSaver,
-  ConsoleLogger,
-]);

@@ -1,9 +1,10 @@
-import type { IURLConfiguration } from "../configuration/IURLConfiguration.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { ITop } from "../../domain/ITop.ts";
-import { URLConfiguration } from "../configuration/URLConfiguration.ts";
-import { provide } from "provide";
+import type { IURLConfiguration } from "services/configuration/IURLConfiguration.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { ITop } from "domain/ITop.ts";
+import { URLConfiguration } from "services/configuration/URLConfiguration.ts";
+import { Provide } from "microdi";
 
+@Provide(URLConfiguration)
 export class TopTypeResolver implements IURLResolver<[keyof ITop]> {
   private static urlMapping: { readonly [key in keyof ITop]: string } = {
     weekTop: "/top/top-week/",
@@ -19,5 +20,3 @@ export class TopTypeResolver implements IURLResolver<[keyof ITop]> {
     return `${origin}${TopTypeResolver.urlMapping[topType]}`;
   }
 }
-
-provide(TopTypeResolver, [URLConfiguration]);

@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
-import { ReadingTimeMinutesParser } from "./ReadingTimeMinutesParser.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { ReadingTimeMinutesParser } from "services/pagemeta-parser/reading-time-minutes-parser/ReadingTimeMinutesParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
 Deno.test(
   {

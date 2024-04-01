@@ -1,9 +1,10 @@
-import { IHTMLClient } from "./IHTMLClient.ts";
-import { HTMLClient } from "./HTMLClient.ts";
-import { provide } from "provide";
-import { INetworkConfiguration } from "../configuration/INetworkConfiguration.ts";
-import { NetworkConfiguration } from "../configuration/NetworkConfiguration.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import { HTMLClient } from "services/network/HTMLClient.ts";
+import { Provide } from "microdi";
+import type { INetworkConfiguration } from "services/configuration/INetworkConfiguration.ts";
+import { NetworkConfiguration } from "services/configuration/NetworkConfiguration.ts";
 
+@Provide(NetworkConfiguration, HTMLClient)
 export class RetrierHTMLClient implements IHTMLClient {
   public constructor(
     private readonly configuration: INetworkConfiguration,
@@ -27,5 +28,3 @@ export class RetrierHTMLClient implements IHTMLClient {
     throw lastError;
   }
 }
-
-provide(RetrierHTMLClient, [NetworkConfiguration, HTMLClient]);

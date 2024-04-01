@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../lib/TestTools.ts";
-import { OnPageParser } from "./OnPageParser.ts";
-import { DOMParser } from "../dom-parser/DOMParser.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { OnPageParser } from "services/on-page-parser/OnPageParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
 Deno.test(
   {

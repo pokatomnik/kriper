@@ -1,10 +1,11 @@
-import type { ElementHander } from "./ElementHandler.ts";
-import type { IURLConfiguration } from "../../configuration/IURLConfiguration.ts";
-import type { Element, Document } from "denodom";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { URLConfiguration } from "../../configuration/URLConfiguration.ts";
+import type { ElementHander } from "services/pagemeta-parser/content-parser/ElementHandler.ts";
+import type { IURLConfiguration } from "services/configuration/IURLConfiguration.ts";
+import { Element, Document } from "denodom";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { URLConfiguration } from "services/configuration/URLConfiguration.ts";
 
+@Provide(DOMParser, URLConfiguration)
 export class HTMLProcessor {
   private static readonly EOL = "\n";
 
@@ -150,5 +151,3 @@ export class HTMLProcessor {
     }
   }
 }
-
-provide(HTMLProcessor, [DOMParser, URLConfiguration]);

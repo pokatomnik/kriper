@@ -1,6 +1,6 @@
-import { FileReader, Snapshot } from "../../../lib/TestTools.ts";
-import { NumberOfViewsParser } from "./NumberOfViewsParser.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
+import { FileReader, Snapshot } from "lib/TestTools.ts";
+import { NumberOfViewsParser } from "services/pagemeta-parser/number-of-views-parser/NumberOfViewsParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
 
 Deno.test(
   {

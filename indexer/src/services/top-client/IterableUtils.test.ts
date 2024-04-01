@@ -1,4 +1,4 @@
-import { isEmpty, len } from "./IterableUtils.ts";
+import { isEmpty, len } from "services/top-client/IterableUtils.ts";
 import * as Testing from "testing";
 
 Deno.test("EmptyChecker - empty Array", () => {

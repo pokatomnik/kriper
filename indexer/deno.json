@@ -1,4 +1,5 @@
 {
+  "lock": false,
   "compilerOptions": {
     "strict": true,
     "noImplicitAny": true,
@@ -15,9 +16,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true
+    "noPropertyAccessFromIndexSignature": true,
+    "experimentalDecorators": false
   },
-  "importMap": "import_map.json",
   "lint": {
     "files": {
       "include": ["."]
@@ -56,5 +57,14 @@
     "start": "deno task clean && deno run --allow-read --allow-write --allow-net ./bootstrap.ts | tee ./last-run.log",
 
     "clean": "sh ./clean-out.sh"
+  },
+  "imports": {
+    "denodom": "https://deno.land/x/deno_dom@v0.1.35-alpha/deno-dom-wasm.ts",
+    "testing": "https://deno.land/std@0.154.0/testing/asserts.ts",
+    "chalkin": "https://deno.land/x/chalkin@v0.1.3/mod.ts",
+    "microdi": "https://deno.land/x/microdi@v1.0.0/mod.ts",
+    "domain/": "./src/domain/",
+    "lib/": "./src/lib/",
+    "services/": "./src/services/"
   }
 }

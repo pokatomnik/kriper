@@ -1,16 +1,17 @@
-import type { IClient } from "../lib/IClient.ts";
-import type { IFetchPageParams } from "../lib/IFetchPageParams.ts";
-import type { IPagination } from "../lib/IPagination.ts";
-import type { IHTMLClient } from "../network/IHTMLClient.ts";
-import type { IURLResolver } from "../lib/IURLResolver.ts";
-import type { IParser } from "../lib/IParser.ts";
-import type { ILogger } from "../lib/ILogger.ts";
-import { provide } from "provide";
-import { PaginationResolver } from "../pagination-resolver/PaginationResolver.ts";
-import { RetrierHTMLClient } from "../network/RetrierHTMLClient.ts";
-import { OnPageParser } from "../on-page-parser/OnPageParser.ts";
-import { ConsoleLogger } from "../logger/ConsoleLogger.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
+import type { IPagination } from "services/lib/IPagination.ts";
+import type { IHTMLClient } from "services/network/IHTMLClient.ts";
+import type { IURLResolver } from "services/lib/IURLResolver.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import type { ILogger } from "services/lib/ILogger.ts";
+import { Provide } from "microdi";
+import { PaginationResolver } from "services/pagination-resolver/PaginationResolver.ts";
+import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
+import { OnPageParser } from "services/on-page-parser/OnPageParser.ts";
+import { ConsoleLogger } from "services/logger/ConsoleLogger.ts";
 
+@Provide(PaginationResolver, RetrierHTMLClient, OnPageParser, ConsoleLogger)
 export class PageListClient
   implements IClient<Array<IFetchPageParams>, [IPagination]>
 {
@@ -48,10 +49,3 @@ export class PageListClient
     return Array.from(linksMap.values());
   }
 }
-
-provide(PageListClient, [
-  PaginationResolver,
-  RetrierHTMLClient,
-  OnPageParser,
-  ConsoleLogger,
-]);

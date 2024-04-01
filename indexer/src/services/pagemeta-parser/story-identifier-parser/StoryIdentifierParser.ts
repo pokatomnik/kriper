@@ -1,7 +1,8 @@
-import { provide } from "https://deno.land/x/microdi@v0.0.3/Provider.ts";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { IParser } from "../../lib/IParser.ts";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
 
+@Provide(DOMParser)
 export class StoryIdentifierParser implements IParser<string> {
   private static readonly STORY_ID_SPAN_ID = "story_id";
 
@@ -26,5 +27,3 @@ export class StoryIdentifierParser implements IParser<string> {
     return Promise.resolve(storyId);
   }
 }
-
-provide(StoryIdentifierParser, [DOMParser]);

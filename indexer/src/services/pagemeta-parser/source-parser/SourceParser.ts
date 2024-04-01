@@ -1,8 +1,9 @@
-import type { IParser } from "../../lib/IParser.ts";
-import { provide } from "provide";
-import { DOMParser } from "../../dom-parser/DOMParser.ts";
-import { getURL } from "./URLParser.ts";
+import type { IParser } from "services/lib/IParser.ts";
+import { Provide } from "microdi";
+import { DOMParser } from "services/dom-parser/DOMParser.ts";
+import { getURL } from "services/pagemeta-parser/source-parser/URLParser.ts";
 
+@Provide(DOMParser)
 export class SourceParser implements IParser<string | null> {
   private static readonly SOURCE_ELEMENT_SELECTOR =
     "span.text-muted span i.fa-quote-right + a";
@@ -32,5 +33,3 @@ export class SourceParser implements IParser<string | null> {
     return Promise.resolve(url);
   }
 }
-
-provide(SourceParser, [DOMParser]);
