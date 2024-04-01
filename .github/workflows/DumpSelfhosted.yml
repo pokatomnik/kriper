@@ -1,0 +1,32 @@
+name: Dump on Github
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dump:
+    runs-on: self-hosted
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Start Dump
+        run: cd indexer && deno task start
+
+      - name: Archive results
+        run: tar czf ./out.tar.gz ./out
+
+      - name: Upload Archive
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: out.tar.gz
+          path: indexer/out.tar.gz
