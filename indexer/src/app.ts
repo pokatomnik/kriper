@@ -1,20 +1,20 @@
-import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
-import type { IClient } from "services/lib/IClient.ts";
-import type { IPagination } from "services/lib/IPagination.ts";
-import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
-import type { IPageMeta } from "domain/IPageMeta.ts";
 import type { IIndex } from "domain/IIndex.ts";
-import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
-import type { ILogger } from "services/lib/ILogger.ts";
-import { Provide } from "microdi";
-import { TopClient } from "services/top-client/TopClient.ts";
-import { TagsClient } from "services/tags-client/TagsClient.ts";
-import { PagnationClient } from "services/pagination-client/PaginationClient.ts";
-import { PageListClient } from "services/pages-list-client/PagesListClient.ts";
-import { PageMetaClient } from "services/pagemeta-client/PageMetaClient.ts";
-import { IndexSaver } from "services/storage/IndexSaver.ts";
-import { ConsoleLogger } from "services/logger/ConsoleLogger.ts";
+import type { IPageMeta } from "domain/IPageMeta.ts";
+import type { ITagsGroupMap } from "domain/ITagGroupsMap.ts";
 import { ITop } from "domain/ITop.ts";
+import { Provide } from "microdi";
+import { HaltOnThrowAsync } from "services/lib/HaltOnThrow.ts";
+import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
+import type { IClient } from "services/lib/IClient.ts";
+import type { IFetchPageParams } from "services/lib/IFetchPageParams.ts";
+import type { IPagination } from "services/lib/IPagination.ts";
+import { LoggedAsync } from "services/lib/LoggedMethod.ts";
+import { PageMetaClient } from "services/pagemeta-client/PageMetaClient.ts";
+import { PageListClient } from "services/pages-list-client/PagesListClient.ts";
+import { PagnationClient } from "services/pagination-client/PaginationClient.ts";
+import { IndexSaver } from "services/storage/IndexSaver.ts";
+import { TagsClient } from "services/tags-client/TagsClient.ts";
+import { TopClient } from "services/top-client/TopClient.ts";
 
 @Provide(
   TopClient,
@@ -22,8 +22,7 @@ import { ITop } from "domain/ITop.ts";
   PagnationClient,
   PageListClient,
   PageMetaClient,
-  IndexSaver,
-  ConsoleLogger
+  IndexSaver
 )
 export class App {
   public constructor(
@@ -38,102 +37,74 @@ export class App {
       ReadonlyArray<IPageMeta>,
       [ReadonlyArray<IFetchPageParams>]
     >,
-    private readonly indexSaver: IAsyncStorage<string, IIndex>,
-    private readonly logger: ILogger
+    private readonly indexSaver: IAsyncStorage<string, IIndex>
   ) {}
 
+  @LoggedAsync({
+    start: () => "Started fetching tops...",
+    success: () => "Finished fetching tops.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async getTop(): Promise<ITop> {
-    let top: ITop;
-    this.logger.info("Startted fetching tops...");
-    try {
-      top = await this.topClient.get();
-      this.logger.info("Finished fetching top.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Unknown top fethcing error");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
-    return top;
+    return await this.topClient.get();
   }
 
+  @LoggedAsync({
+    start: () => "Started fetching tags...",
+    success: () => "Finished fetching tags.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async getTagsGroupMap(): Promise<ITagsGroupMap> {
-    let tagsMap: ITagsGroupMap;
-    this.logger.info("Started fetching tags...");
-    try {
-      tagsMap = await this.tagsClient.get();
-      this.logger.info("Finished fetching tags.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Unknown tags fetching error");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
-    return tagsMap;
+    return await this.tagsClient.get();
   }
 
+  @LoggedAsync({
+    start: () => "Started fetching pagination...",
+    success: () => "Finished fetching pagination.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async getPagination(): Promise<IPagination> {
-    let pagination: IPagination;
-    this.logger.info("Started fetching pagination...");
-    try {
-      pagination = await this.paginationClient.get();
-      this.logger.info("Finished fetching pagination.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Unknown pagination fetching error");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
-    return pagination;
+    return await this.paginationClient.get();
   }
 
+  @LoggedAsync({
+    start: () => "Started fetching pages list...",
+    success: () => "Finished fetching pages list.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async getPagesToFetch(
     pagination: IPagination
   ): Promise<Array<IFetchPageParams>> {
-    let pagesToFetch: Array<IFetchPageParams>;
-    this.logger.info("Started fetching pages list...");
-    try {
-      pagesToFetch = await this.pageListClient.get(pagination);
-      this.logger.info("Finished fetching pages list.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Unknown fetching pages list error");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
-    return pagesToFetch;
+    return await this.pageListClient.get(pagination);
   }
 
+  @LoggedAsync({
+    start: () => "Started fetching content and page metadata...",
+    success: () => "Finished fetching metadata for pages list.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async getPageMeta(
     pagesToFetch: Array<IFetchPageParams>
   ): Promise<ReadonlyArray<IPageMeta>> {
-    let pageMeta: ReadonlyArray<IPageMeta>;
-    this.logger.info("Started fetching content and page metadata...");
-    try {
-      pageMeta = await this.pageMetaClient.get(pagesToFetch);
-      this.logger.info("Finished fetching metadata for pages list.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Unknown fetching content error");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
-    return pageMeta;
+    return await this.pageMetaClient.get(pagesToFetch);
   }
 
+  @LoggedAsync({
+    start: () => "Started dumping index file...",
+    success: () => "Finished dumping index file.",
+    failed: (_self, _args, e) => e.message,
+  })
+  @HaltOnThrowAsync()
   private async saveIndex(index: IIndex) {
-    this.logger.info("Started dumping index file...");
-    try {
-      await this.indexSaver.set("index", index);
-      this.logger.info("Finished dumping index file.");
-    } catch (e) {
-      const error =
-        e instanceof Error ? e : new Error("Failed to dump index file.");
-      this.logger.error(error.message);
-      Deno.exit(1);
-    }
+    await this.indexSaver.set("index", index);
   }
 
+  @LoggedAsync({ success: () => "Process completed successfully" })
   public async start() {
     const top = await this.getTop();
     const tagsGroupMap = await this.getTagsGroupMap();
@@ -167,7 +138,5 @@ export class App {
     };
 
     await this.saveIndex(index);
-
-    this.logger.info("Process completed successfully");
   }
 }
