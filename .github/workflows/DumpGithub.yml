@@ -1,12 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will install Deno then run Deno lint and test.
-# For more information see: https://github.com/denoland/setup-deno
-
-name: Dump
+name: Dump on Github
 
 on:
   workflow_dispatch:
@@ -37,4 +29,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: out.tar.gz
-          path: out.tar.gz
+          path: indexer/out.tar.gz
