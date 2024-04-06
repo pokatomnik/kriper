@@ -4,6 +4,7 @@ import { assertEquals, assertThrows } from "testing";
 Deno.test("Test PaginationResolver - first page", () => {
   const storiesPaginationResolver = new PaginationResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const firstPageUrl = storiesPaginationResolver.resolve(1);
@@ -14,6 +15,7 @@ Deno.test("Test PaginationResolver - first page", () => {
 Deno.test("Test PaginationResolver - second page", () => {
   const storiesPaginationResolver = new PaginationResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const firstPageUrl = storiesPaginationResolver.resolve(2);
@@ -26,6 +28,7 @@ Deno.test(
   () => {
     const storiesPaginationResolver = new PaginationResolver({
       originURL: "https://kriper.net",
+      shorterAPIURL: "https://yndxai.deno.dev",
     });
 
     assertThrows(() => {

@@ -8,14 +8,26 @@ import { Provide } from "microdi";
 import { RetrierHTMLClient } from "services/network/RetrierHTMLClient.ts";
 import { PageMetaParser } from "services/pagemeta-parser/PageMetaParser.ts";
 import { ConsoleLogger } from "services/logger/ConsoleLogger.ts";
+import { BoundMethod } from "decorate";
+import { ShortDescriptionClient } from "services/short-description-client/ShortDescriptionClient.ts";
+import { ShortDescriptionSaver } from "services/storage/ShortDescriptionSaver.ts";
+import { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
 
-@Provide(RetrierHTMLClient, PageMetaParser, ConsoleLogger)
+@Provide(
+  RetrierHTMLClient,
+  ShortDescriptionClient,
+  ShortDescriptionSaver,
+  PageMetaParser,
+  ConsoleLogger
+)
 export class PageMetaClient
   implements
     IClient<ReadonlyArray<IPageMeta>, [ReadonlyArray<IFetchPageParams>]>
 {
   public constructor(
     private readonly httpClient: IHTMLClient,
+    private readonly shortDescriptionClient: IClient<string | null, [string]>,
+    private readonly shortDescriptionSaver: IAsyncStorage<string, string>,
     private readonly pageMetaParser: IParser<IPageMeta>,
     private readonly logger: ILogger
   ) {}
@@ -24,6 +36,7 @@ export class PageMetaClient
     return `[${postition}/${total}] ${message}`;
   }
 
+  @BoundMethod
   public async get(
     fetchParamsList: ReadonlyArray<IFetchPageParams>
   ): Promise<ReadonlyArray<IPageMeta>> {
@@ -43,6 +56,15 @@ export class PageMetaClient
         );
         const rawHTML = await this.httpClient.get(fetchParams.url);
         const pageMeta = await this.pageMetaParser.parse(rawHTML);
+        const shortDescritption = await this.shortDescriptionClient.get(
+          fetchParams.url
+        );
+        if (shortDescritption) {
+          await this.shortDescriptionSaver.set(
+            pageMeta.storyId,
+            shortDescritption
+          );
+        }
         pageMetaList.push(pageMeta);
         this.logger.info(
           this.formatMessage(i, totalPages, "Successfully parsed.")

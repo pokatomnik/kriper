@@ -1,25 +1,25 @@
 import type { IPageMeta } from "domain/IPageMeta.ts";
-import type { IParser } from "services/lib/IParser.ts";
-import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
 import type { IUncheckedDate } from "domain/IUncheckedDate.ts";
 import { Provide } from "microdi";
-import { StoryIdentifierParser } from "services/pagemeta-parser/story-identifier-parser/StoryIdentifierParser.ts";
-import { TitleParser } from "services/pagemeta-parser/title-parser/TitleParser.ts";
-import { ContentParser } from "services/pagemeta-parser/content-parser/ContentParser.ts";
+import type { IAsyncStorage } from "services/lib/IAsyncStorage.ts";
+import type { IParser } from "services/lib/IParser.ts";
 import { AuthorNicknameParser } from "services/pagemeta-parser/author-nickname-parser/AuthorNicknameParser.ts";
 import { AuthorRealNameParser } from "services/pagemeta-parser/author-realname-parser/AuthorRealNameParser.ts";
+import { ContentParser } from "services/pagemeta-parser/content-parser/ContentParser.ts";
 import { DateCreatedParser } from "services/pagemeta-parser/date-created-parser/DateCreatedParser.ts";
-import { NumberOfViewsParser } from "services/pagemeta-parser/number-of-views-parser/NumberOfViewsParser.ts";
-import { ReadingTimeMinutesParser } from "services/pagemeta-parser/reading-time-minutes-parser/ReadingTimeMinutesParser.ts";
-import { SourceParser } from "services/pagemeta-parser/source-parser/SourceParser.ts";
-import { WebPageURLParser } from "services/pagemeta-parser/webpage-url-parser/WebPageURLParser.ts";
-import { RatingParser } from "services/pagemeta-parser/rating-parser/RatingParser.ts";
-import { TagsParser } from "services/pagemeta-parser/tags-parser/TagsParser.ts";
-import { SeeAlsoParser } from "services/pagemeta-parser/see-also-parser/SeeAlsoParser.ts";
-import { ImagesParser } from "services/pagemeta-parser/images-parser/ImagesParser.ts";
-import { VideosParser } from "services/pagemeta-parser/videos-parser/VideosParser.ts";
-import { ContentSaver } from "services/storage/ContentSaver.ts";
 import { GoldParser } from "services/pagemeta-parser/gold-parser/GoldParser.ts";
+import { ImagesParser } from "services/pagemeta-parser/images-parser/ImagesParser.ts";
+import { NumberOfViewsParser } from "services/pagemeta-parser/number-of-views-parser/NumberOfViewsParser.ts";
+import { RatingParser } from "services/pagemeta-parser/rating-parser/RatingParser.ts";
+import { ReadingTimeMinutesParser } from "services/pagemeta-parser/reading-time-minutes-parser/ReadingTimeMinutesParser.ts";
+import { SeeAlsoParser } from "services/pagemeta-parser/see-also-parser/SeeAlsoParser.ts";
+import { SourceParser } from "services/pagemeta-parser/source-parser/SourceParser.ts";
+import { StoryIdentifierParser } from "services/pagemeta-parser/story-identifier-parser/StoryIdentifierParser.ts";
+import { TagsParser } from "services/pagemeta-parser/tags-parser/TagsParser.ts";
+import { TitleParser } from "services/pagemeta-parser/title-parser/TitleParser.ts";
+import { VideosParser } from "services/pagemeta-parser/videos-parser/VideosParser.ts";
+import { WebPageURLParser } from "services/pagemeta-parser/webpage-url-parser/WebPageURLParser.ts";
+import { ContentSaver } from "services/storage/ContentSaver.ts";
 
 @Provide(
   StoryIdentifierParser,
@@ -58,7 +58,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
     private readonly imagesParser: IParser<ReadonlyArray<string>>,
     private readonly videosParser: IParser<ReadonlyArray<string>>,
     private readonly goldParser: IParser<boolean>,
-    private readonly asyncStorage: IAsyncStorage<string, string>
+    private readonly contentSaver: IAsyncStorage<string, string>
   ) {}
 
   public async parse(rawHTML: string): Promise<IPageMeta> {
@@ -98,7 +98,7 @@ export class PageMetaParser implements IParser<IPageMeta> {
       this.goldParser.parse(rawHTML),
     ]);
 
-    await this.asyncStorage.set(storyId, content);
+    await this.contentSaver.set(storyId, content);
 
     return Promise.resolve<IPageMeta>({
       storyId,

@@ -4,6 +4,7 @@ import { assertEquals } from "testing";
 Deno.test("Test TopTypeResolver - week top", () => {
   const topTypeResolver = new TopTypeResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const url = topTypeResolver.resolve("weekTop");
@@ -14,6 +15,7 @@ Deno.test("Test TopTypeResolver - week top", () => {
 Deno.test("Test TopTypeResolver - month top", () => {
   const topTypeResolver = new TopTypeResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const url = topTypeResolver.resolve("monthTop");
@@ -24,6 +26,7 @@ Deno.test("Test TopTypeResolver - month top", () => {
 Deno.test("Test TopTypeResolver - year top", () => {
   const topTypeResolver = new TopTypeResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const url = topTypeResolver.resolve("yearTop");
@@ -34,6 +37,7 @@ Deno.test("Test TopTypeResolver - year top", () => {
 Deno.test("Test TopTypeResolver - all the time top", () => {
   const topTypeResolver = new TopTypeResolver({
     originURL: "https://kriper.net",
+    shorterAPIURL: "https://yndxai.deno.dev",
   });
 
   const url = topTypeResolver.resolve("allTheTimeTop");
