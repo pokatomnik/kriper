@@ -5,18 +5,18 @@ import { PathConfiguration } from "services/configuration/PathConfiguration.ts";
 import { BoundMethod } from "decorate";
 
 @Provide(PathConfiguration)
-export class ContentSaver implements IAsyncStorage<string, string> {
+export class ShortDescriptionSaver implements IAsyncStorage<string, string> {
   public constructor(private readonly pathConfiguration: IPathConfiguration) {}
 
   private getFilePath(storyId: string): string {
-    return `${this.pathConfiguration.outputPath}/${storyId}.md`;
+    return `${this.pathConfiguration.outputPath}/${storyId}.short.md`;
   }
 
   @BoundMethod
-  public async set(storyId: string, content: string): Promise<void> {
+  public async set(storyId: string, shortContent: string): Promise<void> {
     const filePath = this.getFilePath(storyId);
     try {
-      await Deno.writeTextFile(filePath, content);
+      await Deno.writeTextFile(filePath, shortContent);
     } catch {
       throw new Error(`Failed to save to ${filePath}`);
     }

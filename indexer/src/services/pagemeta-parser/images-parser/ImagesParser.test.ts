@@ -13,6 +13,7 @@ Deno.test(
     );
     const images = await new ImagesParser(new DOMParser(), {
       originURL: "https://kriper.net",
+      shorterAPIURL: "https://yndxai.deno.dev",
     }).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
       JSON.stringify(images, null, 2),

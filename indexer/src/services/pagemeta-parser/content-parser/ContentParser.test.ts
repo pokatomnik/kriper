@@ -16,6 +16,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -38,6 +39,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -60,6 +62,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -82,6 +85,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -104,6 +108,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -126,6 +131,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(
@@ -148,6 +154,7 @@ Deno.test(
       new DOMParser(),
       new HTMLProcessor(new DOMParser(), {
         originURL: "http://kriper.net",
+        shorterAPIURL: "https://yndxai.deno.dev",
       })
     ).parse(rawHTML);
     await new Snapshot(import.meta).snapshotCheck(

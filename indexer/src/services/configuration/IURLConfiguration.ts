@@ -1,3 +1,4 @@
 export interface IURLConfiguration {
-  originURL: string;
+  readonly originURL: string;
+  readonly shorterAPIURL: string;
 }

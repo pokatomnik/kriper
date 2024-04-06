@@ -1,30 +1,16 @@
 import type { IHTMLClient } from "services/network/IHTMLClient.ts";
 import { HTMLClient } from "services/network/HTMLClient.ts";
-import { Provide } from "microdi";
-import type { INetworkConfiguration } from "services/configuration/INetworkConfiguration.ts";
+import { Provide, resolve } from "microdi";
+import { BoundMethod, Retry } from "decorate";
 import { NetworkConfiguration } from "services/configuration/NetworkConfiguration.ts";
 
-@Provide(NetworkConfiguration, HTMLClient)
+@Provide(HTMLClient)
 export class RetrierHTMLClient implements IHTMLClient {
-  public constructor(
-    private readonly configuration: INetworkConfiguration,
-    private readonly sourceHTMLClient: IHTMLClient
-  ) {}
+  public constructor(private readonly sourceHTMLClient: IHTMLClient) {}
 
-  private readonly defaultError = new Error("Unknown fetch error");
-
+  @Retry(resolve(NetworkConfiguration).maxNetworkAttempts)
+  @BoundMethod
   public async get(url: string): Promise<string> {
-    const maxNetworkAttempts = this.configuration.maxNetworkAttempts;
-    let lastError = this.defaultError;
-    let currentAttempt = 0;
-    while (currentAttempt < maxNetworkAttempts)
-      try {
-        return await this.sourceHTMLClient.get(url);
-      } catch (e) {
-        const error = e instanceof Error ? e : this.defaultError;
-        ++currentAttempt;
-        lastError = error;
-      }
-    throw lastError;
+    return await this.sourceHTMLClient.get(url);
   }
 }
