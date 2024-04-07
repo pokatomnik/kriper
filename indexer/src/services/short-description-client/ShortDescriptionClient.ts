@@ -32,6 +32,7 @@ export class ShortDescriptionClient
         const parsedSummary = await this.shortDescriptionParser.parse(
           response.data.summary
         );
+        // Do not include short description if it is too short (less than two lines is definitely not informative)
         if (parsedSummary.split("\n").length < 2) {
           return null;
         }
