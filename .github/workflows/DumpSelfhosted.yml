@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   dump:
+    timeout-minutes: 1440
     runs-on: self-hosted
 
     steps:
