@@ -29,7 +29,13 @@ export class ShortDescriptionClient
         IProtocolResponse<YndxAIResponse>
       >(shorterAPIURL, { url: storyURL });
       if (response.data?.summary) {
-        return await this.shortDescriptionParser.parse(response.data.summary);
+        const parsedSummary = await this.shortDescriptionParser.parse(
+          response.data.summary
+        );
+        if (parsedSummary.split("\n").length < 2) {
+          return null;
+        }
+        return parsedSummary;
       }
       return null;
     } catch {

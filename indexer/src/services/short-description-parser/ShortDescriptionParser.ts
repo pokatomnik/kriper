@@ -2,11 +2,19 @@ import { BoundMethod } from "decorate";
 import { Provide } from "microdi";
 import type { IParser } from "services/lib/IParser.ts";
 
+/**
+ * Yandex API returns raw description for the story.
+ * Sometimes that description inlude unwanted statements.
+ * This parser removes them as well as unwanted characters.
+ */
 @Provide()
 export class ShortDescriptionParser implements IParser<string> {
   private deleteStatements: ReadonlySet<string> = new Set([
     "•",
     "Возможность незарегистрированным пользователям писать комментарии и выставлять рейтинг временно отключена.",
+    "Возможность комментирования и выставления рейтинга временно отключена для незарегистрированных пользователей.",
+    "Посетители в группе Гости не могут оставлять комментарии к данной публикации.",
+    "Пересказана только часть статьи. Для продолжения перейдите к чтению оригинала.",
   ]);
 
   @BoundMethod
