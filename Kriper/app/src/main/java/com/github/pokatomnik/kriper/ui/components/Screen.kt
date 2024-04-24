@@ -8,10 +8,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable as AccompanistComposable
+import androidx.navigation.compose.composable as AccompanistComposable
 
 
-@OptIn(ExperimentalAnimationApi::class)
 internal fun NavGraphBuilder.screen(
     route: String,
     keepScreenOn: Boolean = false,

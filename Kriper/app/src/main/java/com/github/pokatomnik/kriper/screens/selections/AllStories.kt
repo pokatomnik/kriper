@@ -1,11 +1,17 @@
 package com.github.pokatomnik.kriper.screens.selections
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.BottomDrawerValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.rememberBottomDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,7 +20,10 @@ import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.domain.PageMeta
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.services.index.Selections
-import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.components.BottomSheet
+import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.PageTitle
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 import com.github.pokatomnik.kriper.ui.widgets.HideStoriesType
 import com.github.pokatomnik.kriper.ui.widgets.PageMetaLazyList
 import com.github.pokatomnik.kriper.ui.widgets.sortingStateWithUI
@@ -53,7 +62,7 @@ fun makeParametrizedSelection(
                         priorButton = {
                             IconButton(onClick = onNavigateBack) {
                                 Icon(
-                                    imageVector = Icons.Filled.ArrowBack,
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                     contentDescription = "Назад"
                                 )
                             }

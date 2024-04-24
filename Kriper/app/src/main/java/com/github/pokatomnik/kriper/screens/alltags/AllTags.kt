@@ -1,18 +1,26 @@
 package com.github.pokatomnik.kriper.screens.alltags
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ext.getPluralNoun
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
-import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.components.CardNavigationListItem
+import com.github.pokatomnik.kriper.ui.components.LazyList
+import com.github.pokatomnik.kriper.ui.components.PageContainer
 import com.github.pokatomnik.kriper.ui.components.PageTitle
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
 
 @Composable
 fun AllTags(
@@ -27,7 +35,7 @@ fun AllTags(
             priorButton = {
                 IconButton(onClick = onNavigateBack) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Назад"
                     )
                 }

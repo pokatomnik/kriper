@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
@@ -49,7 +52,7 @@ fun GalleryImage(
                 priorButton = if (displayHeaderState.value) ({
                     IconButton(onClick = onNavigateBack) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Назад"
                         )
                     }
@@ -59,24 +62,30 @@ fun GalleryImage(
                 }) else null
             ) {
 //              val angleState = remember { mutableStateOf(0f) }
-                val zoomState = remember { mutableStateOf(1f) }
-                val offsetXState = remember { mutableStateOf(0f) }
-                val offsetYState = remember { mutableStateOf(0f) }
+                val zoomState = remember { mutableFloatStateOf(1f) }
+                val offsetXState = remember { mutableFloatStateOf(0f) }
+                val offsetYState = remember { mutableFloatStateOf(0f) }
 
 //              val angleStateAnimated = animateFloatAsState(targetValue = angleState.value)
-                val zoomStateAnimated = animateFloatAsState(targetValue = zoomState.value)
-                val offsetXStateAnimated = animateFloatAsState(targetValue = offsetXState.value)
-                val offsetYStateAnimated = animateFloatAsState(targetValue = offsetYState.value)
+                val zoomStateAnimated = animateFloatAsState(targetValue = zoomState.floatValue,
+                    label = "zoom"
+                )
+                val offsetXStateAnimated = animateFloatAsState(targetValue = offsetXState.floatValue,
+                    label = "offsetX"
+                )
+                val offsetYStateAnimated = animateFloatAsState(targetValue = offsetYState.floatValue,
+                    label = "offsetY"
+                )
 
                 val toggleView = {
 //                  angleState.value == 0f
-                    if (zoomState.value == 1f) {
-                        zoomState.value = 5f
+                    if (zoomState.floatValue == 1f) {
+                        zoomState.floatValue = 5f
                     } else {
-                        zoomState.value = 1f
+                        zoomState.floatValue = 1f
                     }
-                    offsetXState.value = 0f
-                    offsetYState.value = 0f
+                    offsetXState.floatValue = 0f
+                    offsetYState.floatValue = 0f
                 }
 
                 Box(
@@ -116,15 +125,15 @@ fun GalleryImage(
                                         _
                                         ->
 //                                      angleState.value += gestureRotate
-                                        zoomState.value =
-                                            (zoomState.value * gestureZoom).coerceIn(1f, 5f)
-                                        val x = pan.x * zoomState.value
-                                        val y = pan.y * zoomState.value
+                                        zoomState.floatValue =
+                                            (zoomState.floatValue * gestureZoom).coerceIn(1f, 5f)
+                                        val x = pan.x * zoomState.floatValue
+                                        val y = pan.y * zoomState.floatValue
 //                                      val angleRad = angleState.value * PI / 180.0
 //                                      offsetXState.value += (x * cos(angleRad) - y * sin(angleRad)).toFloat()
 //                                      offsetYState.value += (x * sin(angleRad) + y * cos(angleRad)).toFloat()
-                                        offsetXState.value += x
-                                        offsetYState.value += y
+                                        offsetXState.floatValue += x
+                                        offsetYState.floatValue += y
                                     }
                                 )
                             }
