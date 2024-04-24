@@ -36,6 +36,8 @@ import com.github.pokatomnik.kriper.ui.components.screen
 import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
 import androidx.navigation.compose.NavHost
+import com.github.pokatomnik.kriper.screens.about.About
+import com.github.pokatomnik.kriper.screens.aipowers.AIPowers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -260,8 +262,24 @@ fun AppComposable(
                             ) {
                                 navigation.settingsRoute.Params {
                                     Settings(
-                                        onNavigateBack = { navigation.navigateBack() }
+                                        onNavigateBack = { navigation.navigateBack() },
+                                        onNavigateToAbout = { navigation.settingsAboutRoute.navigate() },
+                                        onNavigateToAIPowers = { navigation.settingsAIPowersRoute.navigate() }
                                     )
+                                }
+                            }
+                            screen (
+                                route = navigation.settingsAboutRoute.route,
+                            ) {
+                                navigation.settingsAboutRoute.Params {
+                                    About(onNavigateBack = { navigation.navigateBack() })
+                                }
+                            }
+                            screen(
+                                route = navigation.settingsAIPowersRoute.route
+                            ) {
+                                navigation.settingsAIPowersRoute.Params {
+                                    AIPowers(onNavigateBack = { navigation.navigateBack() })
                                 }
                             }
                             screen(

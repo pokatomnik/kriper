@@ -644,6 +644,50 @@ data class Navigation(
             get() = routePath
     }
 
+    val settingsAboutRoute = object : RouteNoParameters {
+        private val routePath = "/settings/about"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
+    val settingsAIPowersRoute = object : RouteNoParameters {
+        private val routePath = "/settings/ai"
+
+        @Composable
+        override fun on(): Boolean {
+            val currentDestination = rememberCurrentDestination()
+            return currentDestination.on(routePath)
+        }
+
+        override fun navigate() {
+            navController.navigateDistinct(routePath)
+        }
+
+        @Composable
+        override fun Params(content: @Composable () -> Unit) {
+            content()
+        }
+
+        override val route: String
+            get() = routePath
+    }
+
     val historyRoute = object : RouteNoParameters {
         private val routePath = "/history"
 

@@ -5,10 +5,10 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun LegalWarningButton(
-    navigateToAbout: () -> Unit,
+fun AINotice(
+    navigateToAIPowers: () -> Unit,
 ) {
-    TextButton(onClick = navigateToAbout) {
-        Text("О приложении")
+    TextButton(onClick = navigateToAIPowers) {
+        Text("AI в приложении")
     }
 }

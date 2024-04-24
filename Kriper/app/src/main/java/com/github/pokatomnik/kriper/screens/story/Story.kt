@@ -173,6 +173,12 @@ fun Story(
                                                 .height(SMALL_PADDING.dp)
                                         )
                                     }
+                                    ShortDescription(
+                                        storyId = storyId,
+                                        colorsInfo = colorPresetState.value,
+                                    ) {
+                                        Spacer(modifier = Modifier.fillMaxWidth().height(SMALL_PADDING.dp))
+                                    }
                                     StoryTags(
                                         storyId = storyId,
                                         colorsInfo = colorPresetState.value,

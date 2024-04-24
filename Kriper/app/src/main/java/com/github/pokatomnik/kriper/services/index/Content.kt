@@ -96,6 +96,17 @@ class Content(
             }
         }
 
+    suspend fun getStoryShortDescriptionById(storyId: String) =
+        withContext(Dispatchers.IO + SupervisorJob()) {
+            try {
+                val pageMeta = index.pageMeta[storyId]
+                    ?: throw IOException("No short description for page meta with id $storyId")
+                contentReaderService.getTextContent("content/${pageMeta.storyId}.short.md")
+            } catch (e: IOException) {
+                ""
+            }
+        }
+
     suspend fun findStoryByPathMatch(uri: Uri) = withContext(Dispatchers.Main + SupervisorJob()) {
         index.pageMeta.values.find { currentPageMeta ->
             val currentURI = Uri.parse(currentPageMeta.webpageURL)
