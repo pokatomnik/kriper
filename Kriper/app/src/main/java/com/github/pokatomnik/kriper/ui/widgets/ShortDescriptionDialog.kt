@@ -13,9 +13,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,22 +23,20 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
+import kotlinx.coroutines.launch
 
 const val DEFAULT_EMPTY = "Короткое описание отсутствует"
+
+private data class ShortDescriptionHolder(val shortDescription: String)
 
 @Composable
 fun ShortDescriptionDialog(
     storyId: String,
     consumer: @Composable (show: () -> Unit) -> Unit
 ) {
-    val shortDescription = remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
     val visibility = remember { mutableStateOf(false) }
-
-    IndexServiceReadiness { indexService ->
-        LaunchedEffect(storyId) {
-            shortDescription.value = indexService.content.getStoryShortDescriptionById(storyId)
-        }
-    }
+    val shortDescription = remember { mutableStateOf<ShortDescriptionHolder?>(null) }
 
     if (visibility.value) {
         Dialog(
@@ -56,7 +54,9 @@ fun ShortDescriptionDialog(
                     .background(MaterialTheme.colors.surface)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(1f).padding(LARGE_PADDING.dp)
+                    modifier = Modifier
+                        .fillMaxSize(1f)
+                        .padding(LARGE_PADDING.dp)
                 ) {
                     Column(
                         modifier = Modifier
@@ -65,7 +65,12 @@ fun ShortDescriptionDialog(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Text(
-                            text = shortDescription.value.ifEmpty { DEFAULT_EMPTY },
+                            text = shortDescription.value.let { shortDescriptionHolder ->
+                                shortDescriptionHolder
+                                    ?.shortDescription
+                                    ?.ifEmpty { DEFAULT_EMPTY }
+                                    ?: ""
+                            },
                             textAlign = TextAlign.Justify
                         )
                     }
@@ -80,7 +85,19 @@ fun ShortDescriptionDialog(
         }
     }
 
-    return consumer {
-        visibility.value = true
+    IndexServiceReadiness { indexService ->
+        val showShortDescription: () -> Unit = {
+            if (shortDescription.value != null) {
+                visibility.value = true
+            } else scope.launch {
+                val newHolder = ShortDescriptionHolder(
+                    shortDescription = indexService.content.getStoryShortDescriptionById(storyId)
+                )
+                shortDescription.value = newHolder
+                visibility.value = true
+            }
+        }
+
+        consumer(showShortDescription)
     }
 }
