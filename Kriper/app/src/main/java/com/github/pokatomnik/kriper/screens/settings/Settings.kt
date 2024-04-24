@@ -26,6 +26,8 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 @Composable
 fun Settings(
     onNavigateBack: () -> Unit,
+    onNavigateToAbout: () -> Unit,
+    onNavigateToAIPowers: () -> Unit,
 ) {
     PageContainer(
         priorButton = {
@@ -72,7 +74,7 @@ fun Settings(
                     .padding(horizontal = LARGE_PADDING.dp),
                 mainAxisAlignment = MainAxisAlignment.Center
             ) {
-                LegalWarningButton()
+                LegalWarningButton(navigateToAbout = onNavigateToAbout)
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
                 WebsiteButton()
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
@@ -82,7 +84,7 @@ fun Settings(
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
                 OpenWebmasterContactsButton()
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
-                AINotice()
+                AINotice(navigateToAIPowers = onNavigateToAIPowers)
             }
             Spacer(
                 modifier = Modifier
