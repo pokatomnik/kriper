@@ -1,14 +1,29 @@
 package com.github.pokatomnik.kriper.ui.widgets
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.HeartBroken
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -20,8 +35,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.ext.uppercaseFirst
-import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.components.ALPHA_GHOST
+import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.components.VerticalDivider
+import com.github.pokatomnik.kriper.ui.components.format
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StoryCardNavigationListItem(
     title: String,
@@ -30,7 +50,8 @@ fun StoryCardNavigationListItem(
     author: String,
     readingTimeMinutes: Float,
     liked: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)? = null
 ) {
     Card(
         shape = MaterialTheme.shapes.small,
@@ -43,9 +64,10 @@ fun StoryCardNavigationListItem(
             modifier = Modifier
                 .fillMaxSize()
                 .clipToBounds()
-                .clickable(
+                .combinedClickable(
                     indication = rememberRipple(bounded = true),
                     onClick = onClick,
+                    onLongClick = onLongClick,
                     interactionSource = remember { MutableInteractionSource() }
                 )
                 .padding(LARGE_PADDING.dp)

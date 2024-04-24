@@ -1,7 +1,18 @@
 package com.github.pokatomnik.kriper.screens.story
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -49,7 +60,7 @@ fun StoryDetails(
                         }
                     } else {
                         Text(
-                            text = "Добвил(а) ${pageMeta.authorNickname}",
+                            text = "Добавил(а) ${pageMeta.authorNickname}",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = colorsInfo.contentColor ?: contentColorFor(
@@ -72,7 +83,9 @@ fun StoryDetails(
                                 else -> Icons.Filled.Favorite
                             },
                             contentDescription = "Рейтинг",
-                            modifier = Modifier.size(18.dp).alpha(ALPHA_GHOST),
+                            modifier = Modifier
+                                .size(18.dp)
+                                .alpha(ALPHA_GHOST),
                             tint = colorsInfo.contentColor ?: contentColorFor(MaterialTheme.colors.surface)
                         )
                         Text(
@@ -88,7 +101,9 @@ fun StoryDetails(
                         Icon(
                             imageVector = Icons.Filled.Timer,
                             contentDescription = "Время на прочтение",
-                            modifier = Modifier.size(18.dp).alpha(ALPHA_GHOST),
+                            modifier = Modifier
+                                .size(18.dp)
+                                .alpha(ALPHA_GHOST),
                             tint = colorsInfo.contentColor ?: contentColorFor(
                                 MaterialTheme.colors.surface
                             )

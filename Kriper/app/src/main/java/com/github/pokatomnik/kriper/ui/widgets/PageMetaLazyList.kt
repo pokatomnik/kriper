@@ -32,15 +32,18 @@ private fun PageMetaUI(
     liked: Boolean,
     onClick: (PageMeta) -> Unit,
 ) {
-    StoryCardNavigationListItem(
-        title = pageMeta.title,
-        tags = pageMeta.tags,
-        rating = pageMeta.rating,
-        author = pageMeta.authorship,
-        readingTimeMinutes = pageMeta.readingTimeMinutes,
-        liked = liked,
-        onClick = { onClick(pageMeta) }
-    )
+    ShortDescriptionDialog(storyId = pageMeta.storyId) { showShortDescription ->
+        StoryCardNavigationListItem(
+            title = pageMeta.title,
+            tags = pageMeta.tags,
+            rating = pageMeta.rating,
+            author = pageMeta.authorship,
+            readingTimeMinutes = pageMeta.readingTimeMinutes,
+            liked = liked,
+            onClick = { onClick(pageMeta) },
+            onLongClick = showShortDescription
+        )
+    }
 }
 
 enum class HideStoriesType {
@@ -110,7 +113,9 @@ fun PageMetaLazyList(
 
         if (actualPageMeta.isEmpty()) {
             Column(
-                modifier = Modifier.fillMaxSize().padding(horizontal = LARGE_PADDING.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = LARGE_PADDING.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
