@@ -81,6 +81,8 @@ fun Settings(
                 ContactViaEmailButton()
                 Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
                 OpenWebmasterContactsButton()
+                Spacer(modifier = Modifier.width(LARGE_PADDING.dp))
+                AINotice()
             }
             Spacer(
                 modifier = Modifier
