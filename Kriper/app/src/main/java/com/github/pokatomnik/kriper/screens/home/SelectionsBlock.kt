@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
 import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.FiberNew
 import androidx.compose.material.icons.filled.HistoryEdu
-import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -92,7 +92,7 @@ fun SelectionsBlock(
                 modifier = Modifier.width(SMALL_PADDING.dp)
             )
             IconicCardSmall(
-                icon = Icons.Filled.ReceiptLong,
+                icon = Icons.AutoMirrored.Filled.ReceiptLong,
                 title = "Короткие",
                 backgroundTile = ImageBitmap.imageResource(
                     if (isLocalAppDarkThemeEnabled()) {

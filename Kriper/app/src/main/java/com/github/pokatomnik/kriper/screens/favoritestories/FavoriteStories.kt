@@ -2,10 +2,21 @@ package com.github.pokatomnik.kriper.screens.favoritestories
 
 import android.widget.Toast
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.pokatomnik.kriper.services.db.dao.favoritestories.DisplayHelpSideEffect
 import com.github.pokatomnik.kriper.services.db.rememberKriperDatabase
-import com.github.pokatomnik.kriper.ui.components.*
+import com.github.pokatomnik.kriper.ui.components.LARGE_PADDING
+import com.github.pokatomnik.kriper.ui.components.PageContainer
+import com.github.pokatomnik.kriper.ui.components.PageTitle
+import com.github.pokatomnik.kriper.ui.components.SMALL_PADDING
+import com.github.pokatomnik.kriper.ui.components.makeToast
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Dispatchers
@@ -103,7 +118,7 @@ fun FavoriteStories(
         priorButton = {
             IconButton(onClick = onNavigateBack) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Назад"
                 )
             }

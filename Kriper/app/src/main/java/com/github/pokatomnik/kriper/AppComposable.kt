@@ -35,7 +35,7 @@ import com.github.pokatomnik.kriper.services.index.IndexServiceReadiness
 import com.github.pokatomnik.kriper.ui.components.screen
 import com.github.pokatomnik.kriper.ui.widgets.KriperBottomNavigation
 import com.github.pokatomnik.kriper.ui.widgets.LocalScaffoldState
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import androidx.navigation.compose.NavHost
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -79,7 +79,7 @@ fun AppComposable(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        AnimatedNavHost(
+                        NavHost(
                             navController = navigation.navController,
                             startDestination = navigation.defaultRoute.route,
                             modifier = Modifier.padding(scaffoldPaddingValues)
