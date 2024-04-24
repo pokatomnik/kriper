@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -55,15 +56,25 @@ fun ShortDescriptionDialog(
                     .background(MaterialTheme.colors.surface)
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(LARGE_PADDING.dp)
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.fillMaxSize(1f).padding(LARGE_PADDING.dp)
                 ) {
-                    Text(
-                        text = shortDescription.value.ifEmpty { DEFAULT_EMPTY },
-                        textAlign = TextAlign.Justify
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        Text(
+                            text = shortDescription.value.ifEmpty { DEFAULT_EMPTY },
+                            textAlign = TextAlign.Justify
+                        )
+                    }
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { visibility.value = false }
+                    ) {
+                        Text("Отлично")
+                    }
                 }
             }
         }
