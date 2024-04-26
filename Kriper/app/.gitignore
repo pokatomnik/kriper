@@ -1,3 +1,5 @@
 /build
 /src/main/assets/content/*.md
 /src/main/assets/content/*.json
+/release/baselineProfiles/0/app-release.dm
+/release/baselineProfiles/1/app-release.dm
