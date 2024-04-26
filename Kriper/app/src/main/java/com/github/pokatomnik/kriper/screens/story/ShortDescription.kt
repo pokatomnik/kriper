@@ -60,7 +60,7 @@ fun ShortDescription(
                     ShortDescriptionDialog(storyId = storyId) { showShortDescription ->
                         TextButton(onClick = showShortDescription) {
                             Text(
-                                text = "ПОКАЗАТЬ КРАТКО",
+                                text = "АННОТАЦИЯ",
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 color = colorsInfo.contentColor ?: contentColorFor(
