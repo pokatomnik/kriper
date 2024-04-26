@@ -71,7 +71,8 @@ fun ShortDescriptionDialog(
                                     ?.ifEmpty { DEFAULT_EMPTY }
                                     ?: ""
                             },
-                            textAlign = TextAlign.Justify
+                            textAlign = TextAlign.Justify,
+                            color = MaterialTheme.colors.primary
                         )
                     }
                     Button(
